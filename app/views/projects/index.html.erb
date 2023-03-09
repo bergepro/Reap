@@ -1,0 +1,12 @@
+<h1>index projects</h1>
+
+<% @projects.each do |project| %>
+    <div class="border-2">
+        <%= link_to project.name, project %><br>
+    </div>
+    <br>
+<% end %>
+
+<div class="bg-indigo-200">
+    <%= link_to "new project", new_project_path %>
+</div>
