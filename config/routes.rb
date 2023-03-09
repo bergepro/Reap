@@ -3,5 +3,12 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get 'home/index'
   # Defines the root path route ("/")
-  root to:'home#index'
+  root 'home#index'
+
+  get 'projects/index'
+  
+  resources :projects do
+    resources :members
+  end
+
 end
