@@ -1,0 +1,16 @@
+<div class="bg-blue-100">
+    <h2>new member: </h2>
+    <% if flash[:alert] %>
+        <div class="bg-red-300 text-red-900 px-4 py-3 w-fit rounded-full" role="alert">
+            <%= flash[:alert] %>
+        </div>
+    <% end %>  
+    <%= form_with model: [ @project, @project.members.build ] do |f| %>
+
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+   
+    <%= f.submit "Add Member", class: "btn btn-primary" %>
+     
+    <% end %>
+</div>
