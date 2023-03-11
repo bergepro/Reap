@@ -52,7 +52,12 @@ class ProjectsController < ApplicationController
         @project.destroy
     
         redirect_to '/projects#index', status: :see_other
-    end    
+    end
+
+    def add_member
+        @project = Project.find(params[:id])
+        render 'members/new'
+    end
 
     private
     # tillater kun data fra formet med .permit til prosjektopprettelse

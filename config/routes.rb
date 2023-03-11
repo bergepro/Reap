@@ -11,4 +11,9 @@ Rails.application.routes.draw do
     resources :members
   end
 
+  resources :projects do
+    get 'add_member', to: 'members#new'
+  end
+
+  delete 'members/:id', to: 'members#destroy'
 end

@@ -1,21 +1,30 @@
-<h1>show project</h1>
+<div class="bg-pink-100">
+    <h1>show project</h1>
+<br>
+    <h2>prosjekt navn: <%= @project.name %></h2>
+<br>
 
-<h2>prosjekt navn: <%= @project.name %></h2>
+    <h2>prosjekt beskrivelse: <%= @project.description %></h2>
+    <br>
 
-<h2>prosjekt beskrivelse: <%= @project.description %></h2>
+    <h3><strong>members:</strong></h3>
+    <%= render @project.members %>
 
-<%= render @project.members %>
 
+    <%= render 'members/new'%>
 
-<ul>
-    <li><%= link_to "Edit", edit_project_path(@project) %></li>
-    <li>
-        <%= 
-            link_to "Delete project", project_path(@project), 
-            data:{
-                turbo_method: :delete,
-                turbo_confirm: "Are you sure?"
-            }
-        %>
-    </li>    
-</ul>
+    <ul class="bg-violet-200 padding-10">
+        <li><%= link_to "Edit project", edit_project_path(@project) %></li>
+        <br>
+        <li>
+            <%= 
+                link_to "Delete project", project_path(@project), 
+                data:{
+                    turbo_method: :delete,
+                    turbo_confirm: "Are you sure?"
+                }
+            %>
+        </li>    
+    </ul>
+</div>
+

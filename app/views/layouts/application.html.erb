@@ -13,8 +13,12 @@
 
   <body>
     <%= render 'layouts/navbar' %>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <% if notice %>
+      <p class="notice bg-green-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+      <p class="alert bg-red-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= alert %></p>
+    <% end %>
    <%= yield %>
   </body>
 </html>
