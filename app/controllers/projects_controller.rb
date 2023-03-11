@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+    before_action :authenticate_user!
     # henter alle prosjekter til en bruker
     def index
         @projects = current_user.projects
@@ -31,7 +32,9 @@ class ProjectsController < ApplicationController
     end
 
     # initialiserer å endre et prosjekt
-    def edit
+    def edit        
+        @is_in_update = true
+
         @project = Project.find(params[:id])
     end
     
@@ -40,10 +43,12 @@ class ProjectsController < ApplicationController
         @project = Project.find(params[:id])
 
         if @project.update(project_params)
-            redirect_to @project
+            flash[:notice] = "project has been updated"
+
         else
-            render :edit, status: :unprocessable_entity
+            flash[:alert] = "cannot update project" 
         end
+        redirect_to request.referrer
     end
 
     # sletter prosjektet fra databasen

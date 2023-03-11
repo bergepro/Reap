@@ -8,24 +8,31 @@ class MembersController < ApplicationController
 
         @project = Project.find(params[:project_id])
         @user = User.find_by(email: @email)
-
+        
         if @user.nil?
             flash[:alert] = "#{@email} does not exist"
         elsif @project.members.exists?(user_id: @user.id)
             flash[:alert] = "#{@email} is already a member of the project"
         else
-            flash[:notice] = "#{@email} was added to the project"
-            @member = @project.members.create(user: @user)
+            @member = @project.members.build(user: @user)
+            if @member.save
+                flash[:notice] = "#{@email} was added to the project"
+            end
         end
-        redirect_to project_path(@project)
+        redirect_to request.referrer
     end
 
     # sletter prosjektet fra databasen
     def destroy
-        @member = Member.find(params[:id])
-        @member.destroy
-    
-        redirect_to '/projects#index', status: :see_other
+        @project = Project.find(params[:id])
+        @member = @project.members.find(params[:project_id])
+        if @project.members.count <= 1
+            flash[:alert] = "cannot remove last member of the project"
+        elsif
+            flash[:notice] = "Member has been removed from the project"
+            @member.destroy
+        end
+        redirect_to request.referrer
     end
 
     private

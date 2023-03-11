@@ -1,10 +1,6 @@
 <p>
     <%= member.user.email %>
-    <%= 
-        link_to "remove", project_member_path(member), class: 'text-rose-900 px-4', 
-        data:{
-            turbo_method: :delete,
-            turbo_confirm: "Are you sure?"
-        }
-    %>
-</p>
+    <% if @is_in_update %>
+        <%= render 'members/remove', member: member %>
+    <% end %>
+</p>    
