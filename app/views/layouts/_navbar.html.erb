@@ -1,3 +1,26 @@
+<nav>
+  <div class="flex space-x-2 h-16 bg-orange-100 shadow-md sm:justify-center items-center">
+    <a href="" class="font-bold">Reap</a>
+    <a href="time">Time</a>
+    <a href="projects">Projects</a>
+    <div class="">
+      <% if current_user %>
+        <div class="group absolute">
+          <button type="button" class="btn btn-secondary"><%= current_user.email %></button>
+          <div class="hidden group-hover:block h-24 ">
+            <div class="table">
+              <div class="table-row"><%= link_to "Edit Account" %></div>
+              <div class="table-row"><%= button_to "Sign Out" %></div>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <%= link_to "Sign Up" %>
+        <%= link_to "Sign In" %>
+      <% end %>
+    </div>
+  </div>
+</nav>
 <% if current_user %>
-    <h3> <%= button_to "Sign Out", destroy_user_session_path, method: :delete %> </h3>
+  <h3> <%= button_to "Sign Out", destroy_user_session_path, method: :delete %> </h3>
 <% end %>
