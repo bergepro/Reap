@@ -5,12 +5,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body>
-    <%= yield %>
+    <%= render 'layouts/navbar' %>
+    <% if notice %>
+      <p class="notice bg-green-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+      <p class="alert bg-red-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= alert %></p>
+    <% end %>
+   <%= yield %>
   </body>
 </html>
