@@ -1,0 +1,12 @@
+<h1>edit page</h1>
+
+<%= render "form", project: @project%>
+
+<div class="bg-yellow-100">
+    <h3>edit members: </h3><br>
+    <%= render @project.members %>
+</div>
+
+<%= render 'members/new'%>
+
+<%= link_to "back to project", @project, class: "border-2 border-black" %>

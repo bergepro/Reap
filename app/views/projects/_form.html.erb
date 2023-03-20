@@ -1,0 +1,31 @@
+<div class="bg-indigo-200" >
+    <%= form_with model: @project do |form|%>
+        <div>
+            <%= form.label :name %> <br>
+            <%= form.text_area :name %>
+            <% @project.errors.full_messages_for(:name).each do |message|%>
+                <div><%= message %></div>
+            <% end %>
+        </div>
+
+        <div>
+            <%= form.label :description %> <br>
+            <%= form.text_area :description %>
+            <% @project.errors.full_messages_for(:description).each do |message|%>
+                <div><%= message %></div>
+            <% end %>
+        </div>  
+
+        <div>
+            <%= form.label :client %> <br>
+            <%= form.text_area :client %>
+            <% @project.errors.full_messages_for(:client).each do |message|%>
+                <div><%= message %></div>
+            <% end %>
+        </div>  
+
+        <div>
+            <%= form.submit%>
+        </div>
+    <% end %>
+</div>
