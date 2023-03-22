@@ -1,10 +1,10 @@
 <div class="bg-pink-100">
-    <h1>show project</h1>
+    <h1>show client</h1>
 <br>
-    <h2>prosjekt navn: <%= @client.name %></h2>
+    <h2>client navn: <%= @client.name %></h2>
 <br>
 
-    <h2>prosjekt beskrivelse: <%= @client.description %></h2>
+    <h2>client beskrivelse: <%= @client.description %></h2>
     <br>
 
     <ul class="bg-violet-200 padding-10">
@@ -20,4 +20,8 @@
             %>
         </li>    
     </ul>
+</div>
+<div class="bg-purple-100">
+    <p><%= link_to "View Projects", client_projects_path(@client) %></p>
+    <p><%= link_to "New Project", new_client_project_path(@client) %></p>
 </div>

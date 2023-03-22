@@ -1,7 +1,7 @@
 <div class="bg-zinc-100">
-    <h1>index projects</h1><br>
+    <h1>index clients</h1><br>
     <% @clients.each do |client| %>
-        prosjektnavn: <%= link_to client.name, client, class: "border-2 divide-slate-900" %><br>
+        clientnavn: <%= link_to client.name, client, class: "border-2 divide-slate-900" %><br>
         <br>
     <% end %>
 
