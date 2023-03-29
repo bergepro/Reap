@@ -1,4 +1,6 @@
 <% @projects.each do |project| %>
-    prosjekt name: <%= project.name%>
-    <br>
+  <p>projektnavn: </p>
+  <%= link_to project.name, client_project_path(@client, project) %>
+  <br>
+  <br>
 <% end %>

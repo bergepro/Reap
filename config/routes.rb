@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   root 'home#index'
 
   resources :clients do
-    resources :projects
+    resources :projects do
+      resources :memberships
+    end
   end
 end
