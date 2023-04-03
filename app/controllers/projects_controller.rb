@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   def index
     @client = Client.find(params[:client_id])
-    @projects = @client.projects
+    @projects = @client.projects.joins(:memberships).where(memberships: { user_id: current_user.id })
   end
 
   # viser et enkelt prosjekt til bruker
@@ -29,7 +29,8 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    puts "edit"
+    @is_in_update = true
+  
     puts params.inspect
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
@@ -37,6 +38,7 @@ class ProjectsController < ApplicationController
   end
   
   def update
+    
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
 
