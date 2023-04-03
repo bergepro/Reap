@@ -11,7 +11,7 @@
     <%= render @project.memberships %>
 
     <ul class="bg-violet-200 padding-10">
-        <li><%= link_to "Edit project", edit_client_project_path(@project) %></li>
+        <li><%= link_to "Edit project", edit_client_project_path(@client, @project) %></li>
         <br>
         <li>
             <%= 
