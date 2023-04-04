@@ -23,6 +23,13 @@ class TasksController < ApplicationController
     end
   end
 
+  def edit
+    @is_in_update = true
+
+    puts params.inspect
+    @task = Task.find(params[:id])
+  end
+
   private
 
   def task_params

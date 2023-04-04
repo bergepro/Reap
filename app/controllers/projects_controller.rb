@@ -8,6 +8,8 @@ class ProjectsController < ApplicationController
   def show
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
+    @tasks = Task.all
+    @assigned_tasks = @tasks.joins(:assigned_tasks).where(assigned_tasks: { project_id: @project.id })
   end
 
   def new

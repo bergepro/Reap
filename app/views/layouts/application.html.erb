@@ -10,9 +10,30 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
-
   <body>
-    <%= render 'layouts/navbar' %>
+  <!-- Navbar -->
+    <nav class="flex space-x-2 h-16 bg-orange-100 shadow-md sm:justify-center items-center mb-1">
+      <%= link_to "Reap", root_path, class: "font-bold" %>
+      <%= link_to "Tasks", tasks_path %>
+      <%= link_to "Clients", clients_path %>
+      <div class="">
+        <% if current_user %>
+         <div class="group absolute">
+            <button type="button" class="btn btn-secondary"><%= current_user.email %></button>
+            <div class="hidden group-hover:block h-24 ">
+              <div class="table">
+                <div class="table-row"><%= link_to "Edit Account" %></div>
+                <div class="table-row"><%= button_to "Sign Out", destroy_user_session_path, method: :delete %></div>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <%= link_to "Sign Up", new_registration_path(resource_name) %>
+          <%= link_to "Sign In" %>
+        <% end %>
+      </div>
+    </nav>
+
     <% if notice %>
       <p class="notice bg-green-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= notice %></p>
     <% end %>
@@ -20,6 +41,11 @@
       <p class="alert bg-red-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= alert %></p>
     <% end %>
     <%= yield %>
-    <%= render 'layouts/footer' %>
+
+    <!-- Footer -->
+    <footer class="bottom-0 bg-orange-100 h-16 items-center flex space-x-2 sm:justify-center fixed w-full">
+    <a href="" class="font-bold">Reap</a>
+    <a href="">About Us</a>
+    </footer>
   </body>
 </html>
