@@ -8,7 +8,11 @@
     <br>
 
     <h4>project members: </h4>
-    <%= render @project.memberships %>
+    <h4><%= render @project.memberships %></h4>
+    <br>
+
+    <h5>ProjectTasks/Assigned Tasks:</h5>
+    <h5><%= render @project.assigned_tasks %><h5>
 
     <ul class="bg-violet-200 padding-10">
         <li><%= link_to "Edit project", edit_client_project_path(@project) %></li>

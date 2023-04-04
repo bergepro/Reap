@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :clients do
     resources :projects do
       resources :memberships
+      resources :tasks
     end
   end
 end
