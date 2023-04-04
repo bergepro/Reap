@@ -1,12 +1,13 @@
 class ProjectsController < ApplicationController
   def index
     @client = Client.find(params[:client_id])
-    @projects = @client.projects
+    @projects = @client.projects.joins(:memberships).where(memberships: { user_id: current_user.id })
   end
 
   # viser et enkelt prosjekt til bruker
   def show
-    @project = Project.find(params[:id])
+    @client = Client.find(params[:client_id])
+    @project = @client.projects.find(params[:id])
   end
 
   def new
@@ -28,7 +29,8 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    puts "hei"
+    @is_in_update = true
+  
     puts params.inspect
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
@@ -36,14 +38,16 @@ class ProjectsController < ApplicationController
   end
   
   def update
-    @project = Project.find(params[:id])
+    
+    @client = Client.find(params[:client_id])
+    @project = @client.projects.find(params[:id])
 
     if @project.update(project_params)
       flash[:notice] = "project has been updated"
     else
       flash[:alert] = "cannot update project" 
     end
-    redirect_to request.referrer
+    redirect_to client_project_path(@client, @project)
   end
 
   def destroy
