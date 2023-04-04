@@ -30,22 +30,20 @@ class ProjectsController < ApplicationController
 
   def edit
     @is_in_update = true
-  
+
     puts params.inspect
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
-
   end
-  
+
   def update
-    
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
 
     if @project.update(project_params)
-      flash[:notice] = "project has been updated"
+      flash[:notice] = 'project has been updated'
     else
-      flash[:alert] = "cannot update project" 
+      flash[:alert] = 'cannot update project'
     end
     redirect_to client_project_path(@client, @project)
   end
@@ -58,7 +56,8 @@ class ProjectsController < ApplicationController
   end
 
   private
-  def project_params 
+
+  def project_params
     params.require(:project).permit(:name, :description)
   end
 end

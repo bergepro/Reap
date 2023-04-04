@@ -15,8 +15,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_31_200450) do
   enable_extension "plpgsql"
 
   create_table "assigned_tasks", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "task_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_assigned_tasks_on_project_id"
+    t.index ["task_id"], name: "index_assigned_tasks_on_task_id"
   end
 
   create_table "clients", force: :cascade do |t|
@@ -33,15 +37,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_31_200450) do
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_memberships_on_project_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
-  end
-
-  create_table "project_tasks", force: :cascade do |t|
-    t.bigint "project_id", null: false
-    t.bigint "task_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["project_id"], name: "index_project_tasks_on_project_id"
-    t.index ["task_id"], name: "index_project_tasks_on_task_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -72,9 +67,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_31_200450) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "assigned_tasks", "projects"
+  add_foreign_key "assigned_tasks", "tasks"
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
-  add_foreign_key "project_tasks", "projects"
-  add_foreign_key "project_tasks", "tasks"
   add_foreign_key "projects", "clients"
 end
