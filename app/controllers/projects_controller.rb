@@ -4,12 +4,13 @@ class ProjectsController < ApplicationController
     @projects = @client.projects.joins(:memberships).where(memberships: { user_id: current_user.id })
   end
 
-  # viser et enkelt prosjekt til bruker
+  # viser et enkelt prosjekt til bruker .where(assigned_tasks: { project_id: @project.id }
   def show
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
     @tasks = Task.all
-    @assigned_tasks = @tasks.joins(:assigned_tasks).where(assigned_tasks: { project_id: @project.id })
+    @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
+                          .joins(:assigned_tasks).where("project_id = #{@project.id}")
   end
 
   def new

@@ -13,7 +13,7 @@
 
     <h5>Assigned tasks:</h5>
     <% @assigned_tasks.each do |assigned_task| %>
-        <%= link_to assigned_task.name %>
+        <%= link_to assigned_task.name, client_project_assigned_task_path(@client, @project, assigned_task) %>
         <br>
     <% end %>
     <ul class="bg-violet-200 padding-10">

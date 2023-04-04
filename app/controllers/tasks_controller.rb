@@ -30,6 +30,24 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
   end
 
+  def update
+    @task = Task.find(params[:id])
+
+    if @task.update(task_params)
+      flash[:notice] = 'task has been updated'
+    else
+      flash[:alert] = 'cannot update task'
+    end
+    redirect_to tasks_path
+  end
+
+  def destroy
+    @task = Task.find(params[:id])
+    @task.destroy
+
+    redirect_to tasks_path
+  end
+
   private
 
   def task_params
