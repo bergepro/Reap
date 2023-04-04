@@ -1,0 +1,6 @@
+<p>assigned tasks: </p>
+<br>
+<% @assigned_tasks.each do |assigned_task| %>
+  <%= link_to assigned_task.name %>
+  <br>
+<% end %>

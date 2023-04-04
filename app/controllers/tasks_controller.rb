@@ -1,8 +1,6 @@
 class TasksController < ApplicationController
   def index
-    @client = Client.find(params[:client_id])
-    @projects = @client.projects
-    @tasks = @projects.assigned_tasks
+    @tasks = Task.all
   end
 
   def show
@@ -10,20 +8,24 @@ class TasksController < ApplicationController
   end
 
   def new
-    @project = Project.find(params[:client_id])
-    @task = @projects.tasks.build
+    @tasks = Task.all
+    @task = @tasks.build
   end
 
   def create
-    @client = Client.find(params[:client_id])
-    @project = @client.projects.build(project_params)
+    @tasks = Task.all
+    @task = @tasks.build(task_params)
 
-    @project.users << current_user
-
-    if @project.save
-      redirect_to client_projects_path(@client)
+    if @task.save
+      redirect_to tasks_path
     else
       render :new, status: :unprocessable_entity
     end
+  end
+
+  private
+
+  def task_params
+    params.require(:task).permit(:name)
   end
 end

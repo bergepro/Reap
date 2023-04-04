@@ -1,6 +1,6 @@
+<p>global tasks: </p>
+<br>
 <% @tasks.each do |task| %>
-  <p>task: </p>
-  <%= link_to project.name, client_project_path(@client, project) %>
-  <br>
+  <%= link_to task.name %>
   <br>
 <% end %>
