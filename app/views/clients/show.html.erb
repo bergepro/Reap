@@ -1,0 +1,28 @@
+<div class="bg-pink-100">
+    <h1>show client</h1>
+<br>
+    <h2>client navn: <%= @client.name %></h2>
+<br>
+
+    <h2>client beskrivelse: <%= @client.description %></h2>
+    <br>
+
+    <ul class="bg-violet-200 padding-10">
+        <li><%= link_to "Edit client", edit_client_path(@client) %></li>
+        <br>
+        <li>
+            <%= 
+                link_to "Delete client", client_path(@client), 
+                data:{
+                    turbo_method: :delete,
+                    turbo_confirm: "Are you sure?"
+                }
+            %>
+        </li>    
+    </ul>
+</div>
+<div class="bg-purple-100">
+    <p><%= link_to "View Projects", client_projects_path(@client) %></p>
+    <p><%= link_to "New Project", new_client_project_path(@client) %></p>
+</div>
+<%= link_to "back to clients", clients_path, class: "border-2 border-black" %>

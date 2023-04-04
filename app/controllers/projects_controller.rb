@@ -1,79 +1,66 @@
 class ProjectsController < ApplicationController
-    before_action :authenticate_user!
-    # henter alle prosjekter til en bruker
-    def index
-        @projects = current_user.projects
+  def index
+    @client = Client.find(params[:client_id])
+    @projects = @client.projects.joins(:memberships).where(memberships: { user_id: current_user.id })
+  end
+
+  # viser et enkelt prosjekt til bruker .where(assigned_tasks: { project_id: @project.id }
+  def show
+    @client = Client.find(params[:client_id])
+    @project = @client.projects.find(params[:id])
+    @tasks = Task.all
+    @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
+                          .joins(:assigned_tasks).where("project_id = #{@project.id}")
+  end
+
+  def new
+    @client = Client.find(params[:client_id])
+    @project = @client.projects.build
+  end
+
+  def create
+    @client = Client.find(params[:client_id])
+    @project = @client.projects.build(project_params)
+
+    @project.users << current_user
+
+    if @project.save
+      redirect_to client_projects_path(@client)
+    else
+      render :new, status: :unprocessable_entity
     end
+  end
 
-    # viser et enkelt prosjekt til bruker
-    def show
-        @project = Project.find(params[:id])
-        @members = @project.users
+  def edit
+    @is_in_update = true
+
+    puts params.inspect
+    @client = Client.find(params[:client_id])
+    @project = @client.projects.find(params[:id])
+  end
+
+  def update
+    @client = Client.find(params[:client_id])
+    @project = @client.projects.find(params[:id])
+
+    if @project.update(project_params)
+      flash[:notice] = 'project has been updated'
+    else
+      flash[:alert] = 'cannot update project'
     end
+    redirect_to client_project_path(@client, @project)
+  end
 
-    # initialiserer nytt prosjekt
-    def new 
-        @project = Project.new
-    end
+  def destroy
+    @project = Project.find(params[:id])
+    @project.destroy
 
-    # lager nytt prosjekt i databasen og legger oppretter som member
-    def create
-        def create
-            @project = Project.new(project_params)
-            @project.start_date = generate_timestamp
+    redirect_to '/projects#index', status: :see_other
+  end
 
-            if @project.save
-              @project.members.create(user: current_user)
-              redirect_to '/projects#index'
-            else
-              render :new, status: :unprocessable_entity
-            end
-          end
-    end
+  private
 
-    # initialiserer å endre et prosjekt
-    def edit        
-        @is_in_update = true
-
-        @project = Project.find(params[:id])
-    end
-    
-    # oppdaterer prosjektet i databasen
-    def update
-        @project = Project.find(params[:id])
-
-        if @project.update(project_params)
-            flash[:notice] = "project has been updated"
-
-        else
-            flash[:alert] = "cannot update project" 
-        end
-        redirect_to request.referrer
-    end
-
-    # sletter prosjektet fra databasen
-    def destroy
-        @project = Project.find(params[:id])
-        @project.destroy
-    
-        redirect_to '/projects#index', status: :see_other
-    end
-
-    def add_member
-        @project = Project.find(params[:id])
-        render 'members/new'
-    end
-
-    private
-    # tillater kun data fra formet med .permit til prosjektopprettelse
-    def project_params
-      params.require(:project).permit(:name, :description, :client)
-    end
-
-    # lager timestamp av tiden nå
-    def generate_timestamp
-        DateTime.now
-    end
-
- 
+  def project_params
+    params.require(:project).permit(:name, :description)
+  end
 end

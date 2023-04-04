@@ -1,0 +1,10 @@
+<p>prosjekt: <%= @project.name %></p>
+<br>
+<p>assigned tasks: </p>
+<div class="bg-pink-100">
+  <% @assigned_tasks.each do |assigned_task| %>
+    <%= link_to assigned_task.name %>
+    <br>
+  <% end %>
+</div>
+

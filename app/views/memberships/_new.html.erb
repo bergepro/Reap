@@ -1,8 +1,7 @@
 <div class="bg-blue-100">
     <h2>new member: </h2>
 
-    <%= form_with model: [ @project, @project.members.build ] do |f| %>
-
+    <%= form_with model: [@client, @project, @project.memberships.build ] do |f| %>
     <%= f.label :email %>
     <%= f.email_field :email %>
    

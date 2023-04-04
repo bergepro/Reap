@@ -1,12 +1,9 @@
-<h1>edit page</h1>
-
-<%= render "form", project: @project%>
-
+<h1>edit project</h1>
+<%= render "form", { client: @client, project: @project } %>
 <div class="bg-yellow-100">
     <h3>edit members: </h3><br>
-    <%= render @project.members %>
+    <%= render @project.memberships %>
 </div>
+<%= render "memberships/new" %>
 
-<%= render 'members/new'%>
-
-<%= link_to "back to project", @project, class: "border-2 border-black" %>
+<%= link_to "back to project", [@client, @project], class: "border-2 border-black" %>

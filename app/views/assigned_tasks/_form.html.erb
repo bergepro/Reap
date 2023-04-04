@@ -1,0 +1,15 @@
+<div class="bg-indigo-200" >
+    <%= form_with model: [ @client, @project, @assigned_task ] do |form| %>
+        <div>
+            <%= form.label :name %> <br>
+            <%= form.collection_select :task_id, @tasks, :id, :name, include_blank: false %>
+            <% @assigned_task.errors.full_messages_for(:name).each do |message|%>
+                <div><%= message %></div>
+            <% end %>
+        </div>
+
+        <div>
+            <%= form.submit%>
+        </div>
+    <% end %>
+</div>

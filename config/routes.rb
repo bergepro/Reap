@@ -5,15 +5,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'home#index'
 
-  get 'projects/index'
-  
-  resources :projects do
-    resources :members
+  resources :clients do
+    resources :projects do
+      resources :memberships
+      resources :assigned_tasks
+    end
   end
-
-  resources :projects do
-    get 'add_member', to: 'members#new'
-  end
-
-  delete 'members/:id', to: 'members#destroy'
+  resources :tasks
 end
