@@ -1,7 +1,7 @@
 <nav class="flex space-x-2 h-16 bg-orange-100 shadow-md sm:justify-center items-center mb-1">
   <a href="/" class="font-bold">Reap</a>
   <a href="/time">Time</a>
-  <a href="/projects">Projects</a>
+  <%= link_to "Clients", clients_path %>
   <div class="">
     <% if current_user %>
       <div class="group absolute">

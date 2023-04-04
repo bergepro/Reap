@@ -1,0 +1,11 @@
+<div class="bg-blue-100">
+    <h2>new member: </h2>
+
+    <%= form_with model: [@client, @project, @project.memberships.build ] do |f| %>
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+   
+    <%= f.submit "Add Member", class: "btn btn-primary" %>
+     
+    <% end %>
+</div>
