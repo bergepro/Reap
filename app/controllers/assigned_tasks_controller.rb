@@ -3,7 +3,7 @@ class AssignedTasksController < ApplicationController
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:project_id])
     @tasks = Task.all
-    @assigned_tasks = @tasks.joins(:assigned_tasks).where(assigned_tasks: { project_id: @project_id })
+    @assigned_tasks = @tasks.joins(:assigned_tasks).where(assigned_tasks: { project_id: @project.id })
   end
 
   def show
@@ -12,7 +12,7 @@ class AssignedTasksController < ApplicationController
 
   def new
     @client = Client.find(params[:client_id])
-    @project = @client.projects.find(params[:client_id])
+    @project = @client.projects.find(params[:project_id])
     @assigned_task = @project.assigned_tasks.build
     @tasks = Task.all
   end

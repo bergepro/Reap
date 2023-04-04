@@ -2,7 +2,7 @@
     <%= form_with model: [ @client, @project, @assigned_task ] do |form| %>
         <div>
             <%= form.label :name %> <br>
-            <%= form.collection_select :task_id, @tasks, :id, :name, include_blank: true %>
+            <%= form.collection_select :task_id, @tasks, :id, :name, include_blank: false %>
             <% @assigned_task.errors.full_messages_for(:name).each do |message|%>
                 <div><%= message %></div>
             <% end %>
