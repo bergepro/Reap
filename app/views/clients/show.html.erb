@@ -1,26 +1,26 @@
-<div class=" flex justify-evenly ">
+<div class=" flex justify-evenly pt-4">
   <div>
-    <br>
+    <div class='flex justify-between'>
     <p class='text-2xl'> <%= @client.name %></p>
-    <br>
-
-    <p class='text-md'> <%= @client.description %></p>
-    <br>
-
-    <div class="pt-20 flex justify-evenly ">
-     <%= link_to "View Projects", client_projects_path(@client), class:'bg-blue-200 rounded p-2 ' %>
-     <%= link_to "New Project", new_client_project_path(@client), class: 'bg-blue-200 rounded p-2'%>
-    </div>
-    <div class="pt-40 flex flex-row justify-evenly">
+    <div class="flex flex-row justify-end space-x-2 pb-4">
       <%= link_to "Edit client", edit_client_path(@client), class: 'rounded bg-blue-300 p-2' %>
       <%= 
-        link_to "Delete client", client_path(@client),  class: 'rounded bg-red-400 p-2',
+        link_to "Delete client", client_path(@client),  class: ' rounded bg-red-400 p-2',
           data:{
             turbo_method: :delete,
             turbo_confirm: "Are you sure?"
           }
         %>
   </div>
+  </div>
+  <p class='text-md'> <%= @client.description %></p>
+  <br>
+
+  <div class="pt-10 flex justify-evenly ">
+    <%= link_to "View Projects", client_projects_path(@client), class:'bg-blue-200 rounded p-2 ' %>
+    <%= link_to "New Project", new_client_project_path(@client), class: 'bg-blue-200 rounded p-2'%>
+  </div>
+
 
   </div>
 </div>
