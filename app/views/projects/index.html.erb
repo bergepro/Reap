@@ -1,8 +1,0 @@
-<% @projects.each do |project| %>
-  <p>projektnavn: </p>
-  <%= link_to project.name, client_project_path(@client, project) %>
-  <br>
-  <br>
-<% end %>
-
-<%= link_to "back to client", @client, class: "border-2 border-black" %>

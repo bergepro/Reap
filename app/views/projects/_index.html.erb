@@ -1,0 +1,6 @@
+<% @projects.each do |project| %>
+  <p>projektnavn: </p>
+  <%= link_to project.name, client_project_path(@client, project) , class: 'italic text-stone-700' %>
+  <br>
+  <br>
+<% end %>

@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  before_action :authenticate_user!
   def index
     @client = Client.find(params[:client_id])
     @projects = @client.projects.joins(:memberships).where(memberships: { user_id: current_user.id })

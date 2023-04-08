@@ -1,4 +1,5 @@
 class AssignedTasksController < ApplicationController
+  before_action :authenticate_user!
   def index
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:project_id])

@@ -1,4 +1,5 @@
 class ClientsController < ApplicationController
+    before_action :authenticate_user!
     # henter alle klienter 
     def index
         @clients = Client.all
@@ -7,6 +8,7 @@ class ClientsController < ApplicationController
     # viser et enkelt klient til bruker
     def show
         @client = Client.find(params[:id])
+        @projects = @client.projects
     end
 
     # initialiserer nytt klient
