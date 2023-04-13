@@ -37,7 +37,7 @@ class ClientsController < ApplicationController
         @client = Client.find(params[:id])
 
         if @client.update(client_params)
-            redirect_to '/clients#index'
+            redirect_to @client
             flash[:notice] = "client has been updated"
         else
             flash[:alert] = "cannot update client" 
