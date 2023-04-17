@@ -1,0 +1,9 @@
+<%= render "form", { client: @client, project: @project, time_reg: @time_reg } %>
+
+<%= 
+    link_to "remove ", client_project_time_reg_path(@client, @project, @time_reg), class: 'text-red-900 border-2 border-black', 
+    data:{
+        turbo_method: :delete,
+        turbo_confirm: "Are you sure?"
+    }
+%>

@@ -12,6 +12,8 @@ class ProjectsController < ApplicationController
     @tasks = Task.all
     @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
                           .joins(:assigned_tasks).where("project_id = #{@project.id}")
+
+    @time_regs = @project.time_regs.joins(:membership).where(memberships: { user_id: current_user.id })
   end
 
   def new
@@ -35,7 +37,6 @@ class ProjectsController < ApplicationController
   def edit
     @is_in_update = true
 
-    puts params.inspect
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
   end
