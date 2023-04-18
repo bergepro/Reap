@@ -1,15 +1,17 @@
-<div class="bg-indigo-200" >
-    <%= form_with model: [ @client, @project, @assigned_task ] do |form| %>
-        <div>
-            <%= form.label :name %> <br>
-            <%= form.collection_select :task_id, @tasks, :id, :name, include_blank: false %>
-            <% @assigned_task.errors.full_messages_for(:name).each do |message|%>
-                <div><%= message %></div>
-            <% end %>
+<div class="max-w-md">    
+  <%= form_with model: [ @client, @project, @assigned_task ] do |form| %>
+    <div>
+      <%= form.label :name %> <br>
+      <%= form.collection_select :task_id, @tasks, :id, :name, { include_blank: false }, { class: 'w-52' }  %>
+      <% @assigned_task.errors.full_messages_for(:name).each do |message|%>
+        <div class="text-sm italic text-gray-600">
+          <%= message %>
         </div>
+      <% end %>
+    </div>
 
-        <div>
-            <%= form.submit%>
-        </div>
-    <% end %>
+  <div class="actions text-center p-1 m-1">
+    <%= form.submit class: "rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow" %>
+  </div>
+  <% end %>
 </div>

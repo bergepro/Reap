@@ -1,11 +1,11 @@
-<div class="bg-blue-100">
-    <h2>new member: </h2>
+<div class="">
+    <h3 class="font-medium">New member: </h3>
 
     <%= form_with model: [@client, @project, @project.memberships.build ] do |f| %>
-    <%= f.label :email %>
+    <%= f.label :email, class: "mr-2"%>
     <%= f.email_field :email %>
    
-    <%= f.submit "Add Member", class: "btn btn-primary" %>
+    <%= f.submit "Add Member", class: "rounded bg-blue-200 p-2 hover:bg-blue-300" %>
      
     <% end %>
 </div>

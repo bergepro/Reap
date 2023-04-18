@@ -22,7 +22,7 @@
 
 		<div class="p-1 my-4">
 			<h4 class="font-medium">Project members: </h4>
-			<h4 class="italic m-1 border-t border-gray-300"><%= render @project.memberships %></h4>
+			<h4 class="m-1 border-t text-gray-700 border-gray-300"><%= render @project.memberships %></h4>
 		</div>		
 
 		<div class="p-1 my-4">			
@@ -34,10 +34,8 @@
 			<h4 class="font-medium border-b border-gray-300">Project tasks:</h4>
 			<div class="mb-8">
 			<% @assigned_tasks.each do |assigned_task| %>
-					<div class="border-b border-gray-300 pb-1 pt-1">
-					<%= link_to assigned_task.name, 
-						client_project_assigned_task_path(@client, @project, assigned_task)
-						%>				
+					<div class="border-b text-gray-700 border-gray-300 pb-1 pt-1">
+					<%= assigned_task.name %>				
 					</div>
 			<% end %>		
 		</div>
