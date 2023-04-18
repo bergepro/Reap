@@ -1,4 +1,4 @@
-<%= link_to "Remove task from project", client_project_assigned_task_path(@client, @project, assigned_task), class: "bg-violet-200", 
+<%= link_to "Remove", client_project_assigned_task_path(@client, @project, assigned_task), class: "bg-violet-200", 
   data:{
     turbo_method: :delete,
     turbo_confirm: "Are you sure?"
