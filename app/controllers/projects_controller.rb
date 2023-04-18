@@ -39,6 +39,8 @@ class ProjectsController < ApplicationController
 
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
+    @assigned_tasks = AssignedTask.select("assigned_tasks.id, tasks.name, project_id").joins("INNER JOIN tasks ON assigned_tasks.task_id = tasks.id")
+
   end
 
   def update
