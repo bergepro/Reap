@@ -21,7 +21,7 @@ class AssignedTasksController < ApplicationController
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:project_id])
     @assigned_task = @project.assigned_tasks.build
-    @tasks = Task.all
+    @tasks = Task.all.where.not(id: AssignedTask.select(:task_id)).select(:id, :name)  
   end
 
   def create
@@ -40,7 +40,12 @@ class AssignedTasksController < ApplicationController
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:project_id])
     @assigned_task = @project.assigned_tasks.find(params[:id])
-    @assigned_task.destroy
+
+    if @assigned_task.time_regs.count >= 1
+      flash[:alert] = "Cannot remove task with registered time"
+    elsif
+      @assigned_task.destroy
+    end
 
     redirect_to client_project_path(@client, @project)
   end

@@ -1,2 +1,9 @@
 <h1>edit task</h1>
 <%= render "form", { task: @task } %>
+<%= link_to "Delete task", task_path(@task), 
+  data:{
+    turbo_method: :delete,
+    turbo_confirm: "Are you sure?"
+  }
+%>
+
