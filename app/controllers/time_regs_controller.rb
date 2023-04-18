@@ -19,7 +19,11 @@ class TimeRegsController < ApplicationController
         @client = Client.find(params[:client_id])   
         @project = @client.projects.find(params[:project_id])   
         @time_reg = @project.time_regs.build(time_reg_params)
-        
+
+        @membership = @project.memberships.find_by(user_id: current_user.id)
+        @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
+        .joins(:assigned_tasks).where("project_id = #{@project.id}")  
+
         if @time_reg.save
             redirect_to client_project_path(@client, @project)
         else
@@ -55,9 +59,13 @@ class TimeRegsController < ApplicationController
         @project = @client.projects.find(params[:project_id])
         @time_reg = @project.time_regs.find(params[:id])
 
-        @time_reg.destroy
-
-        redirect_to [@client, @project], status: :see_other
+        if @time_reg.destroy
+            redirect_to [@client, @project]
+            flash[:notice] = "Time entry has been deleted"
+        else
+            flash[:alert] = "cannot delete time entry" 
+            render :new, status: :unprocessable_entity
+        end
     end
 
     private

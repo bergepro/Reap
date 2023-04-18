@@ -1,22 +1,49 @@
-<%= form_with(model: [@client, @project, @time_reg]) do |form| %>
-  <div class="field">
-    <%= form.label :notes %>
-    <%= form.text_area :notes %>
-  </div>
+<div class="flex flex-col items-center pt-4">
+    <%= form_with(model: [@client, @project, @time_reg]) do |form| %>
+      <div class="max-w-md">
+        <div class="field my-4"></div>
+          <%= form.label :assigned_task_id %>       
+          <br>
+          <% if @assigned_tasks %>
+            <%= form.collection_select :assigned_task_id, @assigned_tasks, :id, :name, {}, { class: 'w-52' } %>
+          <% end %>
+          <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
+            <div class="text-sm italic text-gray-600"><%= message %></div>
+          <% end %>
+        </div>
 
-  <div class="field">
-    <%= form.label :minutes %>
-    <%= form.number_field :minutes %>
-  </div>
+        <div class="field my-4">
+          <%= form.label :notes %>       
+          <% @time_reg.errors.full_messages_for(:notes).each do |message| %>
+            <div class="text-sm italic text-gray-600"><%= message %></div>
+          <% end %>
+          <br>
+          <%= form.text_area :notes, { class: 'w-52' } %>
 
-  <div class="field">
-    <%= form.label :assigned_task_id %>
-    <%= form.collection_select :assigned_task_id, @assigned_tasks, :id, :name %>
-  </div>
+        </div>
 
-  <%= form.hidden_field :membership_id, value: @membership.id %>
+        <div class="field my-45">
+          <%= form.label :minutes %>
+              
+          <% @time_reg.errors.full_messages_for(:minutes).each do |message| %>
+            <div class="text-sm	italic text-gray-600"><%= message %></div>
+          <% end %>
+          <br>  
+          <%= form.number_field :minutes, { class: 'w-52' } %>
+        </div>
 
-  <div class="actions">
-    <%= form.submit %>
+        <%= form.hidden_field :membership_id, value: @membership.id %>
+
+        <div class="actions text-center">
+          <%= form.submit class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow' %>
+        </div>
+        <div class="mt-4">
+          <%= 
+            link_to "Back to Project", [@client, @project], 
+              class: "text-gray-600 italic text-sm text-left" 
+          %>        
+        </div>        
+      </div>
+    <% end %>    
   </div>
-<% end %>
+</div>
