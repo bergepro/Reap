@@ -12,8 +12,9 @@ class ProjectsController < ApplicationController
     @tasks = Task.all
     @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
                           .joins(:assigned_tasks).where("project_id = #{@project.id}")
-
-    @time_regs = @project.time_regs.joins(:membership).where(memberships: { user_id: current_user.id })
+    @time_regs = @project.time_regs.joins(:membership, assigned_task: :task)
+                          .where(memberships: { user_id: current_user.id })
+                          .order('time_regs.created_at DESC')  
   end
 
   def new

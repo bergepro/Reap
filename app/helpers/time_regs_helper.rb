@@ -4,6 +4,11 @@ module TimeRegsHelper
     return nil if time_minutes.nil?
     hours = time_minutes / 60
     minutes = time_minutes % 60
-    "#{hours}:#{minutes}"
+
+    if minutes > 10
+      return "#{hours}:#{minutes}"
+    else 
+      return "#{hours}:0#{minutes}"
+    end
   end
 end

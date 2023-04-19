@@ -1,59 +1,28 @@
 <div class="flex flex-col items-center pt-4">
-    <%= form_with(model: [@client, @project, @time_reg]) do |form| %>
-      <div class="max-w-md">
-        <div class="field my-4"></div>
-          <%= form.label :assigned_task_id %>       
-          <br>
-          <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
-            <div class="text-sm italic text-gray-600"><%= message %></div>
-          <% end %>         
-          <% if @assigned_tasks %>
-            <%= form.collection_select :assigned_task_id, @assigned_tasks, :id, :name, {}, { class: 'w-52' } %>
-          <% end %>
-        </div>
+  <div class="max-w-md">
+    <div class="p-1 my-4">
+    <h1 class="font-bold">New time entry:</h1>
+    <%= render "form", { client: @client, project: @project } %>
+    </div>
 
-        <div class="field my-4">
-          <%= form.label :notes %>       
-          <br>
-          <%= form.text_area :notes, class: 'w-full' %>
-          <% @time_reg.errors.full_messages_for(:notes).each do |message| %>
-            <div class="text-sm italic text-gray-600"><%= message %></div>
-          <% end %>
-        </div>
+    <div class="text-center p-1 m-1">
+      <%= 
+        link_to "Delete time entry ", client_project_time_reg_path(@client, @project, @time_reg), 
+          class: 'rounded bg-red-400 p-2 hover:bg-red-500', 
+          data:{
+            turbo_method: :delete,
+            turbo_confirm: "Are you sure?"
+          }
+      %>        
+    </div>
 
-        <div class="field my-45">
-          <%= form.label :minutes %>
-          <br>  
-          <%= form.number_field :minutes, class: 'w-full' %>
-          <% @time_reg.errors.full_messages_for(:minutes).each do |message| %>
-            <div class="text-sm	italic text-gray-600"><%= message %></div>
-          <% end %>
-        </div>
-
-        <%= form.hidden_field :membership_id, value: @membership.id %>
-
-        <div class="actions text-center p-1 m-1">
-          <%= form.submit class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow' %>
-        </div>
-        <div class="text-center p-1 m-1">
-          <%= 
-            link_to "Delete task ", client_project_time_reg_path(@client, @project, @time_reg), 
-              class: 'rounded bg-red-400 p-2 hover:bg-red-500', 
-              data:{
-                turbo_method: :delete,
-                turbo_confirm: "Are you sure?"
-              }
-          %>        
-        </div>
-        <div class="mt-4">
-          <%= 
-            link_to "Back to Project", [@client, @project], 
-              class: "text-gray-600 italic text-sm text-left" 
-          %>        
-        </div>     
-      </div>
-    <% end %>    
+    <div class="mt-4">
+      <%= 
+        link_to "Back to Project", [@client, @project], 
+          class: "text-gray-600 italic text-sm text-left" 
+      %>        
+    </div> 
+  </div>
 </div>
-
 
 

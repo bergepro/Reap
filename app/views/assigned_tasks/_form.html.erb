@@ -2,7 +2,7 @@
   <%= form_with model: [ @client, @project, @assigned_task ] do |form| %>
     <div>
       <%= form.label :name %> <br>
-      <%= form.collection_select :task_id, @tasks, :id, :name, { include_blank: false }, { class: 'w-52' }  %>
+      <%= form.collection_select :task_id, @tasks, :id, :name, { include_blank: false }, { class: 'w-full' }  %>
       <% @assigned_task.errors.full_messages_for(:name).each do |message|%>
         <div class="text-sm italic text-gray-600">
           <%= message %>

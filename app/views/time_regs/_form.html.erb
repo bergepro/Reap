@@ -1,0 +1,38 @@
+<div class="max-w-md">
+  <%= form_with(model: [@client, @project, @time_reg]) do |form| %>
+    <div class="field my-4">
+      <%= form.label :assigned_task_id %>       
+      <br>
+      <% if @assigned_tasks %>
+        <%= form.collection_select :assigned_task_id, @assigned_tasks, :id, :name, {}, class: 'w-full'  %>
+      <% end %>
+      <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
+        <div class="text-sm italic text-gray-600"><%= message %></div>
+      <% end %>
+    </div>
+    <div class="field my-4">
+      <%= form.label :notes %>       
+      <% @time_reg.errors.full_messages_for(:notes).each do |message| %>
+        <div class="text-sm italic text-gray-600"><%= message %></div>
+      <% end %>
+      <br>
+      <%= form.text_area :notes, class: 'w-full' %>
+
+    </div>
+    <div class="field my-45">
+      <%= form.label :minutes %>
+          
+      <% @time_reg.errors.full_messages_for(:minutes).each do |message| %>
+        <div class="text-sm	italic text-gray-600"><%= message %></div>
+      <% end %>
+      <br>  
+      <%= form.number_field :minutes, class: 'w-full'  %>
+    </div>
+
+    <%= form.hidden_field :membership_id, value: @membership.id %>
+
+    <div class="actions text-center">
+      <%= form.submit class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow' %>
+    </div>   
+  <% end %>  
+</div>

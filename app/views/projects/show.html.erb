@@ -27,29 +27,31 @@
 
 		<div class="p-1 my-4">			
 			<h4 class="font-medium">Your time-entries: </h4>
-			<div class="m-1 border-t border-gray-300"><%= render @project.time_regs %></div>
+			<div class="m-1 border-t border-gray-300">    
+				<%= render @time_regs %>
+			</div>
 		</div>	
 
 		<div class="p-1 my-4">
 			<h4 class="font-medium border-b border-gray-300">Project tasks:</h4>
-			<div class="mb-8">
 			<% @assigned_tasks.each do |assigned_task| %>
-					<div class="border-b text-gray-700 border-gray-300 pb-1 pt-1">
-					<%= assigned_task.name %>				
-					</div>
+				<div class="border-b text-gray-700 border-gray-300 pb-1 pt-1">
+				<%= assigned_task.name %>				
+				</div>
 			<% end %>		
 		</div>
-
 		<div class="flex justify-between">
 			<%= link_to "Assign task", new_client_project_assigned_task_path(@client, @project), 
-        class: 'rounded bg-blue-200 p-2 ml-2 mr-2 hover:bg-blue-300' 
+        class: 'rounded bg-blue-200 p-2 ml-6 hover:bg-blue-300' 
       %>
 			<%= link_to "New time-entry", new_client_project_time_reg_path(@client, @project), 
-        class: 'rounded bg-blue-200 p-2 hover:bg-blue-300' 
+        class: 'rounded bg-blue-200 p-2 mr-6 hover:bg-blue-300' 
       %>
-			<br>  
 		</div>
 		<br>
 		<%= link_to "back to client", client_path(@client), class: "text-gray-600 italic text-sm" %>
   </div>
 </div>
+
+
+<br><br><br><br><br><br>

@@ -2,7 +2,7 @@
   <%= form_with model: @client do |form|%>
     <div>
       <%= form.label :name %> <br>
-      <%= form.text_area :name %>
+      <%= form.text_area :name, class: "w-full" %>
       <% @client.errors.full_messages_for(:name).each do |message|%>
         <div class="text-sm italic text-gray-600">
           <%= message %>
@@ -12,7 +12,7 @@
 
     <div>
       <%= form.label :description %> <br>
-      <%= form.text_area :description %>
+      <%= form.text_area :description, class: "w-full" %>
       <% @client.errors.full_messages_for(:description).each do |message|%>
         <div class="text-sm italic text-gray-600">
           <%= message %>

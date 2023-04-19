@@ -1,7 +1,6 @@
 <div class="flex items-center justify-between border-b text-gray-700 border-gray-300 pb-1 pt-1 ">
-  <span class="mr-24">
-    <%= assigned_task.name%>
+  <span>
+    <%= assigned_task.name%>  
   </span>
-  <%= render 'assigned_tasks/remove', assigned_task: assigned_task %>
-  <br>
+    <%= render 'assigned_tasks/remove', assigned_task: assigned_task %>
 </div>

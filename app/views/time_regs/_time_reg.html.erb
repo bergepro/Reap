@@ -1,14 +1,29 @@
 <div class="flex items-center justify-between mr-2 pt-2 pb-2 border-b border-gray-300">
   <div>  
-  <p><%= time_reg.assigned_task.task.name %></p>
+  <p class="mr-20"><%= time_reg.assigned_task.task.name %></p>
   <p class="text-sm italic text-gray-600"><%= time_reg.notes %> </p>  
   </div>
-  <div>
-    <span class="font-semibold"><%= convert_time(time_reg)%></span>    
+  <div class="flex items-center justify-between">
+    <span class="font-semibold"><%= convert_time(time_reg)%></span>
     <%= link_to "Edit entry", 
       edit_client_project_time_reg_path(@client, @project, time_reg), 
       class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300' 
-    %>   
+    %>
+    <% if time_reg.active%>
+      <%= 
+        button_to "Stop", 
+          client_project_time_reg_toggle_active_path(@client, @project, time_reg), 
+          method: :patch,
+          class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300"
+      %>
+    <% else %>
+      <%= 
+        button_to "Start", 
+          client_project_time_reg_toggle_active_path(@client, @project, time_reg), 
+          method: :patch,
+          class: "text-sm rounded bg-green-200 p-1 hover:bg-green-300"
+      %>
+    <% end %>
   </div>
 
 </div>
