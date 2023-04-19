@@ -1,9 +1,6 @@
 <p>global tasks: </p>
 <br>
-<% @tasks.each do |task| %>
-  <%= link_to task.name, task_path(task) %>
-  <br>
-<% end %>
+<%= render @tasks %>
 <br>
 <div class="bg-pink-100">
   <%= link_to "New global task", new_task_path %>

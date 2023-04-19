@@ -1,4 +1,5 @@
 class MembershipsController < ApplicationController
+    before_action :authenticate_user!
     def new
         puts params.inspect
         @client = Client.find(params[:client_id])

@@ -34,13 +34,16 @@
       </div>
     </nav>
 
-    <% if notice %>
-      <p class="notice bg-green-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= notice %></p>
-    <% end %>
-    <% if alert %>
-      <p class="alert bg-red-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= alert %></p>
-    <% end %>
-    <%= yield %>
+    <div class="flex justify-evenly pt-4">
+      <% if notice %>
+        <p class="notice bg-green-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="alert bg-red-300 text-red-900 px-3 py-3 w-fit rounded-full"><%= alert %></p>
+      <% end %>
+    </div>
+
+    <%= yield %>   
 
     <!-- Footer -->
     <footer class="bottom-0 bg-orange-100 h-16 items-center flex space-x-2 sm:justify-center fixed w-full">

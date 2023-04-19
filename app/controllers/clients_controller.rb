@@ -1,4 +1,5 @@
 class ClientsController < ApplicationController
+    before_action :authenticate_user!
     # henter alle klienter 
     def index
         @clients = Client.all
@@ -7,6 +8,7 @@ class ClientsController < ApplicationController
     # viser et enkelt klient til bruker
     def show
         @client = Client.find(params[:id])
+        @projects = @client.projects
     end
 
     # initialiserer nytt klient
@@ -35,7 +37,7 @@ class ClientsController < ApplicationController
         @client = Client.find(params[:id])
 
         if @client.update(client_params)
-            redirect_to '/clients#index'
+            redirect_to @client
             flash[:notice] = "client has been updated"
         else
             flash[:alert] = "cannot update client" 

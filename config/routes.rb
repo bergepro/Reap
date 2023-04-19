@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :projects do
       resources :memberships
       resources :assigned_tasks
+      resources :time_regs
     end
   end
   resources :tasks

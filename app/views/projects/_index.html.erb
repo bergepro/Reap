@@ -1,0 +1,9 @@
+<% @projects.each_with_index do |project, index| %>
+  <% if index.even? %>
+    <div class="bg-slate-100 px-10 py-1">
+  <% else %>
+    <div class="bg-gray-200 px-10 py-1">
+  <% end %>
+    <%= link_to project.name, client_project_path(@client, project), class: 'italic text-stone-700' %>
+  </div>
+<% end %>

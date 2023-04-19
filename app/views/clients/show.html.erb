@@ -1,8 +1,8 @@
-<div class=" flex justify-evenly pt-4">
+<div class="flex justify-evenly pt-4">
   <div>
     <div class='flex justify-between'>
-    <p class='text-2xl'> <%= @client.name %></p>
-    <div class="flex flex-row justify-end space-x-2 pb-4">
+    <p class='text-2xl mr-4'> <%= @client.name %></p> 
+    <div class="flex flex-row justify-end space-x-2 pb-4 ">
       <%= link_to "Edit client", edit_client_path(@client), class: 'rounded bg-blue-300 p-2' %>
       <%= 
         link_to "Delete client", client_path(@client),  class: ' rounded bg-red-400 p-2',
@@ -15,13 +15,15 @@
   </div>
   <p class='text-md'> <%= @client.description %></p>
   <br>
+  <div>
+    <h3 class="font-bold text-lg">projects: </h3><br>
+    <%= render 'projects/index' %>  
+  </div>
 
   <div class="pt-10 flex justify-evenly ">
-    <%= link_to "View Projects", client_projects_path(@client), class:'bg-blue-200 rounded p-2 ' %>
     <%= link_to "New Project", new_client_project_path(@client), class: 'bg-blue-200 rounded p-2'%>
   </div>
-
-
+  <br>
+  <%= link_to "back to clients", clients_path, class: "text-gray-600 italic text-sm" %>
   </div>
 </div>
-<%= link_to "back to clients", clients_path, class: "border-2 border-black" %>
