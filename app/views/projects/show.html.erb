@@ -45,7 +45,13 @@
         <br>  
       </div>
       <br>
-      <%= link_to "Export Time Regs to CSV", export_client_project_time_regs_path(client_id: @project.client.id, project_id: @project.id, format: :csv), class: "btn btn-primary" %>
+      <%= link_to "Export Time Regs to CSV", export_client_project_time_regs_path(client_id: @project.client.id, project_id: @project.id, format: :csv), class: 'rounded bg-blue-300 p-2' %>
+      <br>
+      <br>
+      <%= form_tag({ controller: 'time_regs', action: 'import', client_id: @client.id, project_id: @project.id }, multipart: true) do %>
+        <%= file_field_tag :file %>
+        <%= submit_tag "Import CSV" %>
+      <% end %>
       <br>
       <%= link_to "back to client", client_path(@client), class: "text-gray-600 italic text-sm" %>
     </div>

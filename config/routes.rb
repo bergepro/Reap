@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :time_regs do
         collection do
           get 'export'
+          post 'import'
         end
       end
     end
