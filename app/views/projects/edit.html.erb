@@ -1,0 +1,33 @@
+<div class="flex flex-col items-center pt-4">
+  <div class="max-w-md">
+    <div class="p-1 my-4">
+    <%= render "form", { client: @client, project: @project } %>
+    </div>
+
+    <div class="p-1 my-4">
+      <div class="font-medium border-b border-gray-300">
+        <h3>assigned tasks:</h3>      
+      </div>
+        <%= render @assigned_tasks %>
+    </div>
+
+    <div class="p-1 my-4">
+      <div class="font-medium border-b border-gray-300">
+        <h3>edit members: </h3>
+      </div>
+      <%= render @project.memberships %>
+    </div>
+
+    <%= render "memberships/new" %>
+    <br>
+    <%= 
+      link_to "back to project", [@client, @project], 
+        class: "text-gray-600 italic text-sm" 
+    %>
+  </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>

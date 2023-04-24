@@ -1,0 +1,9 @@
+<%= 
+  link_to "Remove", 
+    client_project_assigned_task_path(@client, @project, assigned_task), 
+      class: "rounded bg-red-400 p-1  hover:bg-red-500 mr-6", 
+      data:{
+        turbo_method: :delete,
+        turbo_confirm: "Are you sure?"
+      }
+  %>
