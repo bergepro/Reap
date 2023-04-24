@@ -1,8 +1,8 @@
-<div class="flex items-center justify-between mr-2 border-b border-gray-300">
-  <%= membership.user.email %> 
-
+<div class="flex items-center justify-between border-b text-gray-700 border-gray-300 pb-1 pt-1 ">
+  <span class="">
+    <%= membership.user.email %> 
+  </span>
   <% if @is_in_update %>
     <%= render 'memberships/remove', membership: membership %>
-  <% end %>
-  <br>
+  <% end %>  
 </div>

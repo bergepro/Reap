@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :memberships
       resources :assigned_tasks
       resources :time_regs do
+        patch :toggle_active
         collection do
           get 'export'
           post 'import'

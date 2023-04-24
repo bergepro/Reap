@@ -1,22 +1,10 @@
-<%= form_with(model: [@client, @project, @time_reg]) do |form| %>
-  <div class="field">
-    <%= form.label :notes %>
-    <%= form.text_area :notes %>
-  </div>
-
-  <div class="field">
-    <%= form.label :minutes %>
-    <%= form.number_field :minutes %>
-  </div>
-
-  <div class="field">
-    <%= form.label :assigned_task_id %>
-    <%= form.collection_select :assigned_task_id, @assigned_tasks, :id, :name %>
-  </div>
-
-  <%= form.hidden_field :membership_id, value: @membership.id %>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+<div class="flex flex-col items-center pt-4">
+  <div class="max-w-md">
+    <div class="p-1 my-4">
+    <h1 class="font-bold">New time entry:</h1>
+    <%= render "form", { client: @client, project: @project, time_reg: @time_reg}%>
+    <%= link_to "back to project", [@client, @project], class: "text-gray-600 italic text-sm" %>    
+    </div>
+    
+  </div>  
+</div>

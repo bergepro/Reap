@@ -10,10 +10,12 @@ class ProjectsController < ApplicationController
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:id])
     @tasks = Task.all
-    @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
-                          .joins(:assigned_tasks).where("project_id = #{@project.id}")
-
-    @time_regs = @project.time_regs.joins(:membership).where(memberships: { user_id: current_user.id })
+    @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
+                          .joins(:task)
+                          .where(project_id: @project.id)
+    @time_regs = @project.time_regs.joins(:membership, assigned_task: :task)
+                          .where(memberships: { user_id: current_user.id })
+                          .order('time_regs.date_worked DESC', 'tasks.name DESC')
   end
 
   def new
@@ -28,7 +30,7 @@ class ProjectsController < ApplicationController
     @project.users << current_user
 
     if @project.save
-      redirect_to client_projects_path(@client)
+      redirect_to @client
     else
       render :new, status: :unprocessable_entity
     end
