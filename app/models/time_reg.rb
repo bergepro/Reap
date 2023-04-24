@@ -7,5 +7,4 @@ class TimeReg < ApplicationRecord
   validates :membership, presence: true
   validates :assigned_task, presence: true
   validates :assigned_task_id, presence: true
-
 end

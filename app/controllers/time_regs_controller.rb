@@ -15,7 +15,6 @@ class TimeRegsController < ApplicationController
         
         @membership = @project.memberships.find_by(user_id: current_user.id)
         @time_reg = @project.time_regs.new
-
     end
     
     def create 
@@ -34,6 +33,8 @@ class TimeRegsController < ApplicationController
         else
           render :new, status: :unprocessable_entity
         end
+
+        
     end
 
     def edit
@@ -102,7 +103,7 @@ class TimeRegsController < ApplicationController
 
     private
     def time_reg_params
-        params.require(:time_reg).permit(:notes, :minutes, :assigned_task_id, :membership_id)
+        params.require(:time_reg).permit(:notes, :minutes, :assigned_task_id, :membership_id, :date_worked)
     end
 
 
