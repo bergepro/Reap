@@ -37,6 +37,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
+    puts params.inspect
     @is_in_update = true
 
     @client = Client.find(params[:client_id])
@@ -58,10 +59,14 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
+    puts "--------------"
+    puts params.inspect
+    
+    @client = Client.find(params[:client_id])
     @project = Project.find(params[:id])
     @project.destroy
 
-    redirect_to '/projects#index', status: :see_other
+    redirect_to @client, status: :see_other
   end
 
   private

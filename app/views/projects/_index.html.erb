@@ -1,4 +1,4 @@
-<h1 class="font-medium border-b border-gray-300 text-lg">Clients: </h1>
+<h1 class="font-medium border-b border-gray-300 text-lg">Projects: </h1>
 <% @projects.each do |project| %>
     <div class="border-b text-gray-700 border-gray-300 pb-1 pt-1">
     <%= link_to project.name, client_project_path(@client, project), class: 'italic text-stone-700' %>

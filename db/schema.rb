@@ -55,17 +55,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_161146) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "time_entries", force: :cascade do |t|
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.bigint "assigned_task_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["assigned_task_id"], name: "index_time_entries_on_assigned_task_id"
-    t.index ["user_id"], name: "index_time_entries_on_user_id"
-  end
-
   create_table "time_regs", force: :cascade do |t|
     t.text "notes"
     t.integer "minutes"
@@ -97,8 +86,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_161146) do
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
   add_foreign_key "projects", "clients"
-  add_foreign_key "time_entries", "assigned_tasks"
-  add_foreign_key "time_entries", "users"
   add_foreign_key "time_regs", "assigned_tasks"
   add_foreign_key "time_regs", "memberships"
 end
