@@ -1,5 +1,7 @@
 class TimeRegsController < ApplicationController
   before_action :authenticate_user!
+  before_action :ensure_membership
+
   require 'activerecord-import/base'
   require 'csv'
   
@@ -102,50 +104,49 @@ class TimeRegsController < ApplicationController
   end
 
   def import
-  @client = Client.find(params[:client_id])
-  @project = @client.projects.find(params[:project_id])
-  imported_time_regs = []
+    @client = Client.find(params[:client_id])
+    @project = @client.projects.find(params[:project_id])
+    imported_time_regs = []
 
-  if params[:file].blank?
-    flash[:alert] = "Please select a file to import."
-    redirect_to client_project_path(@client, @project) and return
-  end
+    if params[:file].blank?
+      flash[:alert] = "Please select a file to import."
+      redirect_to client_project_path(@client, @project) and return
+    end
 
-  file = params[:file].read
-  begin
-    CSV.parse(file, headers: true) do |row|
-      time_reg_params = row.to_hash.slice('notes', 'minutes', 'assigned_task_id', 'membership_id')
-      time_reg_params['notes'] = row['notes']
-      time_reg_params['minutes'] = row['minutes']
-      time_reg_params['assigned_task_id'] = row['assigned_task_id']
-      time_reg_params['membership_id'] = row['membership_id']
-      time_reg_params['date_worked'] = row['date_worked']
-      imported_time_reg = @project.time_regs.new(time_reg_params)
-      if imported_time_reg.valid?
-        imported_time_regs << imported_time_reg
-      else
-        Rails.logger.debug "Invalid time entry: #{imported_time_reg.errors.full_messages}"
+    file = params[:file].read
+    begin
+      CSV.parse(file, headers: true) do |row|
+        time_reg_params = row.to_hash.slice('notes', 'minutes', 'assigned_task_id', 'membership_id')
+        time_reg_params['notes'] = row['notes']
+        time_reg_params['minutes'] = row['minutes']
+        time_reg_params['assigned_task_id'] = row['assigned_task_id']
+        time_reg_params['membership_id'] = row['membership_id']
+        time_reg_params['date_worked'] = row['date_worked']
+        imported_time_reg = @project.time_regs.new(time_reg_params)
+        if imported_time_reg.valid?
+          imported_time_regs << imported_time_reg
+        else
+          Rails.logger.debug "Invalid time entry: #{imported_time_reg.errors.full_messages}"
+        end
       end
-    end
 
-    if imported_time_regs.present?
-      TimeReg.import(imported_time_regs)
-      flash[:notice] = "Time entries imported successfully."
-    else
-      flash[:alert] = "No valid time entries found in the file."
+      if imported_time_regs.present?
+        TimeReg.import(imported_time_regs)
+        flash[:notice] = "Time entries imported successfully."
+      else
+        flash[:alert] = "No valid time entries found in the file."
+      end
+      redirect_to client_project_path(@client, @project)
+      rescue StandardError => e
+        flash[:alert] = "There was an error importing the file: #{e.message}"
+        redirect_to client_project_path(@client, @project)
     end
-    redirect_to client_project_path(@client, @project)
-  rescue StandardError => e
-    flash[:alert] = "There was an error importing the file: #{e.message}"
-    redirect_to client_project_path(@client, @project)
   end
-end
 
 
   def export
     @project = Project.find(params[:project_id])
     @time_regs = @project.time_regs
-
     csv_data = CSV.generate(headers: true) do |csv|
       # Add CSV header row
       # csv << ['id', 'user_email', 'task_name', 'minutes','created_at', 'updated_at','assigned_task_id', 'user_id', 'membership_id']
@@ -167,5 +168,15 @@ end
   private
   def time_reg_params
     params.require(:time_reg).permit(:notes, :minutes, :assigned_task_id, :membership_id, :date_worked)
+  end
+
+  def ensure_membership
+    client = Client.find(params[:client_id])
+    project = client.projects.find(params[:project_id])
+
+    if !project.memberships.exists?(user_id: current_user)
+      flash[:alert] = "Access denied"
+      redirect_to root_path
+    end
   end
 end

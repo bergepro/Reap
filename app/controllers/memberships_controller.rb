@@ -1,5 +1,7 @@
 class MembershipsController < ApplicationController
     before_action :authenticate_user!
+    before_action :ensure_membership
+    
     def new
         puts params.inspect
         @client = Client.find(params[:client_id])
@@ -44,4 +46,15 @@ class MembershipsController < ApplicationController
     def membership_params
         params.require(:membership).permit(:email)
     end
+
+    def ensure_membership
+        client = Client.find(params[:client_id])
+        project = client.projects.find(params[:project_id])
+    
+        if !project.memberships.exists?(user_id: current_user)
+          flash[:alert] = "Access denied"
+          redirect_to root_path
+        end
+      end
+
 end

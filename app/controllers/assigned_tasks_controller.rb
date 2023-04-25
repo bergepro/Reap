@@ -1,5 +1,7 @@
 class AssignedTasksController < ApplicationController
   before_action :authenticate_user!
+  before_action :ensure_membership
+
   def index
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:project_id])
@@ -55,4 +57,15 @@ class AssignedTasksController < ApplicationController
   def assigned_task_params
     params.require(:assigned_task).permit(:project_id, :task_id)
   end
+
+  def ensure_membership
+    client = Client.find(params[:client_id])
+    project = client.projects.find(params[:project_id])
+
+    if !project.memberships.exists?(user_id: current_user)
+      flash[:alert] = "Access denied"
+      redirect_to root_path
+    end
+  end
+
 end

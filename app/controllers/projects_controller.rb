@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-
+  before_action :ensure_membership
 
   # viser et enkelt prosjekt til bruker .where(assigned_tasks: { project_id: @project.id }
   def show
@@ -71,4 +71,15 @@ class ProjectsController < ApplicationController
   def project_params
     params.require(:project).permit(:name, :description)
   end
+
+  def ensure_membership
+    client = Client.find(params[:client_id])
+    project = client.projects.find(params[:id])
+
+    if !project.memberships.exists?(user_id: current_user)
+      flash[:alert] = "Access denied"
+      redirect_to root_path
+    end
+  end
+
 end
