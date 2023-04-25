@@ -8,7 +8,7 @@ class ClientsController < ApplicationController
     # viser et enkelt klient til bruker
     def show
         @client = Client.find(params[:id])
-        @projects = @client.projects
+        @projects = current_user.projects.where(projects: {client_id: @client.id})
     end
 
     # initialiserer nytt klient

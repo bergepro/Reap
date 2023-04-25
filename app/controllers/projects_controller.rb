@@ -1,9 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  def index
-    @client = Client.find(params[:client_id])
-    @projects = @client.projects.joins(:memberships).where(memberships: { user_id: current_user.id })
-  end
+
 
   # viser et enkelt prosjekt til bruker .where(assigned_tasks: { project_id: @project.id }
   def show
