@@ -17,7 +17,7 @@
     <p class='text-md'> <%= @client.description %></p>
     <br>
     <div>
-      <%= render 'projects/index' %>  
+      <%= render @projects %>  
     </div>
     <div class="pt-10 flex justify-evenly ">
       <%= link_to "New Project", new_client_project_path(@client), class: 'bg-blue-200 rounded p-2 hover:bg-blue-300'%>

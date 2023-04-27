@@ -1,7 +1,10 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_membership
+  before_action :ensure_membership, except: :index
 
+  def index
+    @clients = Client.all
+  end
   # viser et enkelt prosjekt til bruker .where(assigned_tasks: { project_id: @project.id }
   def show
     @client = Client.find(params[:client_id])
