@@ -13,6 +13,9 @@ module.exports = {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
+      minWidth: {
+        '6': '6em',
+      },
     },
   },
   plugins: [
