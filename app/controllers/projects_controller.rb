@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_membership, except: :index
+  before_action :ensure_membership, only: [:show, :edit, :update, :destroy]
 
   def index
     @clients = Client.all
