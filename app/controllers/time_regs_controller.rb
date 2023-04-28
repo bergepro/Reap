@@ -16,7 +16,6 @@ class TimeRegsController < ApplicationController
     @project = @client.projects.find(params[:project_id])    
     @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
     .joins(:assigned_tasks).where("project_id = #{@project.id}")        
-    
     @membership = @project.memberships.find_by(user_id: current_user.id)
     @time_reg = @project.time_regs.new
   end
@@ -25,8 +24,8 @@ class TimeRegsController < ApplicationController
     @client = Client.find(params[:client_id])   
     @project = @client.projects.find(params[:project_id])   
     @time_reg = @project.time_regs.build(time_reg_params)
-
     @membership = @project.memberships.find_by(user_id: current_user.id)
+    
     @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
     .joins(:assigned_tasks).where("project_id = #{@project.id}")  
 
@@ -52,6 +51,7 @@ class TimeRegsController < ApplicationController
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:project_id])
     @time_reg = @project.time_regs.find(params[:id])
+    @membership = @project.memberships.find_by(user_id: current_user.id)
 
     if @time_reg.update(time_reg_params)
       redirect_to [@client, @project]
