@@ -43,18 +43,35 @@
           <h4 class="font-bold">Project tasks:</h4>
           <h4 class="font-bold mr-16">Hours:</h4>
         </div>
-        <% @assigned_tasks.each do |assigned_task| %>
-          <div class="border-b text-gray-700 border-gray-300 pb-1 pt-1">
-            <div class="flex justify-between">
+
+        <div data-controller="collapse-hours">
+          <% @assigned_tasks.each do |assigned_task| %>
+            <div class="border-b text-gray-700 border-gray-300 pb-1 pt-1">
               <div class="flex justify-between">
-                <button class="collapsible mr-2 rounded bg-gray-100 pr-2 pl-2" data-task-id="<%= assigned_task.id %>">V </button>
-                <h4><%= assigned_task.name %></h4>            
+                <div class="flex justify-between">
+                  <button data-action="" 
+                          class="collapsible mr-2 rounded bg-gray-100 pr-2 pl-2" 
+                          data-task-id="<%= assigned_task.id %>">
+                            V
+                  </button>                  
+                  <h4><%= assigned_task.name %></h4>            
+                </div>
+                <h4 class="font-medium mr-16"><%= convert_time_int(assigned_task.time_regs.sum(:minutes)) %></h4>
               </div>
-              <h4 class="font-medium mr-16"><%= convert_time_int(assigned_task.time_regs.sum(:minutes)) %></h4>
             </div>
-          </div>
-        <% end %>	
+
+            <div class="hidden bg-gray-100" id="collapsible-<%= assigned_task.id %>">
+                <% grouped_time_regs(assigned_task).each do |user| %>
+                  <div class="flex justify-between p-1 border-b border-gray-300">
+                    <h4 class="ml-2"><%= user[0] %></h4>
+                    <h4 class="mr-14"><%= convert_time_int(user[1]) %></h4>              
+                  </div>
+                <% end %>
+            </div>
+          <% end %>         
+        </div>
       </div>
+
       <div class="flex justify-between">
         <%= link_to "Assign task", new_client_project_assigned_task_path(@client, @project), 
           class: 'rounded bg-blue-200 p-2 ml-6 hover:bg-blue-300' 
