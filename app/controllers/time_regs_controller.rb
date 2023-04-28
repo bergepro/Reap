@@ -42,7 +42,7 @@ class TimeRegsController < ApplicationController
   def edit
     @client = Client.find(params[:client_id])
     @project = @client.projects.find(params[:project_id])
-    @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
+    @assigned_tasks = Task.select('DISTINCT name, assigned_tasks.id, project_id, task_id')
         .joins(:assigned_tasks).where("project_id = #{@project.id}")    
     @membership = @project.memberships.find_by(user_id: current_user.id)
     @time_reg = @project.time_regs.find(params[:id])
@@ -145,21 +145,28 @@ class TimeRegsController < ApplicationController
 
 
   def export
+    @client = Client.find(params[:client_id])
     @project = Project.find(params[:project_id])
     @time_regs = @project.time_regs
     csv_data = CSV.generate(headers: true) do |csv|
       # Add CSV header row
       # csv << ['id', 'user_email', 'task_name', 'minutes','created_at', 'updated_at','assigned_task_id', 'user_id', 'membership_id']
-      csv << ['notes', 'minutes', 'assigned_task_id','membership_id', 'date_worked']
+      csv << ['date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email']
       # Add CSV data rows for each time_reg
       @time_regs.each do |time_reg|
-        assigned_task = AssignedTask.find(time_reg.assigned_task_id)
-        task_name = Task.find(assigned_task.task_id).name
-        
-        user_email = User.find(time_reg.membership.user_id).email
-        project_name = Project.find(time_reg.membership.project_id).name
-        # csv << [time_reg.id, user_email,task_name, time_reg.minutes, time_reg.created_at,time_reg.updated_at,time_reg.assigned_task_id,time_reg.membership.user_id,time_reg.membership.project_id ]
-        csv << [time_reg.notes, time_reg.minutes, time_reg.assigned_task_id,time_reg.membership.user.id, time_reg.date_worked]
+        membership = Membership.find(time_reg.membership.id)
+
+        date = time_reg.date_worked
+        client = @client.name
+        project = @project.name
+        task = Task.find(time_reg.assigned_task.task_id).name
+        notes = time_reg.notes
+        minutes = time_reg.minutes
+        first_name = User.find(time_reg.membership.user_id).first_name
+        last_name = User.find(time_reg.membership.user_id).last_name
+        email = User.find(time_reg.membership.user_id).email
+
+        csv << [date, client, project, task, notes, minutes, first_name, last_name, email]
       end
     end
     send_data csv_data, filename: "#{Time.now.to_i}_time_regs_for_#{@project.name}.csv"
