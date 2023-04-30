@@ -8,11 +8,11 @@
     <div class="p-1 my-2">
       <div class="flex items-center justify-between mr-2">
         <p class="text-xl mr-4"> <%= @project.name %></p>
-        <%= link_to "Edit project", edit_client_project_path(@client, @project), 
+        <%= link_to "Edit project", edit_project_path(@project), 
           class: 'rounded bg-blue-300 p-2 mr-2 hover:bg-blue-400'
         %>
         <%= 
-          link_to "Delete project", client_project_path(@client, @project), 
+          link_to "Delete project", project_path(@project), 
             class: 'rounded bg-red-400 p-2  hover:bg-red-500',
             data:{
               turbo_method: :delete,
@@ -73,24 +73,19 @@
       </div>
 
       <div class="flex justify-between">
-        <%= link_to "Assign task", new_client_project_assigned_task_path(@client, @project), 
+        <%= link_to "Assign task", new_project_assigned_task_path(@project), 
           class: 'rounded bg-blue-200 p-2 ml-6 hover:bg-blue-300' 
         %>
-        <%= link_to "New time-entry", new_client_project_time_reg_path(@client, @project), 
+        <%= link_to "New time-entry", new_project_time_reg_path(@project), 
           class: 'rounded bg-blue-200 p-2 mr-6 hover:bg-blue-300' 
         %>
       </div>
       <br>
       <br>
-      <%= link_to "Export Time Regs to CSV", export_client_project_time_regs_path(client_id: @project.client.id, project_id: @project.id, format: :csv), class: 'rounded bg-blue-300 p-2' %>
+      <%= link_to "Quick export to CSV", export_project_time_regs_path(client_id: @project.client.id, project_id: @project.id, format: :csv), class: 'rounded bg-blue-300 p-2' %>
       <br>
       <br>
-      <%= form_tag({ controller: 'time_regs', action: 'import', client_id: @client.id, project_id: @project.id }, multipart: true) do %>
-        <%= file_field_tag :file %>
-        <%= submit_tag "Import CSV", class: 'rounded bg-blue-300 p-2'%>
-      <% end %>
-      <br>
-      <%= link_to "back to client", client_path(@client), class: "text-gray-600 italic text-sm" %>
+      <%= link_to "back to client", client_path(@project.client_id), class: "text-gray-600 italic text-sm" %>
   </div>
 </div>
 

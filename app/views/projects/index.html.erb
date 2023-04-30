@@ -12,19 +12,20 @@
 
         <div class="flex justify-between border-b border-gray-300 pb-1">
           <h2 class="font-semibold text-lg"><%= client.name %></h2>
-          <%= link_to "New Project", new_client_project_path(client), class: 'text-sm bg-blue-200 rounded p-1 hover:bg-blue-300'%>
         </div>
 
         <% @projects.each do |project| %>
           <div class="border-b text-gray-700 border-gray-300 pb-1 pt-1 ">
             <%= 
-              link_to project.name, client_project_path(client, project), 
+              link_to project.name, project_path(project), 
               class: 'italic text-stone-700 ml-4' 
             %>
           </div>
         <% end %>       
       </div>
- 
     <% end %>
+    <div class="flex justify-evenly">
+      <%= link_to "New Project", new_project_path, class: ' bg-blue-200 rounded p-2 hover:bg-blue-300'%>
+    </div>
   </div>
 </div>
