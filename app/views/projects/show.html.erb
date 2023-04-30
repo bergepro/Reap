@@ -61,10 +61,11 @@
             </div>
 
             <div class="hidden bg-gray-100" id="collapsible-<%= assigned_task.id %>">
-                <% grouped_time_regs(assigned_task).each do |user| %>
+                <% grouped_time_regs(assigned_task).each do |grouped_user| %>
                   <div class="flex justify-between p-1 border-b border-gray-300">
-                    <h4 class="ml-2"><%= user[0] %></h4>
-                    <h4 class="mr-14"><%= convert_time_int(user[1]) %></h4>              
+                    <% user = user_data(grouped_user[0]) %>
+                    <h4 class="ml-2"><%= "#{user.first_name} #{user.last_name}" %></h4>
+                    <h4 class="mr-14"><%= convert_time_int(grouped_user[1]) %></h4>              
                   </div>
                 <% end %>
             </div>

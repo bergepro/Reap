@@ -5,4 +5,8 @@ module ProjectsHelper
                 .group("users.email")
                 .pluck("users.email", "SUM(time_regs.minutes)")
   end
+
+  def user_data(email)
+    User.find_by(email: email)
+  end
 end
