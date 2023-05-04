@@ -1,0 +1,10 @@
+<% if tasks.length < 1%>
+  <p>No tasks found</p>
+<% else %>
+  <% tasks.each do |task| %>
+    <label>
+      <%= check_box_tag "task_ids[]", task.id %>
+      <%= task.name %>
+    </label>
+  <% end %>
+<% end %>

@@ -5,6 +5,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'home#index'
 
+  get 'reports/update_task_checkboxes'
+  get 'reports/update_member_checkboxes'
+
+  resources :reports, only: [:index] 
+  
   resources :clients 
   resources :tasks
 

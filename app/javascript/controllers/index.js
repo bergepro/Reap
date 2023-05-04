@@ -9,3 +9,6 @@ application.register("collapse-hours", CollapseHoursController)
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import ReportsController from "./reports_controller"
+application.register("reports", ReportsController)

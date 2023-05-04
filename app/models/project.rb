@@ -7,4 +7,5 @@ class Project < ApplicationRecord
   has_many :users, through: :memberships
   has_many :time_regs, through: :memberships
   has_many :assigned_tasks, dependent: :destroy
+  has_many :tasks, through: :assigned_tasks
 end
