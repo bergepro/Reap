@@ -15,6 +15,10 @@ module.exports = {
       },
       minWidth: {
         '6': '6em',
+        'custom35': '35em',
+      },
+      width: {
+        'custom10': '20em',
       },
     },
   },

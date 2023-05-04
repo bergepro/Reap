@@ -1,14 +1,22 @@
 <div class="flex flex-col items-center pt-4">
-  <div class="max-w-md">
-  <div>
-		<div class="w-96"></div>
-		<div class="w-96"></div>
-	</div>
+  <div class="max-w-md md:min-w-custom35">
+
     <div class="p-1 my-2">
-      <h3 class="font-bold">Global tasks: </h3>    
+      <h3 class="font-bold text-2xl float-left">Global tasks:</h3>
+
+      <div class="group relative float-left">
+        <div class="hidden group-hover:block absolute bg-orange-100 rounded whitespace-nowrap ml-4">
+          <p class="block p-1 text-xs ">
+            You can create global tasks that is avaliable for everyone, <br>
+              all you need to do is assign it to your project
+          </p>
+        </div>
+       <span class="font-normal text-xs">&nbsp;[?]</span>
+      </div>
+
     </div>
 
-    <div class="p-1 my-1">
+    <div class="p-1 my-1 clear-both">
      <%= render @tasks %>    
     </div>
 
