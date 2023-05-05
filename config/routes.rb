@@ -7,8 +7,10 @@ Rails.application.routes.draw do
 
   get 'reports/update_task_checkboxes'
   get 'reports/update_member_checkboxes'
+  get 'reports/render_custom_timeframe'
+  get 'reports/update_projects_select'
 
-  resources :reports, only: [:index] 
+  resources :reports, only: [:index, :new, :create] 
   
   resources :clients 
   resources :tasks

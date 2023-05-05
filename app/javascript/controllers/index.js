@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import CheckBoxesController from "./check_boxes_controller"
+application.register("check-boxes", CheckBoxesController)
+
 import CollapseHoursController from "./collapse_hours_controller"
 application.register("collapse-hours", CollapseHoursController)
 
