@@ -7,14 +7,10 @@
   <div class="flex items-center justify-between">
     <span class="font-semibold"><%= convert_time(time_reg)%></span>
     <%= link_to "Edit entry", edit_time_reg_path(time_reg), class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 whitespace-nowrap' %>
-    <% if time_reg.active%>
-      <%= 
-        button_to "Stop", time_reg_toggle_active_path(time_reg), method: :patch, class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300"
-      %>
-  <% else %>
-    <%= 
-      button_to "Start", time_reg_toggle_active_path(time_reg), method: :patch, class: "text-sm rounded bg-green-200 p-1 hover:bg-green-300"
-    %>
-<% end %>
+    <% if time_reg.active %>
+      <%= button_to "Stop", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300" %>
+    <% else %>
+      <%= button_to "Start", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-green-200 p-1 hover:bg-green-300" %>
+    <% end %>
   </div>
 </div>

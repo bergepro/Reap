@@ -1,26 +1,33 @@
 class TimeRegsController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_membership
+  before_action :ensure_membership, except: [:new, :create]
+  skip_before_action :ensure_membership, only: :toggle_active
 
   require 'activerecord-import/base'
   require 'csv'
 
   def new 
     @project = Project.find(params[:project_id]) if params[:project_id]
-    @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
-      .joins(:assigned_tasks).where("project_id = #{@project.id}")
-    @membership = @project.memberships.find_by(user_id: current_user.id)
-    @time_reg = @project.time_regs.new
+    if @project
+      @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
+        .joins(:assigned_tasks).where("project_id = #{@project.id}")
+      @membership = @project.memberships.find_by(user_id: current_user.id)
+      @time_reg = @project.time_regs.new
+    else
+      # handle error, e.g. redirect to projects index with error message
+    end
   end
 
+
   def create
-    @project = Project.find(params[:project_id]) if params[:project_id]
+    puts params.inspect # Add this line to debug
+
+    @project = Project.find(params[:time_reg][:project_id])
     @time_reg = @project.time_regs.build(time_reg_params)
     @membership = @project.memberships.find_by(user_id: current_user.id)
-
+    @time_regs = @project.time_regs
     @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
-      .joins(:assigned_tasks).where("project_id = #{@project.id}")
-
+      .joins(:assigned_tasks).where(project_id: @project.id)
     @time_reg.active = false
     @time_reg.updated = Time.now
     if @time_reg.save
@@ -30,6 +37,7 @@ class TimeRegsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
 
   def edit
     @time_reg = TimeReg.find(params[:id])
@@ -67,7 +75,7 @@ class TimeRegsController < ApplicationController
   end
 
   def toggle_active
-    @time_reg = TimeReg.find(params[:id])
+    @time_reg = TimeReg.find(params[:time_reg_id])
     @project = @time_reg.assigned_task.project
 
     if @time_reg.active
@@ -91,10 +99,10 @@ class TimeRegsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
   def export
-    @time_reg = TimeReg.find(params[:time_reg_id])
-    @project = @time_reg.assigned_task.project
-    @client = Client.find(@project.client_id)
+    @project = Project.find(params[:project_id])
+    @client = @project.client
     @time_regs = @project.time_regs
     csv_data = CSV.generate(headers: true) do |csv|
       # Add CSV header row
@@ -117,6 +125,7 @@ class TimeRegsController < ApplicationController
         csv << [date, client, project, task, notes, minutes, first_name, last_name, email]
       end
     end
+
     send_data csv_data, filename: "#{Time.now.to_i}_time_regs_for_#{@project.name}.csv"
   end
 
@@ -125,14 +134,23 @@ class TimeRegsController < ApplicationController
     params.require(:time_reg).permit(:notes, :minutes, :assigned_task_id, :membership_id, :date_worked)
   end
 
-  def ensure_membership
-    project = TimeReg.find(params[:id]).assigned_task.project
+  def skip_ensure_membership_for_toggle_active
+    skip_before_action :ensure_membership
+  end
 
-    if !project.memberships.exists?(user_id: current_user)
+  def ensure_membership
+    if params[:id]
+      project = TimeReg.find(params[:id]).assigned_task.project
+    elsif params[:project_id]
+      project = Project.find(params[:project_id])
+    end
+
+    if !project&.memberships&.exists?(user_id: current_user)
       flash[:alert] = "Access denied"
       redirect_to root_path
     end
   end
+
 
 
 end

@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :projects do
     resources :memberships
     resources :assigned_tasks
+    get 'export', to: 'projects#export', as: 'export_project_time_reg'
   end
 end
 

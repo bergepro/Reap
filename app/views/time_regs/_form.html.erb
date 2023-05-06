@@ -1,6 +1,7 @@
 <div class="max-w-md">
   <%= form_with(model: time_reg) do |form| %>
     <div class="field my-4 w-80">
+      <%= form.hidden_field :project_id, value: @project.id %>
       <%= form.label :assigned_task_id %>       
       <br>
       <% if @assigned_tasks %>
