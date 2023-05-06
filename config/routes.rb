@@ -10,7 +10,11 @@ Rails.application.routes.draw do
 
   resources :reports, only: [:index, :new, :create]
   resources :clients
+  get 'reports/update_groupes_select'
+  get '/reports/index'
+  
   resources :tasks
+
   resources :time_regs do
     patch :toggle_active
 
