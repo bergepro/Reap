@@ -4,71 +4,71 @@ class TimeRegsController < ApplicationController
 
   require 'activerecord-import/base'
   require 'csv'
-  
+
   def new 
-    @project = Project.find(params[:project_id])    
+    @project = Project.find(params[:project_id]) if params[:project_id]
     @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
-    .joins(:assigned_tasks).where("project_id = #{@project.id}")        
+      .joins(:assigned_tasks).where("project_id = #{@project.id}")
     @membership = @project.memberships.find_by(user_id: current_user.id)
     @time_reg = @project.time_regs.new
   end
 
-  def create  
-    @project = Project.find(params[:project_id])   
+  def create
+    @project = Project.find(params[:project_id]) if params[:project_id]
     @time_reg = @project.time_regs.build(time_reg_params)
     @membership = @project.memberships.find_by(user_id: current_user.id)
-    
+
     @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
-    .joins(:assigned_tasks).where("project_id = #{@project.id}")  
+      .joins(:assigned_tasks).where("project_id = #{@project.id}")
 
     @time_reg.active = false
     @time_reg.updated = Time.now
     if @time_reg.save
-        flash[:notice] = "Time entry has been created"
-        redirect_to @project
+      flash[:notice] = "Time entry has been created"
+      redirect_to project_path(@project)
     else
-        render :new, status: :unprocessable_entity
-    end   
-  end
-
-  def edit
-    @project = Project.find(params[:project_id])
-    @assigned_tasks = Task.select('DISTINCT name, assigned_tasks.id, project_id, task_id')
-        .joins(:assigned_tasks).where("project_id = #{@project.id}")    
-    @membership = @project.memberships.find_by(user_id: current_user.id)
-    @time_reg = @project.time_regs.find(params[:id])
-  end
-
-  def update
-    @project = Project.find(params[:project_id])
-    @time_reg = @project.time_regs.find(params[:id])
-    @membership = @project.memberships.find_by(user_id: current_user.id)
-
-    if @time_reg.update(time_reg_params)
-      redirect_to @project
-      flash[:notice] = "Time entry has been updated"
-    else
-      flash[:alert] = "cannot update time entry" 
       render :new, status: :unprocessable_entity
     end
   end
 
-  def destroy 
-  @project = Project.find(params[:project_id])
-  @time_reg = @project.time_regs.find(params[:id])
+  def edit
+    @time_reg = TimeReg.find(params[:id])
+    @project = @time_reg.assigned_task.project
+    @assigned_tasks = Task.select('DISTINCT name, assigned_tasks.id, project_id, task_id')
+      .joins(:assigned_tasks).where("project_id = #{@project.id}")
+    @membership = @project.memberships.find_by(user_id: current_user.id)
+  end
 
-  if @time_reg.destroy
-    redirect_to @project
-    flash[:notice] = "Time entry has been deleted"
+  def update
+    @time_reg = TimeReg.find(params[:id])
+    @project = @time_reg.assigned_task.project
+    @membership = @project.memberships.find_by(user_id: current_user.id)
+
+    if @time_reg.update(time_reg_params)
+      redirect_to project_path(@project)
+      flash[:notice] = "Time entry has been updated"
     else
-      flash[:alert] = "cannot delete time entry" 
+      flash[:alert] = "cannot update time entry"
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @time_reg = TimeReg.find(params[:id])
+    @project = @time_reg.assigned_task.project
+
+    if @time_reg.destroy
+      redirect_to project_path(@project)
+      flash[:notice] = "Time entry has been deleted"
+    else
+      flash[:alert] = "cannot delete time entry"
       render :new, status: :unprocessable_entity
     end
   end
 
   def toggle_active
-    @project = Project.find(params[:project_id])
-    @time_reg = @project.time_regs.find(params[:time_reg_id])
+    @time_reg = TimeReg.find(params[:id])
+    @project = @time_reg.assigned_task.project
 
     if @time_reg.active
       new_timestamp = Time.now
@@ -84,16 +84,16 @@ class TimeRegsController < ApplicationController
       @time_reg.updated = Time.now
       @time_reg.active = true
     end
-    
+
     if @time_reg.save
-      redirect_to [@client, @project]
+      redirect_to project_path(@project)
     else
       render :new, status: :unprocessable_entity
     end
   end
-
   def export
-    @project = Project.find(params[:project_id])
+    @time_reg = TimeReg.find(params[:time_reg_id])
+    @project = @time_reg.assigned_task.project
     @client = Client.find(@project.client_id)
     @time_regs = @project.time_regs
     csv_data = CSV.generate(headers: true) do |csv|
@@ -126,11 +126,13 @@ class TimeRegsController < ApplicationController
   end
 
   def ensure_membership
-    project = Project.find(params[:project_id])
+    project = TimeReg.find(params[:id]).assigned_task.project
 
     if !project.memberships.exists?(user_id: current_user)
       flash[:alert] = "Access denied"
       redirect_to root_path
     end
   end
+
+
 end
