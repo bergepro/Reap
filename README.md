@@ -1,24 +1,36 @@
-# README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Harvest time tracking
+Time tracking application written in Ruby on Rails
+## Getting Started
 
-Things you may want to cover:
+---
 
-* Ruby version
+You can get check out this project in two ways: setting it up locally or testing our [live version](https://rocky-headland-04914.herokuapp.com/).
 
-* System dependencies
+### Setting Up Locally
 
-* Configuration
+Install the project's dependencies by running:
 
-* Database creation
+```shell
+yarn install
+```
+and
 
-* Database initialization
 
-* How to run the test suite
+```shell
+bundle install
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+## Database stuff -----------
 
-* Deployment instructions
+Finally, you can run your project locally with:
 
-* ...
+```shell
+bin/dev
+```
+
+Open your browser and visit <http://localhost:3000>, your project should be running!
+
+
+
+
