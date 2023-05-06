@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   get 'reports/update_member_checkboxes'
   get 'reports/render_custom_timeframe'
   get 'reports/update_projects_select'
-
+  get 'reports/update_groupes_select'
+  get '/reports/index'
+  
   resources :reports, only: [:index, :new, :create] 
   
   resources :clients 
