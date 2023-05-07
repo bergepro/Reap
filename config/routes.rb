@@ -15,9 +15,9 @@ Rails.application.routes.draw do
   resources :reports, only: [:index, :new, :create] 
   
   resources :clients 
-  resources :tasks do
-    post 'import'
+  resources :tasks
 
+  match 'projects/import' => 'projects#import', :via => :post
   resources :projects do
     resources :memberships
     resources :assigned_tasks

@@ -27,9 +27,9 @@
     <div class="flex justify-evenly">
       <%= link_to "New Project", new_project_path, class: ' bg-blue-200 rounded p-2 hover:bg-blue-300'%>
     </div>
-    <%= form_with project_import_path do |form| %>
+    <%= form_with url: projects_import_path do |form| %>
       <%= submit_tag "Import CSV", class: 'rounded bg-blue-300 p-2 my-8'%>
-      <%= file_field_tag :file %>
+      <%= form.file_field :file %>
     <% end %>
   </div>
 </div>

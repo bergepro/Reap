@@ -63,7 +63,6 @@ class ProjectsController < ApplicationController
   end
 
   def import
-    #@project = Project.find(params[:project_id])
     imported_time_regs = []
 
     if params[:file].blank?
@@ -91,6 +90,10 @@ class ProjectsController < ApplicationController
           @client.save
           puts @client.id
           puts @client.name
+
+          @client.errors.full_messages.each do |message|
+            puts message
+          end
         else
           @client = Client.find_by(name: client)
         end
@@ -119,9 +122,10 @@ class ProjectsController < ApplicationController
           @task = Task.find_by(name: task)
         end
 
-        puts time_reg_params 
+        puts tr ime_reg_params 
         puts @task.id
 
+        # AssignedTask-håndtering
         assigned_task_params = {"project_id" => @project.id, "task_id" => @task.id}
         if (!@project.assigned_tasks.exists?(task_id: @task.id))
           @assigned_task = @project.assigned_tasks.build(assigned_task_params)
@@ -167,7 +171,6 @@ class ProjectsController < ApplicationController
         redirect_to project_path(@project)
     end
   end
-
 
   private
 
