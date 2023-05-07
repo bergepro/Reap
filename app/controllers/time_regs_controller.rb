@@ -7,7 +7,7 @@ class TimeRegsController < ApplicationController
   require 'csv'
 
   def index
-    @time_regs = current_user.time_regs.order('time_regs.date_worked DESC', 'time_regs.assigned_task_id')
+    @time_regs = current_user.time_regs.order('time_regs.date_worked DESC', 'time_regs.assigned_task_id', 'time_regs.created_at DESC')
   end
 
   def new
@@ -100,6 +100,33 @@ class TimeRegsController < ApplicationController
     else
       render :index, status: :unprocessable_entity
     end
+  end
+
+  def update_minutes_view
+    active_times = User.find(params[:user_id]).time_regs.where(active: true)
+    update_minutes(active_times)
+    
+    @time_regs = User.find(params[:user_id]).time_regs.order('time_regs.date_worked DESC', 'time_regs.assigned_task_id', 'time_regs.created_at DESC')
+    render partial: @time_regs
+  end
+
+  def update_minutes(active_times)
+    active_times.each do | time_reg |
+      puts time_reg.updated
+      new_timestamp = Time.now
+
+      old_time = time_reg.updated.to_i
+      new_time = new_timestamp.to_i
+
+      worked_minutes = (new_time - old_time) / 60
+
+      if worked_minutes >= 1
+        time_reg.minutes += worked_minutes
+        time_reg.updated = Time.now
+        time_reg.save
+      end
+    end
+    active_times
   end
 
   def export

@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get 'export'
       post 'import'
       get 'update_tasks_select'
+      get 'update_minutes_view'
     end
 
   end

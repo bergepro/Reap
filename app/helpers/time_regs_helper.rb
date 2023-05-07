@@ -16,7 +16,7 @@ module TimeRegsHelper
     hours = minutes / 60
     minutes = minutes % 60
 
-    if minutes > 10
+    if minutes > 9
       return "#{hours}:#{minutes}"
     else 
       return "#{hours}:0#{minutes}"
