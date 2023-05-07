@@ -15,7 +15,8 @@ Rails.application.routes.draw do
   resources :reports, only: [:index, :new, :create] 
   
   resources :clients 
-  resources :tasks
+  resources :tasks do
+    post 'import'
 
   resources :projects do
     resources :memberships
@@ -25,10 +26,8 @@ Rails.application.routes.draw do
       patch :toggle_active
       
       collection do
-        get 'export'
-        post 'import'
+        get 'export'    
       end
     end
   end
-
 end
