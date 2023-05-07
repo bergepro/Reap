@@ -84,7 +84,10 @@
       <br>
       <br>
       <%= link_to "Quick export to CSV", export_project_time_regs_path(client_id: @project.client.id, project_id: @project.id, format: :csv), class: 'rounded bg-blue-300 p-2' %>
-      <br>
+      <%= form_tag({ controller: 'time_regs', action: 'import', project_id: @project.id }, multipart: true) do %>
+        <%= submit_tag "Import CSV", class: 'rounded bg-blue-300 p-2 my-8'%>
+        <%= file_field_tag :file %>
+      <% end %>
       <br>
       <%= link_to "back to client", client_path(@project.client_id), class: "text-gray-600 italic text-sm" %>
   </div>
