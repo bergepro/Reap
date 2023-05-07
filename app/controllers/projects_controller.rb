@@ -75,25 +75,15 @@ class ProjectsController < ApplicationController
       CSV.parse(file, headers: true) do |row|
         time_reg_params = row.to_hash.slice('date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email')
 
-        puts "csv:"
-        puts time_reg_params
         time_reg_params['date_worked'] = row['date']
         time_reg_params.delete('date')
-        puts time_reg_params
-        puts "WOAA"
 
         # Client-håndtering
         client = row['client']
         if (!Client.exists?(name: client))
-          client_params = {"name" => client, "description" => ""}
+          client_params = {"name" => client, "description" => "Description."}
           @client = Client.new(client_params)
           @client.save
-          puts @client.id
-          puts @client.name
-
-          @client.errors.full_messages.each do |message|
-            puts message
-          end
         else
           @client = Client.find_by(name: client)
         end
@@ -102,11 +92,15 @@ class ProjectsController < ApplicationController
         # Project-håndtering
         project = row['project']
         if (!Project.exists?(name: project))
-          project_params = {"client_id" => @client.id, "name" => project, "description" => ""}
+          project_params = {"client_id" => @client.id, "name" => project, "description" => "Description."}
           @project = Project.new(project_params)
+          @project.users << current_user
           @project.save
-          puts @project.id 
-          puts @project.name
+
+          @project.errors.full_messages.each do |message|
+            puts message
+          end
+
         else
           @project = Project.find_by(name: project)
         end
@@ -122,7 +116,7 @@ class ProjectsController < ApplicationController
           @task = Task.find_by(name: task)
         end
 
-        puts tr ime_reg_params 
+        puts time_reg_params 
         puts @task.id
 
         # AssignedTask-håndtering
@@ -137,8 +131,6 @@ class ProjectsController < ApplicationController
         end
         time_reg_params['assigned_task_id'] = @assigned_task.id
         time_reg_params.delete('task')
-        puts time_reg_params
-        puts "----------------------------"
 
         time_reg_params.delete('first name')
         time_reg_params.delete('last name')
@@ -149,8 +141,6 @@ class ProjectsController < ApplicationController
         time_reg_params.delete('email')
         time_reg_params['membership_id'] = @membership.id
 
-        puts time_reg_params
-        puts "ÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆ"
         imported_time_reg = @project.time_regs.new(time_reg_params)
         if imported_time_reg.valid?
           imported_time_regs << imported_time_reg
@@ -165,10 +155,10 @@ class ProjectsController < ApplicationController
       else
         flash[:alert] = "No valid time entries found in the file."
       end
-      redirect_to project_path(@project)
+      redirect_to projects_path
       rescue StandardError => e
         flash[:alert] = "There was an error importing the file: #{e.message}"
-        redirect_to project_path(@project)
+        redirect_to projects_path
     end
   end
 
