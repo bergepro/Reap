@@ -15,12 +15,12 @@ module.exports = {
       },
       minWidth: {
         '6': '6em',
-        'custom35': '35em',
-        'custom25': '25em',
+        'custom35': '35rem',
+        'custom25': '25rem',
       },
       width: {
-        'custom20': '20em',
-        'custom15': '15em',
+        'custom20': '20rem',
+        'custom15': '15rem',
       },
     },
   },

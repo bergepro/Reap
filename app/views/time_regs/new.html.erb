@@ -1,10 +1,53 @@
 <div class="flex flex-col items-center pt-4">
   <div class="max-w-md">
-    <div class="p-1 my-4">
+    <div class="p-1 my-4" data-controller="time-tasks">
     <h1 class="font-bold">New time entry:</h1>
-    <%= render "form", { client: @client, project: @project, time_reg: @time_reg}%>
-    <%= link_to "back to project", [@client, @project], class: "text-gray-600 italic text-sm" %>    
+      <%= form_with(model: @time_reg) do |form| %>
+        <div class="field my-4 w-80">
+          <%= form.label :project_id %>       
+          <%= form.collection_select :project_id, @projects , :id, :name, {}, {class: 'w-full', id: 'timeproject-select'}  %>
+          <% @time_reg.errors.full_messages_for(:project_id).each do |message| %>
+            <div class="text-sm italic text-gray-600"><%= message %></div>
+          <% end %>
+        </div>
+
+        <div class="field my-4 w-80">
+          <%= form.label :assigned_task_id %>
+          <%= form.collection_select :assigned_task_id, {}, :id, :name, {}, {class: 'w-full', id: 'timetask-select'}  %>
+          <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
+            <div class="text-sm italic text-gray-600"><%= message %></div>
+          <% end %>
+        </div>
+        <div class="field my-4">
+          <%= form.label :notes %>       
+          <% @time_reg.errors.full_messages_for(:notes).each do |message| %>
+            <div class="text-sm italic text-gray-600"><%= message %></div>
+          <% end %>
+          <br>
+          <%= form.text_area :notes, class: 'w-full' %>
+        </div>
+
+        <div class="field my-45">
+          <%= form.label :minutes %>
+          <% @time_reg.errors.full_messages_for(:minutes).each do |message| %>
+            <div class="text-sm	italic text-gray-600"><%= message %></div>
+          <% end %>
+          <br>  
+          <%= form.number_field :minutes, class: 'w-full'  %>
+        </div>
+
+        <div class="field my-4">
+          <%= form.label :date_worked %>
+          <br>
+            <div class="flex justify-between">
+              <%= form.date_select :date_worked, {}, class: "w-24" %>
+            </div>
+        </div>
+
+        <div class="actions text-center">
+          <%= form.submit class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow' %>
+        </div>   
+      <% end %> 
     </div>
-    
   </div>  
 </div>

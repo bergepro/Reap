@@ -3,26 +3,31 @@ Rails.application.routes.draw do
   get 'home/index'
   root 'home#index'
 
+
+
+  resources :reports, only: [:index, :new, :create]  
+  get 'reports/update_groupes_select'
+  get '/reports/index'
   get 'reports/update_task_checkboxes'
   get 'reports/update_member_checkboxes'
   get 'reports/render_custom_timeframe'
   get 'reports/update_projects_select'
 
-  resources :reports, only: [:index, :new, :create]
+
   resources :clients
-  get 'reports/update_groupes_select'
-  get '/reports/index'
-  
+
   resources :tasks
 
   resources :time_regs do
     patch :toggle_active
-
     collection do
       get 'export'
       post 'import'
+      get 'update_tasks_select'
     end
+
   end
+  
 
   resources :projects do
     resources :memberships

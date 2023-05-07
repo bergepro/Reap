@@ -15,3 +15,6 @@ application.register("hello", HelloController)
 
 import ReportsController from "./reports_controller"
 application.register("reports", ReportsController)
+
+import TimeTasksController from "./time_tasks_controller"
+application.register("time-tasks", TimeTasksController)

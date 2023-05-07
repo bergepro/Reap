@@ -130,11 +130,11 @@ class ReportsController < ApplicationController
 
   def group_time_regs(time_regs, group)
     if group == "task"
-      grouped_report = time_regs.group_by { |time_reg| time_reg.assigned_task.task.name }
+      grouped_report = time_regs.group_by { |time_reg| time_reg.task.name }
     elsif group == "user"
       grouped_report = time_regs.group_by { |time_reg| 
-        "#{time_reg.membership.user.first_name}
-         #{time_reg.membership.user.last_name}" }
+        "#{time_reg.user.first_name}
+         #{time_reg.user.last_name}" }
     elsif group == "date"
       grouped_report = time_regs.group_by { |time_reg | time_reg.date_worked}
     end

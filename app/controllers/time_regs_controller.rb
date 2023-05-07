@@ -1,82 +1,71 @@
 class TimeRegsController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_membership, except: [:new, :create]
-  skip_before_action :ensure_membership, only: :toggle_active
+  #before_action :ensure_membership, except: [:new, :create]
+  #skip_before_action :ensure_membership, only: :toggle_active
 
   require 'activerecord-import/base'
   require 'csv'
 
-  def new 
-    @project = Project.find(params[:project_id]) if params[:project_id]
-    if @project
-      @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
-        .joins(:assigned_tasks).where("project_id = #{@project.id}")
-      @membership = @project.memberships.find_by(user_id: current_user.id)
-      @time_reg = @project.time_regs.new
-    else
-      # handle error, e.g. redirect to projects index with error message
-    end
+  def index
+    @time_regs = current_user.time_regs.order('time_regs.date_worked DESC', 'time_regs.assigned_task_id')
+  end
+
+  def new
+    @projects = current_user.projects
+    @time_reg = TimeReg.new
   end
 
 
   def create
-    puts params.inspect # Add this line to debug
-
-    @project = Project.find(params[:time_reg][:project_id])
-    @time_reg = @project.time_regs.build(time_reg_params)
-    @membership = @project.memberships.find_by(user_id: current_user.id)
-    @time_regs = @project.time_regs
-    @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
-      .joins(:assigned_tasks).where(project_id: @project.id)
+    @project = Project.find(time_reg_params[:project_id])
+    @time_reg = @project.time_regs.build(time_reg_params.except(:project_id))
+   
+    membership = @project.memberships.find_by(user_id: current_user.id)
     @time_reg.active = false
     @time_reg.updated = Time.now
+    @time_reg.membership_id = membership.id
+
+    @projects = current_user.projects
     if @time_reg.save
-      flash[:notice] = "Time entry has been created"
-      redirect_to project_path(@project)
+      flash[:notice] = 'Time entry has been created'
+      redirect_to time_regs_path
     else
-      render :new, status: :unprocessable_entity
+      flash[:alert] = 'Cannot create time entry'
+      render :new, status: :unprocessable_entity 
     end
   end
 
 
   def edit
     @time_reg = TimeReg.find(params[:id])
-    @project = @time_reg.assigned_task.project
-    @assigned_tasks = Task.select('DISTINCT name, assigned_tasks.id, project_id, task_id')
-      .joins(:assigned_tasks).where("project_id = #{@project.id}")
-    @membership = @project.memberships.find_by(user_id: current_user.id)
-  end
+    @projects = current_user.projects
+    @assigned_tasks = Task.joins(:assigned_tasks)
+          .where(assigned_tasks: { project_id: @time_reg.project.id })
+          .pluck(:name, 'assigned_tasks.id')
+  end 
 
   def update
-    @time_reg = TimeReg.find(params[:id])
-    @project = @time_reg.assigned_task.project
-    @membership = @project.memberships.find_by(user_id: current_user.id)
+    puts "-----------"
+    puts params.inspect
 
-    if @time_reg.update(time_reg_params)
-      redirect_to project_path(@project)
+    @time_reg = TimeReg.find(params[:id])
+
+    if @time_reg.update(time_reg_params.except(:project_id))
+      redirect_to time_regs_path
       flash[:notice] = "Time entry has been updated"
     else
-      flash[:alert] = "cannot update time entry"
-      render :new, status: :unprocessable_entity
+      flash[:alert] = "cannot update time entry" 
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @time_reg = TimeReg.find(params[:id])
-    @project = @time_reg.assigned_task.project
 
-    if @time_reg.destroy
-      redirect_to project_path(@project)
-      flash[:notice] = "Time entry has been deleted"
-    else
-      flash[:alert] = "cannot delete time entry"
-      render :new, status: :unprocessable_entity
-    end
   end
 
   def toggle_active
     @time_reg = TimeReg.find(params[:time_reg_id])
-    @project = @time_reg.assigned_task.project
+    @project = @time_reg.project
 
     if @time_reg.active
       new_timestamp = Time.now
@@ -94,9 +83,9 @@ class TimeRegsController < ApplicationController
     end
 
     if @time_reg.save
-      redirect_to project_path(@project)
+      redirect_to time_regs_path
     else
-      render :new, status: :unprocessable_entity
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -118,9 +107,9 @@ class TimeRegsController < ApplicationController
         task = Task.find(time_reg.assigned_task.task_id).name
         notes = time_reg.notes
         minutes = time_reg.minutes
-        first_name = User.find(time_reg.membership.user_id).first_name
-        last_name = User.find(time_reg.membership.user_id).last_name
-        email = User.find(time_reg.membership.user_id).email
+        first_name = User.find(time_reg.user.id).first_name
+        last_name = User.find(time_reg.user.id).last_name
+        email = User.find(time_reg.user.id).email
 
         csv << [date, client, project, task, notes, minutes, first_name, last_name, email]
       end
@@ -129,15 +118,21 @@ class TimeRegsController < ApplicationController
     send_data csv_data, filename: "#{Time.now.to_i}_time_regs_for_#{@project.name}.csv"
   end
 
+  def update_tasks_select
+    puts "-----"
+    @tasks = Task.joins(:assigned_tasks).where(assigned_tasks: { project_id: params[:project_id] }).pluck(:name, 'assigned_tasks.id')
+    render partial: '/time_regs/select', locals: {tasks: @tasks}
+  end
+
   private
   def time_reg_params
-    params.require(:time_reg).permit(:notes, :minutes, :assigned_task_id, :membership_id, :date_worked)
+    params.require(:time_reg).permit(:notes, :minutes, :assigned_task_id, :date_worked, :project_id)
   end
 
   def skip_ensure_membership_for_toggle_active
     skip_before_action :ensure_membership
   end
-
+=begin
   def ensure_membership
     if params[:id]
       project = TimeReg.find(params[:id]).assigned_task.project
@@ -150,7 +145,7 @@ class TimeRegsController < ApplicationController
       redirect_to root_path
     end
   end
-
+=end
 
 
 end
