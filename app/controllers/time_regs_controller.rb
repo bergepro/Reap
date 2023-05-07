@@ -60,7 +60,20 @@ class TimeRegsController < ApplicationController
   end
 
   def destroy
+    @time_reg = TimeReg.find(params[:id])
 
+    if @time_reg.destroy
+      redirect_to time_regs_path
+      flash[:notice] = "Time entry has been deleted"
+    else
+      @projects = current_user.projects
+      @assigned_tasks = Task.joins(:assigned_tasks)
+            .where(assigned_tasks: { project_id: @time_reg.project.id })
+            .pluck(:name, 'assigned_tasks.id')
+
+      flash[:alert] = "cannot delete time entry"
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def toggle_active
@@ -119,7 +132,6 @@ class TimeRegsController < ApplicationController
   end
 
   def update_tasks_select
-    puts "-----"
     @tasks = Task.joins(:assigned_tasks).where(assigned_tasks: { project_id: params[:project_id] }).pluck(:name, 'assigned_tasks.id')
     render partial: '/time_regs/select', locals: {tasks: @tasks}
   end
