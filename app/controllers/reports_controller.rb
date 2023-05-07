@@ -9,7 +9,7 @@ class ReportsController < ApplicationController
     end
     puts "heiiiiiii"
     puts params.inspect
-    group = params[:grouping] || "user"
+    group = params[:grouping] || "task"
     @time_regs = get_time_regs(report)
     @grouped_report = group_time_regs(@time_regs, group)
   end
