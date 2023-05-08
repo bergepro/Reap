@@ -1,14 +1,21 @@
-<h1>this is the index </h1>
-<%= form_with url: '/reports/index', method: 'get' do |form| %>
-  <%= form.label :grouping, "Group by: " %>
-  <%= form.select :grouping, options_for_select(@groupes), {} ,class: 'pr-8' %>
-  <%= form.submit 'Update' %>
-<% end %>
-<br>
+<div class="flex flex-col items-center pt-4">
 
-<div id="">
-  <%= render partial: 'report_data', locals: { grouped_report: @grouped_report } %>
+  <div class="max-w-md md:min-w-custom35">
+    <h1>this is the index </h1>
+
+    <div class="">
+      <%= form_with url: '/reports/index', method: 'get' do |form| %>
+        <%= form.label :grouping, "Group by: " %>
+        <%= form.select :grouping, options_for_select(@groupes), {} ,class: 'pr-8' %>
+        <%= form.submit 'Update' %>
+      <% end %>
+      <br>
+    </div>
+    <div id="">
+      <%= render partial: 'report_data', locals: { grouped_report: @grouped_report } %>
+    </div>
+  </div>
+
 </div>
-
 
 

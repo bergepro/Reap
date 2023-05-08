@@ -1,14 +1,29 @@
-<div id="">
+<table>
+  <thead>
+    <tr class="bg-gray-200">
+      <th>Name</th>
+      <th>Date</th>
+    </tr>
+  </thead>
   <% grouped_report.each do |group, time_regs| %>
-      <%= group %> <br>
-      <% time_regs.each do |time_reg |%>
-          User: <%= time_reg.membership.user.email %>
-          -
-          Date worked: <%= time_reg.date_worked %>
-          -
-          Task name: <%= time_reg.assigned_task.task.name %>
-          -
-          Minutes: <%= time_reg.minutes %><br>
-      <% end %>
+    <div class="bg-gray-100">
+      <%= group %>   
+    </div>
+
+    <% time_regs.each do |time_reg |%>
+      <p>
+        <span>
+          <%= time_reg.user.first_name %> <%= time_reg.user.last_name%>
+        </span>
+        -
+        Date worked: <%= time_reg.date_worked %>
+        -
+        Task name: <%= time_reg.task.name %>
+        -
+        Minutes: <%= time_reg.minutes %><br>    
+      </p>
+    <% end %>
+    <br>
   <% end %>
-</div>
+</table>
+
