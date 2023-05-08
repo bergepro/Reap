@@ -40,10 +40,10 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.perform_caching = false
-
+  
   # in production, :host should be set tot he actual host of your application :D:D
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-
+  
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
@@ -61,16 +61,6 @@ Rails.application.configure do
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
-
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger = ActiveSupport::TaggedLogging.new(logger)
-  end
-
-
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
