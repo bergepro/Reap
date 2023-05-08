@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
 
   resources :reports, only: [:index, :new, :create] do
+    collection do
+      get 'export_test'
+    end
   end
   get 'reports/update_groupes_select'
   get '/reports/index'
@@ -13,7 +16,6 @@ Rails.application.routes.draw do
   get 'reports/update_member_checkboxes'
   get 'reports/render_custom_timeframe'
   get 'reports/update_projects_select'
-  post 'reports/export_test'
 
   resources :clients
 

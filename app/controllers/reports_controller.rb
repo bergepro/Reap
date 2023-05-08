@@ -121,7 +121,6 @@ class ReportsController < ApplicationController
   private
   def filtered_params
     params.permit(:timeframe, :client, :project, task_ids: [], member_ids: [])
-
   end
 
   def set_timeframe(report)
