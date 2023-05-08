@@ -91,45 +91,41 @@ class ProjectsController < ApplicationController
 
         # Project-håndtering
         project = row['project']
-        if (!Project.exists?(name: project))
+        if (!@client.projects.exists?(name: project))
           project_params = {"client_id" => @client.id, "name" => project, "description" => "Description."}
-          @project = Project.new(project_params)
+          @project = @client.projects.new(project_params)
           @project.users << current_user
           @project.save
         else
-          @project = Project.find_by(name: project)
+          @project = @client.projects.find_by(name: project)
         end
         time_reg_params.delete('project')
 
         # Task-håndtering
         task = row['task']
         if (!Task.exists?(name: task))
-          @tasks = Task.all
-          @task = @tasks.new(name: task)
+          @task = Task.new(name: task)
           @task.save
         else
           @task = Task.find_by(name: task)
         end
+        time_reg_params.delete('task')
 
         # AssignedTask-håndtering
-        assigned_task_params = {"project_id" => @project.id, "task_id" => @task.id}
         if (!@project.assigned_tasks.exists?(task_id: @task.id))
-          @assigned_task = @project.assigned_tasks.build(assigned_task_params)
+          @assigned_task = @project.assigned_tasks.build("task_id" => @task.id)
           @assigned_task.save
-          puts "waaahh"
         else
           @assigned_task = @project.assigned_tasks.find_by(task_id: @task.id)
-          puts "wooooo"
         end
-
         time_reg_params['assigned_task_id'] = @assigned_task.id
-        time_reg_params.delete('task')
+        
         time_reg_params.delete('first name')
         time_reg_params.delete('last name')
 
         email = row['email']
         @user = User.find_by(email: email)
-        @membership = Membership.find_by(user_id: @user.id)
+        @membership = Membership.find_by(user_id: @user.id, project_id: @project.id)
         time_reg_params.delete('email')
         time_reg_params['membership_id'] = @membership.id
 
