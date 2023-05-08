@@ -80,44 +80,21 @@ class ProjectsController < ApplicationController
 
         # Client-håndtering
         client = row['client']
-        if (!Client.exists?(name: client))
-          client_params = {"name" => client, "description" => "Description."}
-          @client = Client.new(client_params)
-          @client.save
-        else
-          @client = Client.find_by(name: client)
-        end
+        check_client client
         time_reg_params.delete('client')
 
         # Project-håndtering
         project = row['project']
-        if (!@client.projects.exists?(name: project))
-          project_params = {"client_id" => @client.id, "name" => project, "description" => "Description."}
-          @project = @client.projects.new(project_params)
-          @project.users << current_user
-          @project.save
-        else
-          @project = @client.projects.find_by(name: project)
-        end
+        check_project project
         time_reg_params.delete('project')
 
         # Task-håndtering
         task = row['task']
-        if (!Task.exists?(name: task))
-          @task = Task.new(name: task)
-          @task.save
-        else
-          @task = Task.find_by(name: task)
-        end
+        check_task task 
         time_reg_params.delete('task')
 
         # AssignedTask-håndtering
-        if (!@project.assigned_tasks.exists?(task_id: @task.id))
-          @assigned_task = @project.assigned_tasks.build("task_id" => @task.id)
-          @assigned_task.save
-        else
-          @assigned_task = @project.assigned_tasks.find_by(task_id: @task.id)
-        end
+        check_assigned_task task_id: @task.id
         time_reg_params['assigned_task_id'] = @assigned_task.id
         
         time_reg_params.delete('first name')
@@ -162,6 +139,45 @@ class ProjectsController < ApplicationController
     if !project.memberships.exists?(user_id: current_user)
       flash[:alert] = "Access denied"
       redirect_to root_path
+    end
+  end
+
+  def check_client (client)
+    if (!Client.exists?(name: client))
+      client_params = {"name" => client, "description" => "Description."}
+      @client = Client.new(client_params)
+      @client.save
+     else
+      @client = Client.find_by(name: client)
+     end
+  end
+
+  def check_project (project)
+    if (!@client.projects.exists?(name: project))
+      project_params = {"client_id" => @client.id, "name" => project, "description" => "Description."}
+      @project = @client.projects.new(project_params)
+      @project.users << current_user
+      @project.save
+    else
+      @project = @client.projects.find_by(name: project)
+    end
+  end
+
+  def check_task (task)
+    if (!Task.exists?(name: task))
+      @task = Task.new(name: task)
+      @task.save
+    else
+      @task = Task.find_by(name: task)
+    end
+  end
+
+  def check_assigned_task (task_id)
+    if (!@project.assigned_tasks.exists?(task_id))
+      @assigned_task = @project.assigned_tasks.build("task_id" => @task.id)
+      @assigned_task.save
+    else
+      @assigned_task = @project.assigned_tasks.find_by(task_id: @task.id)
     end
   end
 
