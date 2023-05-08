@@ -1,5 +1,6 @@
 class Report
   include ActiveModel::Model       
-  include ActiveModel::Validations 
 
-  attr_accessor :timeframe, :date_start, :date_end, :client, :project, task_ids:
+  attr_accessor :timeframe, :date_start, :date_end, :client, :project 
+  attr_accessor :task_ids, :member_ids
+end

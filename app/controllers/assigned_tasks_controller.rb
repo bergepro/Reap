@@ -11,7 +11,7 @@ class AssignedTasksController < ApplicationController
   def create
     @project = Project.find(params[:project_id])
     @assigned_task = @project.assigned_tasks.build(assigned_task_params)
-
+    
     if @assigned_task.save
       flash[:notice] = "Task successfully added to project"
       redirect_to new_project_assigned_task_path(@project)
@@ -31,14 +31,13 @@ class AssignedTasksController < ApplicationController
       flash[:notice] = "Task succesfully removed from project"
     end
 
-
     redirect_to edit_project_path(@project)
   end
 
   private
 
   def assigned_task_params
-    params.require(:assigned_task).permit(:project_id, :task_id)
+    params.require(:assigned_task).permit(:project_id, :task_id, :name)
   end
 
   def ensure_membership
