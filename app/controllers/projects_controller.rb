@@ -96,11 +96,6 @@ class ProjectsController < ApplicationController
           @project = Project.new(project_params)
           @project.users << current_user
           @project.save
-
-          @project.errors.full_messages.each do |message|
-            puts message
-          end
-
         else
           @project = Project.find_by(name: project)
         end
@@ -116,9 +111,6 @@ class ProjectsController < ApplicationController
           @task = Task.find_by(name: task)
         end
 
-        puts time_reg_params 
-        puts @task.id
-
         # AssignedTask-håndtering
         assigned_task_params = {"project_id" => @project.id, "task_id" => @task.id}
         if (!@project.assigned_tasks.exists?(task_id: @task.id))
@@ -129,9 +121,9 @@ class ProjectsController < ApplicationController
           @assigned_task = @project.assigned_tasks.find_by(task_id: @task.id)
           puts "wooooo"
         end
+
         time_reg_params['assigned_task_id'] = @assigned_task.id
         time_reg_params.delete('task')
-
         time_reg_params.delete('first name')
         time_reg_params.delete('last name')
 
