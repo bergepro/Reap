@@ -12,9 +12,6 @@ class ProjectsController < ApplicationController
     @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
                           .joins(:task)
                           .where(project_id: @project.id)
-    @time_regs = @project.time_regs.joins(:membership, assigned_task: :task)
-                          .where(memberships: { user_id: current_user.id })
-                          .order('time_regs.date_worked DESC', 'tasks.name DESC')
   end
 
   def new

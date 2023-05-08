@@ -5,14 +5,15 @@ Rails.application.routes.draw do
 
 
 
-  resources :reports, only: [:index, :new, :create]  
+  resources :reports, only: [:index, :new, :create] do
+  end
   get 'reports/update_groupes_select'
   get '/reports/index'
   get 'reports/update_task_checkboxes'
   get 'reports/update_member_checkboxes'
   get 'reports/render_custom_timeframe'
   get 'reports/update_projects_select'
-
+  post 'reports/export_test'
 
   resources :clients
 
@@ -24,6 +25,7 @@ Rails.application.routes.draw do
       get 'export'
       post 'import'
       get 'update_tasks_select'
+      get 'update_minutes_view'
     end
 
   end

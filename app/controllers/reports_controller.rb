@@ -1,4 +1,6 @@
 class ReportsController < ApplicationController
+  require 'activerecord-import/base'
+  require 'csv'
 
   def index
     report_attr = session[:report] 
@@ -7,11 +9,14 @@ class ReportsController < ApplicationController
     if report_attr
       report = Report.new(report_attr)
     end
-    puts "heiiiiiii"
-    puts params.inspect
-    group = params[:grouping] || "user"
+
+    @group_name = params[:grouping] || "task"
+    if @group_name == ""
+      @group_name = params[:old_group]
+    end
+
     @time_regs = get_time_regs(report)
-    @grouped_report = group_time_regs(@time_regs, group)
+    @grouped_report = group_time_regs(@time_regs, @group_name)
   end
 
   def new
@@ -79,9 +84,39 @@ class ReportsController < ApplicationController
 
   def update_groupes_select
     grouped_report = group_time_regs(@time_regs, params[:grouping])
-    render partial: 'reports/report_data', locals: {grouped_report: grouped_report}
+    render partial: 'reports/report_data', locals: {grouped_report: grouped_report, group_name: params[:grouping]}
+  end
+
+  def export
+    puts params[:time_regs]
+    redirect_to reports_path
   end
   
+  def export_test
+    time_regs_ids = JSON.parse(params[:time_reg_ids])
+    csv_data = CSV.generate(headers: true) do |csv|
+      # Add CSV header row
+      # csv << ['id', 'user_email', 'task_name', 'minutes','created_at', 'updated_at','assigned_task_id', 'user_id', 'membership_id']
+      csv << ['date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email']
+      # Add CSV data rows for each time_reg
+      time_regs_ids.each do |time_reg_id|
+        time_reg = TimeReg.find(time_reg_id)
+
+        puts date = time_reg.date_worked
+        puts client = time_reg.project.client.name
+        puts project = time_reg.project.name
+        puts task = time_reg.assigned_task.task.name
+        puts notes = time_reg.notes
+        puts minutes = time_reg.minutes
+        puts first_name = time_reg.user.first_name
+        puts last_name = time_reg.user.last_name
+        puts email = time_reg.user.email
+
+        csv << [date, client, project, task, notes, minutes, first_name, last_name, email]
+      end
+    end
+    send_data csv_data, filename: "#{Time.now.to_i}_time_regs_for_custom_report.csv"
+  end
 
   private
   def filtered_params
@@ -123,9 +158,10 @@ class ReportsController < ApplicationController
     end
 
     time_regs = time_regs.where(membership: {user_id: report.member_ids})
-    time_regs = time_regs.where(assigned_task: {task_id: report.task_ids})
+                         .where(assigned_task: {task_id: report.task_ids})
+                         .order(date_worked: :desc, created_at: :desc)
 
-    return time_regs.all
+    time_regs.all
   end
 
   def group_time_regs(time_regs, group)
@@ -139,7 +175,7 @@ class ReportsController < ApplicationController
       grouped_report = time_regs.group_by { |time_reg | time_reg.date_worked}
     end
 
-    return grouped_report
+    grouped_report
   end
 
 end

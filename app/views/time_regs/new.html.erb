@@ -5,7 +5,7 @@
       <%= form_with(model: @time_reg) do |form| %>
         <div class="field my-4 w-80">
           <%= form.label :project_id %>       
-          <%= form.collection_select :project_id, @projects , :id, :name, {include_blank: "Select a project"}, {class: 'w-full', id: 'timeproject-select'}  %>
+          <%= form.collection_select :project_id, @projects , :id, :name, { include_blank: "select a project:"}, {class: 'w-full', id: 'timeproject-select'}  %>
           <% @time_reg.errors.full_messages_for(:project_id).each do |message| %>
             <div class="text-sm italic text-gray-600"><%= message %></div>
           <% end %>

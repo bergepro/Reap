@@ -1,14 +1,54 @@
-<div id="">
-  <% grouped_report.each do |group, time_regs| %>
-      <%= group %> <br>
-      <% time_regs.each do |time_reg |%>
-          User: <%= time_reg.membership.user.email %>
-          -
-          Date worked: <%= time_reg.date_worked %>
-          -
-          Task name: <%= time_reg.assigned_task.task.name %>
-          -
-          Minutes: <%= time_reg.minutes %><br>
+<table class="w-full">
+  <thead>
+    <tr class="bg-gray-200 text-left border-b-2	 border-gray-300">
+      <% if group_name != "date" %>
+        <th>Date</th>
       <% end %>
-  <% end %>
-</div>
+      <th>Client</th>
+      <th>Project</th>
+      <% if group_name != "task" %>
+        <th>task</th>
+      <% end %>
+      <% if group_name != "user" %>
+        <th>Person</th>
+      <% end %>
+      <th>hours</th>  
+    </tr>
+  </thead>
+  <tbody>
+    <% grouped_report.each do |group, time_regs| %>
+      <tr class="bg-gray-100 border-b-2	 border-gray-300">
+        <td class="p-1 text-sm font-semibold"><%= group %><br></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <% time_regs.each do |time_reg |%>
+        <tr class="border-b-2	 border-gray-300">
+          <% if group_name != "date" %>
+            <td><%= time_reg.date_worked %></td>
+          <% end %>
+          <td><%= time_reg.project.client.name %></td>
+          <td class="pb-1"><%= time_reg.project.name %></td>
+          <% if group_name != "task" %>
+            <td><%= time_reg.task.name %></td>
+          <% end %>
+          <% if group_name != "user" %>
+            <td><%= time_reg.user.first_name %> <%= time_reg.user.last_name%></td>
+          <% end %>
+          <td><%= convert_time_int(time_reg.minutes) %></td>
+        </tr>
+      <% end %>
+      <tr class="">
+        <td><%=  %><br></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

@@ -10,6 +10,9 @@ application.register("check-boxes", CheckBoxesController)
 import CollapseHoursController from "./collapse_hours_controller"
 application.register("collapse-hours", CollapseHoursController)
 
+import DynamicMinutesController from "./dynamic_minutes_controller"
+application.register("dynamic-minutes", DynamicMinutesController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
