@@ -31,7 +31,6 @@ class AssignedTasksController < ApplicationController
       flash[:notice] = "Task succesfully removed from project"
     end
 
-
     redirect_to edit_project_path(@project)
   end
 
