@@ -1,6 +1,6 @@
 <div class="">
   <h3 class="font-medium">New member: </h3>
-    <%= form_with model: [@client, @project, @project.memberships.build ] do |f| %>
+    <%= form_with model: [@project, @project.memberships.build ] do |f| %>
       <div class="flex justify-between">
         <div class="p-1 my-1">
           <%= f.label :email, class: "mr-2"%>

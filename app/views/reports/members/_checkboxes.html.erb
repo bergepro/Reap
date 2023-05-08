@@ -1,0 +1,16 @@
+<div data-controller="check-boxes">
+  <% if members.length < 1%>
+    <p>No members found</p>
+  <% else %>
+    <label class="mr-4 font-semibold">
+      <%= check_box_tag "check_members", 0, false, id: "check_all_members" %>
+      <%= 'Check all'%>
+    </label>
+    <% members.each_with_index  do |member, index| %>
+      <label class="mr-4 border border-yellow-600 rounded p-1">
+        <%= check_box_tag "member_ids[]", member.id, false, id: "check_member_#{index}" %>
+        <%= member.email %>
+      </label>
+    <% end %>
+  <% end %>
+</div>

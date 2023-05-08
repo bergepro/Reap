@@ -1,53 +1,38 @@
 class AssignedTasksController < ApplicationController
   before_action :authenticate_user!
-  def index
-    @client = Client.find(params[:client_id])
-    @project = @client.projects.find(params[:project_id])
-    @assigned_tasks = Task.select('name, assigned_tasks.id, project_id, task_id')
-                          .joins(:assigned_tasks).where("project_id = #{@project.id}")
-  end
-
-  def show
-    @client = Client.find(params[:client_id])
-    @project = @client.projects.find(params[:project_id])
-    # @tasks = Task.all
-    # @assigned_tasks = AssignedTask.select('name, assigned_tasks.id, project_id, task_id')
-    # .joins(:tasks).where("project_id = #{@project.id}")
-    @assigned_task = AssignedTask.find(params[:id])
-    @task = Task.find(@assigned_task.task_id)
-  end
+  before_action :ensure_membership
 
   def new
-    @client = Client.find(params[:client_id])
-    @project = @client.projects.find(params[:project_id])
+    @project = Project.find(params[:project_id])
     @assigned_task = @project.assigned_tasks.build
-    @tasks = Task.all.where.not(id: AssignedTask.select(:task_id)).select(:id, :name)  
+    @tasks = Task.all.where.not(id: @project.assigned_tasks.select(:task_id)).select(:id, :name)  
   end
 
   def create
-    @client = Client.find(params[:client_id])
-    @project = @client.projects.find(params[:project_id])
+    @project = Project.find(params[:project_id])
     @assigned_task = @project.assigned_tasks.build(assigned_task_params)
 
     if @assigned_task.save
-      redirect_to client_project_path(@client, @project)
+      flash[:notice] = "Task successfully added to project"
+      redirect_to new_project_assigned_task_path(@project)
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @client = Client.find(params[:client_id])
-    @project = @client.projects.find(params[:project_id])
+    @project = Project.find(params[:project_id])
     @assigned_task = @project.assigned_tasks.find(params[:id])
 
     if @assigned_task.time_regs.count >= 1
       flash[:alert] = "Cannot remove task with registered time"
     elsif
       @assigned_task.destroy
+      flash[:notice] = "Task succesfully removed from project"
     end
 
-    redirect_to client_project_path(@client, @project)
+
+    redirect_to edit_project_path(@project)
   end
 
   private
@@ -55,4 +40,14 @@ class AssignedTasksController < ApplicationController
   def assigned_task_params
     params.require(:assigned_task).permit(:project_id, :task_id)
   end
+
+  def ensure_membership
+    project = Project.find(params[:project_id])
+
+    if !project.memberships.exists?(user_id: current_user)
+      flash[:alert] = "Access denied"
+      redirect_to root_path
+    end
+  end
+
 end

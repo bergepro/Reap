@@ -13,6 +13,15 @@ module.exports = {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
+      minWidth: {
+        '6': '6em',
+        'custom35': '35em',
+        'custom25': '25em',
+      },
+      width: {
+        'custom20': '20em',
+        'custom15': '15em',
+      },
     },
   },
   plugins: [

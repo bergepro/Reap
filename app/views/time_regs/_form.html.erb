@@ -1,5 +1,5 @@
 <div class="max-w-md">
-  <%= form_with(model: [@client, @project, @time_reg]) do |form| %>
+  <%= form_with model: [@project, @time_reg] do |form| %>
     <div class="field my-4 w-80">
       <%= form.label :assigned_task_id %>       
       <br>
@@ -33,7 +33,7 @@
       <%= form.label :date_worked %>
       <br>
         <div class="flex justify-between">
-          <%= form.date_select :date_worked, {}, class: " w-24" %>
+          <%= form.date_select :date_worked, {}, class: "w-24" %>
         </div>
     </div>
 

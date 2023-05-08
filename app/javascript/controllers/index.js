@@ -4,5 +4,15 @@
 
 import { application } from "./application"
 
+import CheckBoxesController from "./check_boxes_controller"
+application.register("check-boxes", CheckBoxesController)
+
+import CollapseHoursController from "./collapse_hours_controller"
+application.register("collapse-hours", CollapseHoursController)
+
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import ReportsController from "./reports_controller"
+application.register("reports", ReportsController)

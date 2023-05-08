@@ -1,15 +1,14 @@
 class MembershipsController < ApplicationController
     before_action :authenticate_user!
+    before_action :ensure_membership
+    
     def new
-        puts params.inspect
-        @client = Client.find(params[:client_id])
-        @project = @client.projects.find(params[:id])
+        @project = Project.find(params[:id])
     end
 
     def create
         @email = membership_params[:email]
-        @client = Client.find(params[:client_id])
-        @project = @client.projects.find(params[:project_id])
+        @project = Project.find(params[:project_id])
 
         if User.exists?(email: @email)
             @user = User.find_by(email: @email)
@@ -27,14 +26,15 @@ class MembershipsController < ApplicationController
     end
 
     def destroy
-        @client = Client.find(params[:client_id])
-        @project = @client.projects.find(params[:project_id])
+        @project = Project.find(params[:project_id])
         @membership = @project.memberships.find(params[:id])
 
         if @project.memberships.count <= 1
             flash[:alert] = "cannot remove last member of the project"
-        elsif
-            flash[:notice] = "Member has been removed from the project"
+        elsif @membership.time_regs.count >= 1
+            flash[:alert] = "Member has time entries in this project"
+        else
+            flash[:notice] = "#{@membership.user.email} has been removed from the project"
             @membership.destroy
         end
         redirect_to request.referrer
@@ -44,4 +44,14 @@ class MembershipsController < ApplicationController
     def membership_params
         params.require(:membership).permit(:email)
     end
+
+    def ensure_membership
+        project = Project.find(params[:project_id])
+    
+        if !project.memberships.exists?(user_id: current_user)
+          flash[:alert] = "Access denied"
+          redirect_to root_path
+        end
+    end
+
 end

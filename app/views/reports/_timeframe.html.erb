@@ -1,0 +1,16 @@
+<div class="flex justify-evenly bg-orange-50 w-11/12 mt-4 mb-4 p-2 rounded float-right border border-yellow-600" data-controller="timeframe-select">
+  <div>
+    <label for="date_start">Date Start:</label>
+    <div class="">
+      <%= date_select 'date_start', :date_start, {use_short_month: true}, class: 'pr-8' %>
+    </div>    
+  </div>
+
+  <div>
+    <label for="date_end">Date End:</label>
+    <div class="">
+      <%= date_select 'date_end', :date_end, {use_short_month: true}, class: 'pr-8' %>
+    </div>  
+  </div>
+</div>
+

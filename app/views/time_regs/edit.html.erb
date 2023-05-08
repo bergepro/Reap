@@ -2,12 +2,12 @@
   <div class="max-w-md">
     <div class="p-1 my-4">
     <h1 class="font-bold">New time entry:</h1>
-    <%= render "form", { client: @client, project: @project } %>
+    <%= render "form", {project: @project, time_reg: @time_reg } %>
     </div>
 
     <div class="text-center p-1 m-1">
       <%= 
-        link_to "Delete time entry ", client_project_time_reg_path(@client, @project, @time_reg), 
+        link_to "Delete time entry ", project_time_reg_path(@project, @time_reg), 
           class: 'rounded bg-red-400 p-2 hover:bg-red-500', 
           data:{
             turbo_method: :delete,
@@ -18,7 +18,7 @@
 
     <div class="mt-4">
       <%= 
-        link_to "Back to Project", [@client, @project], 
+        link_to "Back to Project", @project, 
           class: "text-gray-600 italic text-sm text-left" 
       %>        
     </div> 

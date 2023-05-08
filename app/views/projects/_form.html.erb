@@ -1,5 +1,15 @@
 <div class="max-w-md">
-  <%= form_with(model: [@client, @project]) do |form| %>
+  <%= form_with model: @project do |form| %>
+    <div>
+      <%= form.label :client %> <br>
+      <%= form.collection_select :client_id, @clients, :id, :name, { include_blank: false }, { class: 'w-full' }  %>
+      <% @project.errors.full_messages_for(:client).each do |message|%>
+        <div class="text-sm italic text-gray-600">
+          <%= message %>
+        </div>
+      <% end %>
+    </div> 
+
     <div>
       <%= form.label :name %> <br>
       <%= form.text_area :name, class: 'w-full' %>

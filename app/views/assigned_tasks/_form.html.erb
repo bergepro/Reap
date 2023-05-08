@@ -1,5 +1,5 @@
 <div class="max-w-md">    
-  <%= form_with model: [ @client, @project, @assigned_task ] do |form| %>
+  <%= form_with model: [ @project, @assigned_task ] do |form| %>
     <div>
       <%= form.label :name %> <br>
       <%= form.collection_select :task_id, @tasks, :id, :name, { include_blank: false }, { class: 'w-full' }  %>

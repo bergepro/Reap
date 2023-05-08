@@ -7,20 +7,20 @@
   <div class="flex items-center justify-between">
     <span class="font-semibold"><%= convert_time(time_reg)%></span>
     <%= link_to "Edit entry", 
-      edit_client_project_time_reg_path(@client, @project, time_reg), 
+      edit_project_time_reg_path(@project, time_reg), 
       class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 whitespace-nowrap' 
     %>
     <% if time_reg.active%>
       <%= 
         button_to "Stop", 
-          client_project_time_reg_toggle_active_path(@client, @project, time_reg), 
+          project_time_reg_toggle_active_path(@project, time_reg), 
           method: :patch,
           class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300"
       %>
     <% else %>
       <%= 
         button_to "Start", 
-          client_project_time_reg_toggle_active_path(@client, @project, time_reg), 
+          project_time_reg_toggle_active_path(@project, time_reg), 
           method: :patch,
           class: "text-sm rounded bg-green-200 p-1 hover:bg-green-300"
       %>
