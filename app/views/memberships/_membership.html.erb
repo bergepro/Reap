@@ -1,4 +1,4 @@
-<div class="flex items-center justify-between border-b text-gray-700 border-gray-300 pb-1 pt-1 ">
+<div class="border-b text-gray-700 border-gray-300 pb-1 pt-1 flex justify-between items-center">
   <div class="flex-col">
     <div>
       <%= " #{membership.user.first_name } #{membership.user.last_name}"%>
@@ -8,6 +8,6 @@
     </div>
   </div>
   <% if @is_in_update %>
-    <%= render 'memberships/remove', membership: membership %>
+    <%= render 'memberships/remove', membership: membership%>
   <% end %>  
 </div>

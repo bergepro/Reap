@@ -1,28 +1,28 @@
 <table class="w-full">
-  <thead>
-    <tr class="bg-gray-200 text-left border-b-2	 border-gray-300">
+  <thead class="w-fill">
+    <tr class="bg-gray-200 text-left">
       <% if group_name != "date" %>
-        <th>Date</th>
+        <th class="border-b-2	border-gray-300">Date</th>
       <% end %>
-      <th>Client</th>
-      <th>Project</th>
+      <th class="border-b-2	border-gray-300">Client</th>
+      <th class="border-b-2	border-gray-300">Project</th>
       <% if group_name != "task" %>
-        <th>task</th>
+        <th class="border-b-2	border-gray-300">Task</th>
       <% end %>
       <% if group_name != "user" %>
-        <th>Person</th>
+        <th class="border-b-2	border-gray-300">Person</th>
       <% end %>
-      <th>hours</th>  
+      <th class="border-b-2	border-gray-300">hours</th>  
     </tr>
   </thead>
-  <tbody>
+  <tbody class="w-full">
     <% grouped_report.each do |group, time_regs| %>
-      <tr class="bg-gray-100 border-b-2	 border-gray-300">
-        <td class="p-1 text-sm font-semibold"><%= group %><br></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+      <tr class="bg-gray-100">
+        <td class="p-1 text-sm font-semibold  border-b-2 border-gray-300"><%= group %><br></td>
+        <td class="border-b-2 border-gray-300"></td>
+        <td class="border-b-2 border-gray-300"></td>
+        <td class="border-b-2 border-gray-300"></td>
+        <td class="border-b-2 border-gray-300"></td>
       </tr>
       <% time_regs.each do |time_reg |%>
         <tr class="border-b-2	 border-gray-300">

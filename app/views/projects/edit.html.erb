@@ -1,24 +1,25 @@
-<div class="flex flex-col items-center pt-4">
-  <div class="max-w-md">
-    <div class="p-1 my-4">
-    <%= render "form", project: @project %>
-    </div>
+<div class="flex flex-col items-center pt-4 mb-20">
+  <div class="max-w-md md:min-w-custom35 my-4">
+    <h1 class="font-medium italic text-2xl ml-4">Edit <%= @project.name %></h1><br>
 
-    <div class="p-1 my-4">
-      <div class="font-medium border-b border-gray-300">
-        <h3>assigned tasks:</h3>      
-      </div>
+    <%= render "form", project: @project %>
+
+
+    <div class="pt-10">
+      <h1 class="font-medium border-b border-gray-300 text-lg italic pb-2">Project tasks</h1>
         <%= render @project.assigned_tasks %>
     </div>
 
-    <div class="p-1 my-4">
-      <div class="font-medium border-b border-gray-300">
-        <h3>edit members: </h3>
-      </div>
+    <div class="pt-10">
+      <h1 class="font-medium border-b border-gray-300 text-lg italic pb-2">Project members</h1>
       <%= render @project.memberships %>
     </div>
 
-    <%= render "memberships/new" %>
+    <div class="pt-10">
+      <h1 class="font-medium text-lg italic pb-2">Add member</h1>
+      <%= render "memberships/new" %>
+    </div>
+
     <br>
     <%= 
       link_to "back to project", @project, 
@@ -26,8 +27,3 @@
     %>
   </div>
 </div>
-<br>
-<br>
-<br>
-<br>
-<br>
