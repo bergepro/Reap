@@ -2,6 +2,7 @@
   <div class="max-w-md">
     <div class="p-1 my-4" data-controller="time-tasks">
     <h1 class="font-bold">New time entry:</h1>
+    
       <%= form_with(model: @time_reg) do |form| %>
         <div class="field my-4 w-80">
           <%= form.label :project_id %>       
@@ -40,7 +41,7 @@
           <%= form.label :date_worked %>
           <br>
             <div class="flex justify-between">
-              <%= form.date_select :date_worked, {}, class: "w-24" %>
+              <%= form.date_select :date_worked, {end_year: Date.today.year}, class: "w-24" %>
             </div>
         </div>
 
