@@ -55,13 +55,19 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    @project = Project.find(params[:id])
-
-    if @project.destroy
-      flash[:notice] = "Project destroyed"
-      redirect_to projects_path
+    @clients = Client.all
+    @project = Project.find(delete_params[:id])
+    if delete_params[:confirmation] == "DELETE"
+      if @project.destroy
+        flash[:notice] = "Project deleted"
+        redirect_to projects_path
+      else
+        flash[:notice] = "Could not delete project"
+        render :new, status: :unprocessable_entity
+      end
     else
-      render :new, status: :unprocessable_entity
+      flash[:alert] = "Could not confirm"
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -138,6 +144,10 @@ class ProjectsController < ApplicationController
     else
       params.require(:project).permit(:client_id, :name, :description)
     end
+  end
+
+  def delete_params
+    params.permit(:confirmation, :id)
   end
 
   def ensure_membership

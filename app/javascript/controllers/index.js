@@ -7,6 +7,9 @@ import { application } from "./application"
 import CheckBoxesController from "./check_boxes_controller"
 application.register("check-boxes", CheckBoxesController)
 
+import CollapseDeleteController from "./collapse_delete_controller"
+application.register("collapse-delete", CollapseDeleteController)
+
 import CollapseHoursController from "./collapse_hours_controller"
 application.register("collapse-hours", CollapseHoursController)
 
