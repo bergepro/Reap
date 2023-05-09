@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  require 'activerecord-import/base'
+  before_action :authenticate_user!
   require 'csv'
 
   def index
