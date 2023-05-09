@@ -20,7 +20,13 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project = Project.new(project_params)
+    puts "------------"
+    puts project_params.inspect 
+    @project = Project.new(project_params.except(:task_ids))
+
+    project_params[:task_ids].each do | task_id |
+      @project.tasks << Task.find(task_id) if task_id != ""
+    end
 
     @project.users << current_user
 
@@ -127,7 +133,11 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:client_id, :name, :description)
+    if action_name == 'create'
+      params.require(:project).permit(:client_id, :name, :description, task_ids: [])
+    else
+      params.require(:project).permit(:client_id, :name, :description)
+    end
   end
 
   def ensure_membership
