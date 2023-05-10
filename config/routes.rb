@@ -3,8 +3,6 @@ Rails.application.routes.draw do
   get 'home/index'
   root 'home#index'
 
-
-
   resources :reports, only: [:index, :new, :create] do
   end
   get 'reports/update_groupes_select'

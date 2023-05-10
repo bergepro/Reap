@@ -1,12 +1,4 @@
 <% t = Time.new %>
-<%
-    # TimeReg id: 3,
-  # notes: "aaa", minutes: 22, membership_id: 1, assigned_task_id: 1,
-  # created_at: "2023-05-06 18:57:27.068343000 +0000",
-  # updated_at: "2023-05-06 19:09:00.838467000 +0000",
-  # active: false, updated: "2023-05-06 19:08:59.781075000 +0000",
-  # date_worked: "2023-05-06"
-%>
 
 <div class="flex flex-row">
   <div class="basis-1/12 justify-items-center">
@@ -32,77 +24,62 @@
     <div class="grid grid-cols-12">
       <div class="col-span-1 flex  ">
         <div class="border rounded p-2 ">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-          </svg>
+          <%= link_to root_path(date: @chosen_date - 1.day) do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+          <% end %>
         </div>
         <div class="border rounded p-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
+          <%= link_to root_path(date: @chosen_date + 1.day) do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          <% end %>
         </div>
       </div>
-      <div class="col-span-10 flex text-3xl self-end">
-        <p class="bold mr-2">
-        Today: 
-        </p>
+      <div class="col-span-8 flex text-3xl self-end">
+        <% if @chosen_date == Date.today %>
+          <p class="bold mr-2">
+          Today: 
+        <% end %>
+
         <p class="text-2xl  self-end">
-        <%= t.strftime("%A, %H %B") %>
+        <%= @chosen_date.strftime("%A, %d %B") %>
         </p>
       </div>
 
-      <div class="col-span-1 flex">
+      <div class="col-span-3 flex">
         <div>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-          </svg>
-        </div>
-        <div>
-          Day
-        </div>
-        <div>
-          Week
+          <%= form_tag(root_path, method: "get") do %>
+            <%= date_field_tag :date, @chosen_date %>
+            <%= submit_tag "Go to date", class: "bg-green-200 p-1 rounded" %>
+          <% end %>
         </div>
       </div>
     </div>
+
 
 
     <div class="flex flex-row items-center content-center mt-6">
+      <% Date::DAYNAMES.rotate.each_with_index do |day, i| %>
+        <div class="grid grow <%= 'border-b-2 border-red-300' if @chosen_date.strftime("%A") == 'Monday' %>">
+
+          <%= day %><br>
+          <% day_minutes = @time_regs_week.select{ |tr| tr.date_worked.wday == (i+1) % 7 }.sum(&:minutes) %>
+          <%= format_duration(day_minutes) %>
+        </div>
+      <% end %>
+
       <div class="grid grow">
-        Mon<br>
-        0:00
-      </div>
-      <div class="grid  grow">
-        Tue<br>
-        0:00
-      </div>
-      <div class="grid grow">
-        Wed<br>
-        0:00
-      </div>
-      <div class="grid  grow">
-        Thu<br>
-        0:00
-      </div>
-      <div class="grid  grow">
-        Fri<br>
-        0:00
-      </div>
-      <div class="grid grow">
-        Sat<br>
-        0:00
-      </div>
-      <div class="grid  grow">
-        Sun<br>
-        0:00
-      </div>
-      <div class="grow content-center items-center text-end">
         Week total
         <br />
-        0:01
+        <%= format_duration(@total_minutes_week) %>
       </div>
 
     </div>
+
+
 
     <div class="border-y-2 divide-y-2">
       <table>
@@ -116,40 +93,36 @@
                     <br>
                     <%= time_reg.notes %>
                   </div>
-                  <div class="flex mx-2">
-                    <div class="mr-2 self-center">
-                      0:00
-                    </div>
-                    <div class="mr-2 self-center">
-                      Stop
-                    </div>
-                    <div class="self-center">
-                      Edit
-                    </div>
-                  </div>
-                </div> 
-              </div>
-              <!-- Add more cells for other TimeEntry attributes -->
+                  <div class="flex items-center justify-between">
+                    <span class="font-semibold"><%= convert_time(time_reg)%></span>
+                    <%= link_to "Edit entry", edit_time_reg_path(time_reg), class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 whitespace-nowrap' %>
+                    <% if time_reg.active %>
+                      <%= button_to "Stop", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300" %>
+                    <% else %>
+                      <%= button_to "Start", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-green-200 p-1 hover:bg-green-300" %>
+                    <% end %>
+                  </div> 
+                </div>
+                <!-- Add more cells for other TimeEntry attributes -->
             </tr>
           <% end %>
         </tbody>
       </table>
+              </div>
+              <div class='text-end mt-6 mr-24'>
+                Total: <%= format_duration(@total_minutes_day) %>
+              </div>
     </div>
   </div>
 
-  <div class='text-end mt-6 mr-24'>
-    Total:  0:01
-  </div>
-
-</div>
-</div>
 
 
 
 
 
 
-<%= link_to "clients", clients_path, class: "border-2" %>
+
+  <%= link_to "clients", clients_path, class: "border-2" %>
 
 
 
