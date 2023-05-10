@@ -1,28 +1,17 @@
-class ReportsController < ApplicationController
-  before_action :authenticate_user!
-  require 'csv'
+class ProjectReportsController < ApplicationController
+  def show
+    @report = ProjectReport.find(params[:id])
 
-  def index
-    report_attr = session[:report] 
     @groupes = ["task", "user", "date"]
 
-    if report_attr
-      report = Report.new(report_attr)
-    end
+    @time_regs = get_time_regs(@report)
 
-    @group_name = params[:grouping] || "task"
-    if @group_name == ""
-      @group_name = params[:old_group]
-    end
-
-    @time_regs = get_time_regs(report)
-    @grouped_report = group_time_regs(@time_regs, @group_name)
+    @grouped_report = group_time_regs(@time_regs, @report.group_by)
   end
 
   def new
     @clients = Client.all
     @report = ProjectReport.new
-
     thisMonthName = I18n.t("date.month_names")[Date.today.month]
     lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
     @TimeFrameOptions = { 
@@ -35,11 +24,58 @@ class ReportsController < ApplicationController
                         }
   end
 
-  def create
-    puts '---------------'
-    puts params.inspect
+  def edit
+    @clients = Client.all
+    @report = ProjectReport.find(params[:id])
+    @projects = Project.where(client_id: @report.client)
+    @members = Project.find(@report.project).users
+    @tasks = Project.find(@report.project).tasks
+    thisMonthName = I18n.t("date.month_names")[Date.today.month]
+    lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
+    @TimeFrameOptions = { 
+                          "Custom" => 'custom', 
+                          "This week" => 'thisWeek',
+                          "Last week" => 'lastWeek',
+                          "This Month (#{thisMonthName})" => 'thisMonth',
+                          "Last month (#{lastMonthName})" => 'lastMonth',
+                          "All Time" => 'allTime'
+                        }
+  end
+  
+  def update
+    @report = ProjectReport.find(params[:id])
+  
+    if @report.update(filtered_params)
+      if @report.timeframe == "custom"
+        date_start_params = params[:date_start]
+        date_end_params = params[:date_end]
+        @report.date_start = Date.new(date_start_params["date_start(1i)"].to_i,
+                                      date_start_params["date_start(2i)"].to_i,
+                                      date_start_params["date_start(3i)"].to_i)
+  
+        @report.date_end = Date.new(date_end_params["date_end(1i)"].to_i,
+                                    date_end_params["date_end(2i)"].to_i,
+                                    date_end_params["date_end(3i)"].to_i)
+      elsif @report.timeframe == "allTime"
+        @report.date_start = nil
+        @report.date_end = nil
+      else
+        @report = set_timeframe(@report)
+      end
+  
+      @report.member_ids = params[:member_ids]
+      @report.task_ids = params[:task_ids]
+  
+      if @report.save
+        redirect_to project_report_path(@report)
+      end
+    else
+      render :edit
+    end
+  end
 
-    @report = Report.new(filtered_params)
+  def create
+    @report = ProjectReport.new(filtered_params)
 
     if @report.timeframe == "custom"
       date_start_params = params[:date_start]
@@ -57,42 +93,61 @@ class ReportsController < ApplicationController
     else
       @report = set_timeframe(@report)
     end
-    session[:report] = @report
-  
-    redirect_to reports_path
+    
+    @report.member_ids = params[:member_ids]
+    @report.task_ids = params[:task_ids]
+    @report.group_by = "task"
+
+    if @report.save
+      redirect_to project_report_path(@report)
+    end 
+  end
+
+  def update_group
+    @report = ProjectReport.find(params[:project_report_id])
+    @report.group_by = params[:group_by]
+    @report.save
+    redirect_to @report
+  end
+
+  # ****************
+  # helper methods *
+  # ****************
+  def get_time_regs(report)
+    time_regs = TimeReg.includes(:membership, :assigned_task)
+
+    if report.timeframe != "allTime"
+      time_regs = time_regs.where(date_worked: report.date_start..report.date_end)
+    end
+
+    time_regs = time_regs.where(membership: {user_id: report.member_ids})
+                         .where(assigned_task: {task_id: report.task_ids})
+                         .order(date_worked: :desc, created_at: :desc)
+
+    time_regs.all
   end
 
   def update_task_checkboxes
     @tasks = Project.find(params[:project_id]).tasks
-    render partial: 'reports/tasks/checkboxes', locals: { tasks: @tasks }
+    render partial: 'project_reports/tasks/checkboxes', locals: { tasks: @tasks }
   end
 
   def update_member_checkboxes
     @members = Project.find(params[:project_id]).users
-    render partial: 'reports/members/checkboxes', locals: { members: @members }
+    render partial: 'project_reports/members/checkboxes', locals: { members: @members }
   end
 
   def update_projects_select
     @client = Client.find(params[:client_id])
     @projects= @client.projects.pluck(:name, :id)
-    render partial: 'reports/projects/select', locals: {projects: @projects}
+    render partial: 'project_reports/projects/select', locals: {projects: @projects}
   end
 
   def render_custom_timeframe
-    render partial: 'reports/timeframe'
-  end
-
-  def update_groupes_select
-    grouped_report = group_time_regs(@time_regs, params[:grouping])
-    render partial: 'reports/report_data', locals: {grouped_report: grouped_report, group_name: params[:grouping]}
+    render partial: 'project_reports/timeframe'
   end
 
   def export
-    puts params[:time_regs]
-    redirect_to reports_path
-  end
-  
-  def export_test
     time_regs_ids = JSON.parse(params[:time_reg_ids])
     csv_data = CSV.generate(headers: true) do |csv|
       # Add CSV header row
@@ -119,9 +174,6 @@ class ReportsController < ApplicationController
   end
 
   private
-  def filtered_params
-    params.permit(:timeframe, :client, :project, task_ids: [], member_ids: [])
-  end
 
   def set_timeframe(report)
     timeframe = report.timeframe
@@ -146,21 +198,11 @@ class ReportsController < ApplicationController
       report.date_start = new_date_start
       report.date_end = new_date_end
       
-      return report
+      report
   end
 
-  def get_time_regs(report)
-    time_regs = TimeReg.includes(:membership, :assigned_task)
-
-    if report.timeframe != "allTime"
-      time_regs = time_regs.where(date_worked: report.date_start..report.date_end)
-    end
-
-    time_regs = time_regs.where(membership: {user_id: report.member_ids})
-                         .where(assigned_task: {task_id: report.task_ids})
-                         .order(date_worked: :desc, created_at: :desc)
-
-    time_regs.all
+  def filtered_params
+    params.require(:project_report).permit(:timeframe, :client, :project, task_ids: [], member_ids: [])
   end
 
   def group_time_regs(time_regs, group)
@@ -176,5 +218,4 @@ class ReportsController < ApplicationController
 
     grouped_report
   end
-
 end

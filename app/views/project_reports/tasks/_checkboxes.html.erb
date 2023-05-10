@@ -1,0 +1,17 @@
+<div data-controller="check-boxes" clas="clear-both">
+  <% if tasks.length < 1%>
+    <p>No tasks found</p>
+  <% else %>
+    <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+       <%= check_box_tag "check_tasks", 0, false, id: "check_all_tasks" %>
+      <%= 'Check all' %>
+    </div>
+    <% tasks.each_with_index  do |task, index| %>
+      <div class="mr-4 border border-yellow-600 rounded p-1 w-fit float-left m-1">
+        <%= check_box_tag "task_ids[]", task.id, false, id: "check_task_#{index}" %>
+        <%= task.name %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+

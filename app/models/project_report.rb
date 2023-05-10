@@ -1,0 +1,2 @@
+class ProjectReport < ApplicationRecord
+end

@@ -1,0 +1,54 @@
+<table class="w-full">
+  <thead class="w-fill">
+    <tr class="bg-gray-200 text-left">
+      <% if @report.group_by != "date" %>
+        <th class="border-b-2	border-gray-300">Date</th>
+      <% end %>
+      <th class="border-b-2	border-gray-300">Client</th>
+      <th class="border-b-2	border-gray-300">Project</th>
+      <% if @report.group_by != "task" %>
+        <th class="border-b-2	border-gray-300">Task</th>
+      <% end %>
+      <% if @report.group_by != "user" %>
+        <th class="border-b-2	border-gray-300">Person</th>
+      <% end %>
+      <th class="border-b-2	border-gray-300">hours</th>  
+    </tr>
+  </thead>
+  <tbody class="w-full">
+    <% grouped_report.each do |group, time_regs| %>
+      <tr class="bg-gray-100">
+        <td class="p-1 text-sm font-semibold  border-b-2 border-gray-300"><%= group %><br></td>
+        <td class="border-b-2 border-gray-300"></td>
+        <td class="border-b-2 border-gray-300"></td>
+        <td class="border-b-2 border-gray-300"></td>
+        <td class="border-b-2 border-gray-300"></td>
+      </tr>
+      <% time_regs.each do |time_reg |%>
+        <tr class="border-b-2	 border-gray-300">
+          <% if @report.group_by != "date" %>
+            <td><%= time_reg.date_worked %></td>
+          <% end %>
+          <td><%= time_reg.project.client.name %></td>
+          <td class="pb-1"><%= time_reg.project.name %></td>
+          <% if @report.group_by != "task" %>
+            <td><%= time_reg.task.name %></td>
+          <% end %>
+          <% if @report.group_by != "user" %>
+            <td><%= time_reg.user.first_name %> <%= time_reg.user.last_name%></td>
+          <% end %>
+          <td><%= convert_time_int(time_reg.minutes) %></td>
+        </tr>
+      <% end %>
+      <tr class="">
+        <td><%=  %><br></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

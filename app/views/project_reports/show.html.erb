@@ -1,0 +1,27 @@
+<div class="flex flex-col items-center pt-4 mb-20">
+  <div class="max-w-md md:min-w-custom50">
+    <h1 class="font-medium italic text-2xl ml-4 mb-10">Your report</h1>
+    <div class="flex justify-between mb-3">
+    <%= link_to 'edit report', edit_project_report_path(@report)%>
+      <div class="flex justify-center">
+        <%= form_with url: project_report_update_group_path(@report), method: :patch do |form| %>
+          <%= form.label :group_by, 'Group by:', class: 'mr-2' %>
+          <%= form.select :group_by, options_for_select(@groupes, @report.group_by),{}, class: 'pr-8 mr-2' %>
+          <%= form.submit 'Update', class: 'text-sm rounded bg-blue-200 p-1 hover:bg-blue-300 h-full'%>
+        <% end %>      
+      </div>
+      <div class="mr-20">
+        <%= form_with url: { action: :export, format: :csv }, method: :get do |form| %>
+          <%= form.hidden_field :time_reg_ids, value: @time_regs.pluck(:id).to_json %>
+          <%= form.submit 'Export to CSV', class: ' rounded bg-blue-200 p-1 hover:bg-blue-300' %>
+        <% end %>       
+      </div>
+
+    </div>
+    <div id="">
+    <%= render partial: 'report_data', locals: { grouped_report: @grouped_report, group_name: @group_name } %>
+  </div>
+  </div>
+</div>
+
+
