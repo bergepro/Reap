@@ -62,19 +62,36 @@ class ProjectReportsController < ApplicationController
       else
         @report = set_timeframe(@report)
       end
-  
+      
+      if params[:task_ids] == nil
+        flash[:alert] = "Please select atleast one task"
+        redirect_to new_project_report_path
+        return
+      elsif params[:member_ids] == nil
+        flash[:alert] = "Please select atleast one user"
+        redirect_to new_project_report_path
+        return
+      end 
+      
       @report.member_ids = params[:member_ids]
       @report.task_ids = params[:task_ids]
   
-      if @report.save
-        redirect_to project_report_path(@report)
-      end
-    else
-      render :edit
+      @report.save
     end
   end
 
   def create
+    @clients = Client.all
+    thisMonthName = I18n.t("date.month_names")[Date.today.month]
+    lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
+    @TimeFrameOptions = { 
+                          "Custom" => 'custom', 
+                          "This week" => 'thisWeek',
+                          "Last week" => 'lastWeek',
+                          "This Month (#{thisMonthName})" => 'thisMonth',
+                          "Last month (#{lastMonthName})" => 'lastMonth',
+                          "All Time" => 'allTime'
+                        }
     @report = ProjectReport.new(filtered_params)
 
     if @report.timeframe == "custom"
@@ -93,14 +110,27 @@ class ProjectReportsController < ApplicationController
     else
       @report = set_timeframe(@report)
     end
-    
+
+    if params[:task_ids] == nil
+      flash[:alert] = "Please select atleast one task"
+      redirect_to new_project_report_path
+      return
+    elsif params[:member_ids] == nil
+      flash[:alert] = "Please select atleast one user"
+      redirect_to new_project_report_path
+      return
+    end 
+
     @report.member_ids = params[:member_ids]
     @report.task_ids = params[:task_ids]
     @report.group_by = "task"
 
     if @report.save
       redirect_to project_report_path(@report)
-    end 
+    else
+      flash[:alert] = "Could not create report"
+      redirect_to new_project_report_path
+    end
   end
 
   def update_group

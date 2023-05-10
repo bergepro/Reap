@@ -117,6 +117,7 @@ class ReportsController < ApplicationController
     end
     send_data csv_data, filename: "#{Time.now.to_i}_time_regs_for_custom_report.csv"
   end
+  
 
   private
   def filtered_params
@@ -177,4 +178,5 @@ class ReportsController < ApplicationController
     grouped_report
   end
 
+  
 end
