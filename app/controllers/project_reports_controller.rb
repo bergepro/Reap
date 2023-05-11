@@ -107,7 +107,7 @@ class ProjectReportsController < ApplicationController
   def update_task_checkboxes
     @tasks = Project.find(params[:project_id]).tasks
 
-    render partial: 'project_reports/tasks/checkboxes', locals: { tasks: @tasks }
+    render partial: 'project_reports/checkboxes', locals: { list: @tasks, txt: 'task' }
   end
 
   # finds members from a specific project
@@ -115,7 +115,7 @@ class ProjectReportsController < ApplicationController
   def update_member_checkboxes
     @members = Project.find(params[:project_id]).users
 
-    render partial: 'project_reports/members/checkboxes', locals: { members: @members }
+    render partial: 'project_reports/checkboxes', locals: { list: @members, txt: 'member' }
   end
 
   # finds the projects with correct columns from a specific client

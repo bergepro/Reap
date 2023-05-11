@@ -1,0 +1,27 @@
+<div data-controller="check-boxes" class="clear-both">
+  <!--checks if list is empty -->
+  <% if list.length < 1%>
+    <p>No <%= txt %>s found</p>
+  <% else %>
+
+    <!--check all boxes box-->
+    <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+      <%= check_box_tag "check_#{txt}s", 0, false, id: "check_all_#{txt}s" %>
+      <%= 'Check all'%>
+    </div>
+
+    <!-- iterates over each item in the list and creates a checkbox-->
+    <% list.each_with_index  do |item, index| %>
+      <div class="mr-4 border border-yellow-600 rounded p-1 w-fit float-left m-1">
+        <%= check_box_tag "#{txt}_ids[]", item.id, false, id: "check_#{txt}_#{index}" %>
+        
+        <!-- checks what text it should display with the checkbox-->
+        <% if txt == "member" %>
+          <%= "#{item.first_name} #{item.last_name}" %>
+        <% elsif txt == "task" %>
+          <%= item.name %>    
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

@@ -1,7 +1,9 @@
 <table class="w-full">
   <thead class="w-fill">
     <tr class="bg-gray-200 text-left">
-      <% if @report.group_by != "date" %>
+    <!-- header table-row with time_reg column names -->
+      <!-- if-tests to not show column that is already grouped by-->
+      <% if @report.group_by != "date" %> 
         <th class="border-b-2	border-gray-300">Date</th>
       <% end %>
       <th class="border-b-2	border-gray-300">Client</th>
@@ -16,7 +18,11 @@
     </tr>
   </thead>
   <tbody class="w-full">
+
+    <!-- iterates over each group -->
     <% grouped_report.each do |group, time_regs| %>
+
+      <!-- shows the group name on a single row-->
       <tr class="bg-gray-100">
         <td class="p-1 text-sm font-semibold  border-b-2 border-gray-300"><%= group %><br></td>
         <td class="border-b-2 border-gray-300"></td>
@@ -24,7 +30,10 @@
         <td class="border-b-2 border-gray-300"></td>
         <td class="border-b-2 border-gray-300"></td>
       </tr>
+
+      <!-- iterates over each time_reg in each group -->
       <% time_regs.each do |time_reg |%>
+        <!-- if-tests to not show column that is already grouped by-->
         <tr class="border-b-2 border-gray-300">
           <% if @report.group_by != "date" %>
             <td class="pb-1"><%= time_reg.date_worked %></td>
@@ -40,6 +49,7 @@
           <td class="pb-1"><%= convert_time_int(time_reg.minutes) %></td>
         </tr>
       <% end %>
+      <!-- filler-row at bottom to space out the groups -->
       <tr class="">
         <td><%=  %><br></td>
         <td></td>
