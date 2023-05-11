@@ -19,6 +19,9 @@ application.register("dynamic-minutes", DynamicMinutesController)
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+import ProjectReportEditController from "./project_report_edit_controller"
+application.register("project-report-edit", ProjectReportEditController)
+
 import ProjectReportsController from "./project_reports_controller"
 application.register("project-reports", ProjectReportsController)
 

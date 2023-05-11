@@ -1,0 +1,20 @@
+<% if list.length < 1 %>
+  <p>No <%= txt %>s found</p>
+  <% else %>
+  <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+    <%= check_box_tag "check_#{txt}s", 0, false, id: "check_all_#{txt}s" %>
+    <%= 'Check all' %>
+  </div>
+  <% if !@report.errors.full_messages_for(:project).any? %>
+    <% list.each do |item| %>
+      <div class="mr-4 border border-yellow-600 rounded p-1 w-fit float-left m-1">
+        <%= check_box_tag "#{txt}_ids[]", item.id, @report.send("#{txt}_ids").include?(item.id.to_s), id: "check_#{txt}_#{item.id}" %>
+        <% if txt == "member" %>
+          <%= "#{item.first_name} #{item.last_name}" %>
+        <% elsif txt == "task" %>
+          <%= item.name %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
