@@ -1,26 +1,14 @@
 class ProjectReportsController < ApplicationController
+  before_action :authenticate_user!
+
   def show
     @failed_update = false
-
     @report = ProjectReport.find(params[:id])
-
     @groupes = ["task", "user", "date"]
-
     @time_regs = get_time_regs(@report)
-
     @grouped_report = group_time_regs(@time_regs, @report.group_by)
-
-
-    thisMonthName = I18n.t("date.month_names")[Date.today.month]
-    lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
-    @TimeFrameOptions = { 
-                          "Custom" => 'custom', 
-                          "This week" => 'thisWeek',
-                          "Last week" => 'lastWeek',
-                          "This Month (#{thisMonthName})" => 'thisMonth',
-                          "Last month (#{lastMonthName})" => 'lastMonth',
-                          "All Time" => 'allTime'
-                        }
+    @TimeFrameOptions = get_timeframe_options
+    
     @projects = Project.where(client_id: @report.client)
     @members = Project.find(@report.project).users
     @tasks = Project.find(@report.project).tasks
@@ -33,123 +21,50 @@ class ProjectReportsController < ApplicationController
     @projects = []
     @members = []
     @tasks = []
-    thisMonthName = I18n.t("date.month_names")[Date.today.month]
-    lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
-    @TimeFrameOptions = { 
-                          "Custom" => 'custom', 
-                          "This week" => 'thisWeek',
-                          "Last week" => 'lastWeek',
-                          "This Month (#{thisMonthName})" => 'thisMonth',
-                          "Last month (#{lastMonthName})" => 'lastMonth',
-                          "All Time" => 'allTime'
-                        }
+    @TimeFrameOptions = get_timeframe_options
   end
 
   def edit
-    @projects = []
     @clients = Client.all
     @report = ProjectReport.find(params[:id])
     @projects = Project.where(client_id: @report.client)
     @members = Project.find(@report.project).users
     @tasks = Project.find(@report.project).tasks
-    thisMonthName = I18n.t("date.month_names")[Date.today.month]
-    lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
-    @TimeFrameOptions = { 
-                          "Custom" => 'custom', 
-                          "This week" => 'thisWeek',
-                          "Last week" => 'lastWeek',
-                          "This Month (#{thisMonthName})" => 'thisMonth',
-                          "Last month (#{lastMonthName})" => 'lastMonth',
-                          "All Time" => 'allTime'
-                        }
+    @TimeFrameOptions = get_timeframe_options
   end
   
-  def update
-    @report = ProjectReport.find(params[:id])
-
-    thisMonthName = I18n.t("date.month_names")[Date.today.month]
-    lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
-    @TimeFrameOptions = { 
-                          "Custom" => 'custom', 
-                          "This week" => 'thisWeek',
-                          "Last week" => 'lastWeek',
-                          "This Month (#{thisMonthName})" => 'thisMonth',
-                          "Last month (#{lastMonthName})" => 'lastMonth',
-                          "All Time" => 'allTime'
-                        }
-    @projects = Project.where(client_id: @report.client)
-    @members = Project.find(@report.project).users
-    @tasks = Project.find(@report.project).tasks
-    @clients = Client.all
+  def update 
+    @report = ProjectReport.find(params[:id])     
     @groupes = ["task", "user", "date"]
     @time_regs = get_time_regs(@report)
     @grouped_report = group_time_regs(@time_regs, @report.group_by)
 
-    if @report.timeframe == "custom"
-      date_start_params = params[:date_start]
-      date_end_params = params[:date_end]
-      @report.date_start = Date.new(date_start_params["date_start(1i)"].to_i,
-                                    date_start_params["date_start(2i)"].to_i,
-                                    date_start_params["date_start(3i)"].to_i)
+    @TimeFrameOptions = get_timeframe_options
 
-      @report.date_end = Date.new(date_end_params["date_end(1i)"].to_i,
-                                  date_end_params["date_end(2i)"].to_i,
-                                  date_end_params["date_end(3i)"].to_i)
-    elsif @report.timeframe == "allTime"
-      @report.date_start = nil
-      @report.date_end = nil
-    else
-      @report = set_timeframe(@report)
-    end
+    @report = set_dates(@report, filtered_params[:timeframe], params[:date_start] || [], params[:date_end] || [])
     
     @report.assign_attributes(filtered_params)      
     @report.member_ids = params[:member_ids] || []
     @report.task_ids = params[:task_ids] || []
+
     if @report.save
       redirect_to @report
     else
       @failed_update = true
+      @clients = Client.all
+      @projects = @report.client.present? ? Client.find(@report.client).projects : []
+      @members = @report.project.to_i > 0 ? Project.find(@report.project).users : []
+      @tasks = @report.project.to_i > 0 ? Project.find(@report.project).tasks : []
       render :show, status: :unprocessable_entity
     end
   end
 
   def create
     @clients = Client.all
-    @projects = []
-    @members = []
-    @tasks = []
-
-    thisMonthName = I18n.t("date.month_names")[Date.today.month]
-    lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
-    @TimeFrameOptions = { 
-                          "Custom" => 'custom', 
-                          "This week" => 'thisWeek',
-                          "Last week" => 'lastWeek',
-                          "This Month (#{thisMonthName})" => 'thisMonth',
-                          "Last month (#{lastMonthName})" => 'lastMonth',
-                          "All Time" => 'allTime'
-                        }
+    @TimeFrameOptions = get_timeframe_options
     @report = ProjectReport.new
-    filtered_params[:timeframe]
 
-    if filtered_params[:timeframe] == "custom"
-      date_start_params = params[:date_start]
-      date_end_params = params[:date_end]
-      @report.date_start = Date.new(date_start_params["date_start(1i)"].to_i, 
-                                    date_start_params["date_start(2i)"].to_i, 
-                                    date_start_params["date_start(3i)"].to_i)
-
-      @report.date_end = Date.new(date_end_params["date_end(1i)"].to_i, 
-                                  date_end_params["date_end(2i)"].to_i, 
-                                  date_end_params["date_end(3i)"].to_i)
-    elsif filtered_params[:timeframe] == "allTime"
-      @report.date_start = nil
-      @report.date_end = nil
-    elsif filtered_params[:timeframe] == nil
-      @report.timeframe = nil
-    else
-      @report = set_timeframe(@report)
-    end
+    @report = set_dates(@report, filtered_params[:timeframe], params[:date_start] || [], params[:date_end] || [])
 
     @report.assign_attributes(filtered_params)      
     @report.member_ids = params[:member_ids] || []
@@ -159,36 +74,17 @@ class ProjectReportsController < ApplicationController
     if @report.save
       redirect_to @report
     else
-      @projects = Client.find(@report.client).projects if @report.client.present?
-      @members = Project.find(@report.project).users if @report.project.present?
-      @tasks = Project.find(@report.project).tasks if @report.project.present?
+      @projects = @report.client.present? ? Client.find(@report.client).projects : []
+      @tasks = @report.project.present? ? Project.find(@report.project).tasks : []
+      @members = @report.project.present? ? Project.find(@report.project).users : []
       render :new, status: :unprocessable_entity
     end
   end
 
-  def update_group
-    @report = ProjectReport.find(params[:project_report_id])
-    @report.group_by = params[:group_by]
-    @report.save
-    redirect_to @report
-  end
 
   # ****************
   # helper methods *
   # ****************
-  def get_time_regs(report)
-    time_regs = TimeReg.includes(:membership, :assigned_task)
-
-    if report.timeframe != "allTime"
-      time_regs = time_regs.where(date_worked: report.date_start..report.date_end)
-    end
-
-    time_regs = time_regs.where(membership: {user_id: report.member_ids})
-                         .where(assigned_task: {task_id: report.task_ids})
-                         .order(date_worked: :desc, created_at: :desc)
-
-    time_regs.all
-  end
 
   def update_task_checkboxes
     @tasks = Project.find(params[:project_id]).tasks
@@ -210,6 +106,13 @@ class ProjectReportsController < ApplicationController
     render partial: 'project_reports/timeframe'
   end
 
+  def update_group
+    @report = ProjectReport.find(params[:project_report_id])
+    @report.group_by = params[:group_by]
+    @report.save
+    redirect_to @report
+  end
+
   def export
     time_regs_ids = JSON.parse(params[:time_reg_ids])
     csv_data = CSV.generate(headers: true) do |csv|
@@ -220,15 +123,15 @@ class ProjectReportsController < ApplicationController
       time_regs_ids.each do |time_reg_id|
         time_reg = TimeReg.find(time_reg_id)
 
-        puts date = time_reg.date_worked
-        puts client = time_reg.project.client.name
-        puts project = time_reg.project.name
-        puts task = time_reg.assigned_task.task.name
-        puts notes = time_reg.notes
-        puts minutes = time_reg.minutes
-        puts first_name = time_reg.user.first_name
-        puts last_name = time_reg.user.last_name
-        puts email = time_reg.user.email
+        date = time_reg.date_worked
+        client = time_reg.project.client.name
+        project = time_reg.project.name
+        task = time_reg.assigned_task.task.name
+        notes = time_reg.notes
+        minutes = time_reg.minutes
+        first_name = time_reg.user.first_name
+        last_name = time_reg.user.last_name
+        email = time_reg.user.email
 
         csv << [date, client, project, task, notes, minutes, first_name, last_name, email]
       end
@@ -237,6 +140,49 @@ class ProjectReportsController < ApplicationController
   end
 
   private
+  def get_time_regs(report)
+    time_regs = TimeReg.includes(:membership, :assigned_task)
+
+    if report.timeframe != "allTime"
+      time_regs = time_regs.where(date_worked: report.date_start..report.date_end)
+    end
+    time_regs = time_regs.where(membership: {user_id: report.member_ids, project_id: report.project})
+                         .where(assigned_task: {task_id: report.task_ids})
+                         .order(date_worked: :desc, created_at: :desc)
+    time_regs.all
+  end
+
+  def get_timeframe_options 
+    thisMonthName = I18n.t("date.month_names")[Date.today.month]
+    lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
+    timeFrameOptions = { 
+                          "Custom" => 'custom', 
+                          "This week" => 'thisWeek',
+                          "Last week" => 'lastWeek',
+                          "This Month (#{thisMonthName})" => 'thisMonth',
+                          "Last month (#{lastMonthName})" => 'lastMonth',
+                          "All Time" => 'allTime'
+                        }
+  end
+
+  def set_dates(report, timeframe, date_start_params, date_end_params)
+    if timeframe == "custom"
+      report.date_start = Date.new(date_start_params["date_start(1i)"].to_i, 
+        date_start_params["date_start(2i)"].to_i, 
+        date_start_params["date_start(3i)"].to_i)
+      report.date_end = Date.new(date_end_params["date_end(1i)"].to_i, 
+        date_end_params["date_end(2i)"].to_i, 
+        date_end_params["date_end(3i)"].to_i)
+    elsif timeframe == "allTime"
+      report.date_start = nil
+      report.date_end = nil
+    elsif timeframe == nil
+      report.timeframe = nil
+    else
+      report = set_timeframe(report)
+    end
+    report
+  end
 
   def set_timeframe(report)
     timeframe = report.timeframe
@@ -245,23 +191,23 @@ class ProjectReportsController < ApplicationController
     new_date_start = nil
     new_date_end = nil
 
-      if timeframe == "thisWeek"
-        new_date_start = today.beginning_of_week
-        new_date_end = today
-      elsif timeframe == "lastWeek"
-        new_date_start = today.last_week.beginning_of_week
-        new_date_end = today.last_week.end_of_week
-      elsif timeframe == "thisMonth"
-        new_date_start = today.beginning_of_month
-        new_date_end = today
-      elsif timeframe == "lastMonth"
-        new_date_start = today.last_month.beginning_of_month
-        new_date_end = today.last_month.end_of_month
-      end
-      report.date_start = new_date_start
-      report.date_end = new_date_end
-      
-      report
+    if timeframe == "thisWeek"
+      new_date_start = today.beginning_of_week
+      new_date_end = today
+    elsif timeframe == "lastWeek"
+      new_date_start = today.last_week.beginning_of_week
+      new_date_end = today.last_week.end_of_week
+    elsif timeframe == "thisMonth"
+      new_date_start = today.beginning_of_month
+      new_date_end = today
+    elsif timeframe == "lastMonth"
+      new_date_start = today.last_month.beginning_of_month
+      new_date_end = today.last_month.end_of_month
+    end
+    report.date_start = new_date_start
+    report.date_end = new_date_end
+
+    report
   end
 
   def filtered_params

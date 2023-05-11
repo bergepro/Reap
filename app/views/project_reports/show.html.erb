@@ -26,8 +26,8 @@
           <%= form.submit 'Export to CSV', class: ' rounded bg-blue-200 p-1 hover:bg-blue-300' %>
         <% end %>       
       </div>
-
     </div>
+    
     <div id="">
     <%= render partial: 'report_data', locals: { grouped_report: @grouped_report, group_name: @group_name } %>
   </div>

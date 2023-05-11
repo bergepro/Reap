@@ -25,19 +25,19 @@
         <td class="border-b-2 border-gray-300"></td>
       </tr>
       <% time_regs.each do |time_reg |%>
-        <tr class="border-b-2	 border-gray-300">
+        <tr class="border-b-2 border-gray-300">
           <% if @report.group_by != "date" %>
-            <td><%= time_reg.date_worked %></td>
+            <td class="pb-1"><%= time_reg.date_worked %></td>
           <% end %>
-          <td><%= time_reg.project.client.name %></td>
+          <td class="pb-1"><%= time_reg.project.client.name %></td>
           <td class="pb-1"><%= time_reg.project.name %></td>
           <% if @report.group_by != "task" %>
-            <td><%= time_reg.task.name %></td>
+            <td class="pb-1"><%= time_reg.task.name %></td>
           <% end %>
           <% if @report.group_by != "user" %>
-            <td><%= time_reg.user.first_name %> <%= time_reg.user.last_name%></td>
+            <td class="pb-1"><%= time_reg.user.first_name %> <%= time_reg.user.last_name%></td>
           <% end %>
-          <td><%= convert_time_int(time_reg.minutes) %></td>
+          <td class="pb-1"><%= convert_time_int(time_reg.minutes) %></td>
         </tr>
       <% end %>
       <tr class="">
