@@ -8,7 +8,6 @@ export default class extends Controller {
 
     projectSelect.addEventListener('change', (event) =>{
       const projectId = event.target.value;
-      console.log("HEI")
       $.ajax({
         type: 'GET',
         url: `/time_regs/update_tasks_select?project_id=${projectId}`,
