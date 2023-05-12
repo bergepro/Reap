@@ -2,14 +2,14 @@
   <div>
     <label for="date_start">Date Start:</label>
     <div class="">
-      <%= date_select 'date_start', :date_start, {use_short_month: true, end_year: Date.today.year}, class: 'pr-8' %>
+      <%= date_field_tag :date_start, class: 'pr-8' %>
     </div>    
   </div>
 
   <div>
     <label for="date_end">Date End:</label>
     <div class="">
-      <%= date_select 'date_end', :date_end, {use_short_month: true, end_year: Date.today.year}, class: 'pr-8' %>
+      <%= date_field_tag :date_end, class: 'pr-8' %>
     </div>  
   </div>
 </div>

@@ -14,6 +14,12 @@
                     { id: 'timeframe-select', class: 'w-custom15 mr-10' })
       %>
     </div>
+
+    <div class="text-sm italic text-gray-600 mt-4">
+      <% @report.errors.full_messages_for(:custom_timeframe).each do |message| %>
+        <p><%= message %></p>
+      <% end %>
+    </div>
     <div id="custom-timeframe">
       <!-- renders custom timeframe fields at start if it was the option when trying to create -->
       <% if @report.timeframe == "custom" %>

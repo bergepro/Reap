@@ -78,24 +78,24 @@ class ProjectReportsController < ApplicationController
     @TimeFrameOptions = get_timeframe_options
 
     # gives the report object its attributes
-    @report = set_dates(@report, filtered_params[:timeframe], params[:date_start] || [], params[:date_end] || [])
+    @report = set_dates(@report, filtered_params[:timeframe], params[:date_start], params[:date_end])
     @report.assign_attributes(filtered_params)      
     @report.member_ids = params[:member_ids] || []
     @report.task_ids = params[:task_ids] || []
     @report.group_by = START_GROUP
-
+      
     # tries to create a new report, if not: render the new view with errors
     if @report.save
-      redirect_to @report # sends the user to the report
-    else
-      # renders the selects and checkboxes with the correct content
+      redirect_to @report # sends the user to the report        
+    else    
+      # Renders the selects and checkboxes with the correct content
       @projects = @report.client.present? ? Client.find(@report.client).projects : []
       @tasks = @report.project.present? ? Project.find(@report.project).tasks : []
       @members = @report.project.present? ? Project.find(@report.project).users : []
-
       render :new, status: :unprocessable_entity
-    end
+    end      
   end
+
 
 
   # ****************
@@ -203,12 +203,11 @@ class ProjectReportsController < ApplicationController
   # sets the timeframe for the report if it is custom or allTime
   def set_dates(report, timeframe, date_start_params, date_end_params)
     if timeframe == "custom"
-      report.date_start = Date.new(date_start_params["date_start(1i)"].to_i, 
-        date_start_params["date_start(2i)"].to_i, 
-        date_start_params["date_start(3i)"].to_i)
-      report.date_end = Date.new(date_end_params["date_end(1i)"].to_i, 
-        date_end_params["date_end(2i)"].to_i, 
-        date_end_params["date_end(3i)"].to_i)
+      # handles parse-error
+      if !params[:date_start].blank? && !params[:date_end].blank?
+        report.date_start = Date.parse(date_start_params)
+        report.date_end = Date.parse(date_end_params)
+      end
     elsif timeframe == "allTime"
       report.date_start = nil
       report.date_end = nil
