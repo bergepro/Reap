@@ -1,11 +1,10 @@
 <% t = Time.new %>
 
-<div class="flex flex-row">
-  <div class="basis-1/12 justify-items-center">
+<div class="flex flex-row self-center m-auto w-full 2xl:w-3/4 ">
 
-
-    <div class="content-center self-center justify-items-center my-16">
-      <div class="flex flex-col self-center gap-y-2">
+  <div class=" justify-items-center max-[800px]:hidden mt-[25vh]">
+    <div class="content-center self-center justify-items-center ">
+      <div class="flex flex-col self-center ">
         <div data-controller="modal" class="text-xs mt-2 m-auto self-center">
           <button data-action="click->modal#toggle">
             <div data-modal-target="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -25,13 +24,10 @@
         </div>
       </div>
     </div>
-
-
   </div>
-
-  <div class="basis-10/12 flex flex-col h-100 ">
-    <div class="grid grid-cols-12">
-      <div class="col-span-1 flex  ">
+  <div class=" flex flex-col grow mx-8   ">
+    <div class="flex w-full justify-between">
+      <div class=" flex  ">
         <div class="border rounded p-2 ">
           <%= link_to root_path(date: @chosen_date - 1.day) do %>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -47,44 +43,59 @@
           <% end %>
         </div>
       </div>
-      <div class="col-span-8 flex text-3xl self-end">
+      <div class="flex lg:text-3xl text-xl w-3/4">
         <% if @chosen_date == Date.today %>
-          <p class="bold mr-2">
+          <p class="bold ml-2 mr-4">
           Today: 
+          </p>
         <% end %>
 
-        <p class="text-2xl  ">
+        <p class="  ">
         <%= @chosen_date.strftime("%A, %d %B") %>
         </p>
       </div>
 
-      <div class="col-span-3 flex">
-        <div class="flex flex-col">
-          <%= form_tag(root_path, method: "get") do %>
+      <div class="col-span-3 ">
+        
+        <%= form_tag(root_path, method: "get", class: "flex space-x-2") do %>
             <%= date_field_tag :date, @chosen_date %>
-            <%= submit_tag "Go to date", class: "bg-green-200 p-1 rounded" %>
-          <% end %>
-        </div>
+            <%= submit_tag "Go to date", class: "bg-green-200 p-1 rounded-xl text-sm" %>
+        <% end %>
       </div>
     </div>
 
+    <div class=" min-[800px]:hidden ">
+      
+        <div data-controller="modal" class="">
+          <button data-action="click->modal#toggle">
+            <div data-modal-target="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all" data-action="click->modal#preventClose">
+                <%= render "time_regs/new", time_reg: @time_reg, projects: @projects %>
+              </div>
+            </div>
+            <div class="bg-green-600 mt-4 h-8 w-screen px-1 py-1 rounded-xl self-stretch text-white  ">
+              Track time
+            </div>
+            
+          </button>
+        </div>
+  </div>
 
 
-    <div class="flex flex-row items-center content-center mt-6">
+    <div class="flex flex-row items-center content-center mt-6 max-[640px]:hidden max-[800px]:my-2">
       <% Date::DAYNAMES.rotate.each_with_index do |day, i| %>
-        <div class="grid grow <%= 'border-b-4 border-red-300' if @chosen_date.wday == (i+1)%7 %>">
+        <div class="grid grow max-[800px]:text-xs <%= 'border-b-2 border-red-300' if @chosen_date.wday == (i+1)%7 %>">
           <%= day %><br>
           <% day_minutes = @time_regs_week.select{ |tr| tr.date_worked.wday == (i+1) % 7 }.sum(&:minutes) %>
           <%= format_duration(day_minutes) %>
         </div>
       <% end %>
 
-      <div class="grid grow">
+      <div class="grid  text-end">
         Week total
         <br />
         <%= format_duration(@total_minutes_week) %>
       </div>
-
     </div>
 
 
@@ -120,6 +131,9 @@
               <div class='text-end mt-6 mr-24'>
                 Total: <%= format_duration(@total_minutes_day) %>
               </div>
+              
+
+  <%= link_to "Clients", clients_path, class: "relative bottom-0 border-2 w-14" %>
     </div>
   </div>
 
@@ -132,8 +146,6 @@
 
 
 
-
-  <%= link_to "clients", clients_path, class: "border-2" %>
 
 
 
