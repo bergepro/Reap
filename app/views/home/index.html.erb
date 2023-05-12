@@ -5,14 +5,23 @@
 
 
     <div class="content-center self-center justify-items-center my-16">
-      <div class="flex flex-col self-center">
-        <div class="bg-green-500 h-12 w-12 px-1 py-1 rounded-xl self-center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="white" class="w-10 h-10 self-center">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-        </div>
-        <div class="text-xs mt-2 m-auto self-center">
-          Track time
+      <div class="flex flex-col self-center gap-y-2">
+        <div data-controller="modal" class="text-xs mt-2 m-auto self-center">
+          <button data-action="click->modal#toggle">
+            <div data-modal-target="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all" data-action="click->modal#preventClose">
+
+                <%= render "time_regs/new", time_reg: @time_reg, projects: @projects %>
+              </div>
+            </div>
+            <div class="bg-green-500 h-16 w-16 px-1 py-1 rounded-xl self-center m-auto ">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="white" class="w-14 h-14 self-center">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </div>
+            <p class='mt-4 text-lg'>
+            Track time</p>
+          </button>
         </div>
       </div>
     </div>
@@ -44,13 +53,13 @@
           Today: 
         <% end %>
 
-        <p class="text-2xl  self-end">
+        <p class="text-2xl  ">
         <%= @chosen_date.strftime("%A, %d %B") %>
         </p>
       </div>
 
       <div class="col-span-3 flex">
-        <div>
+        <div class="flex flex-col">
           <%= form_tag(root_path, method: "get") do %>
             <%= date_field_tag :date, @chosen_date %>
             <%= submit_tag "Go to date", class: "bg-green-200 p-1 rounded" %>
@@ -63,8 +72,7 @@
 
     <div class="flex flex-row items-center content-center mt-6">
       <% Date::DAYNAMES.rotate.each_with_index do |day, i| %>
-        <div class="grid grow <%= 'border-b-2 border-red-300' if @chosen_date.strftime("%A") == 'Monday' %>">
-
+        <div class="grid grow <%= 'border-b-4 border-red-300' if @chosen_date.wday == (i+1)%7 %>">
           <%= day %><br>
           <% day_minutes = @time_regs_week.select{ |tr| tr.date_worked.wday == (i+1) % 7 }.sum(&:minutes) %>
           <%= format_duration(day_minutes) %>
@@ -99,10 +107,10 @@
                     <% if time_reg.active %>
                       <%= button_to "Stop", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300" %>
                     <% else %>
-                      <%= button_to "Start", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-green-200 p-1 hover:bg-green-300" %>
-                    <% end %>
+                      <%= button_to "Start", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm r ounded bg-green-200 p-1 hover:bg-green-300" %>
+                    <% end %>   
                   </div> 
-                </div>
+                </div>  
                 <!-- Add more cells for other TimeEntry attributes -->
             </tr>
           <% end %>
@@ -114,6 +122,9 @@
               </div>
     </div>
   </div>
+
+
+
 
 
 
