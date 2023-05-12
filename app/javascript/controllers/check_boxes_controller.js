@@ -7,12 +7,14 @@ export default class extends Controller {
     // gets the check-all boxes
     const checkTaskElement = document.querySelector('#check_all_tasks');
     const checkMemberElement = document.querySelector('#check_all_members');
+  
 
     // if exixts call checkAll function with element
     if (checkTaskElement != null)
-      checkAll(checkTaskElement, "task") 
+      checkAll(checkTaskElement, "task");
     if (checkMemberElement != null)
-      checkAll(checkMemberElement, "member") 
+      checkAll(checkMemberElement, "member");
+
 
     //  that takes the element of the checkbox and the name 
     function checkAll(checkElement, checkName){

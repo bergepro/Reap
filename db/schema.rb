@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_10_143014) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_12_094806) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,6 +82,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_143014) do
     t.date "date_worked"
     t.index ["assigned_task_id"], name: "index_time_regs_on_assigned_task_id"
     t.index ["membership_id"], name: "index_time_regs_on_membership_id"
+  end
+
+  create_table "user_reports", force: :cascade do |t|
+    t.string "creator"
+    t.string "timeframe"
+    t.date "date_start"
+    t.date "date_end"
+    t.string "user"
+    t.text "task_ids", default: [], array: true
+    t.text "project_ids", default: [], array: true
+    t.string "group_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

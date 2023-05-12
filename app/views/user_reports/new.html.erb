@@ -1,0 +1,24 @@
+<h1>new user report</h1>
+<div data-controller="user-reports">
+  <%= form_with model: @report do |form| %>
+    <%= form.collection_select(:user, @users, :id, :name,
+                              { include_blank: "Select a user" }, { data: { action: "change->user-reports#handleChange" }, class: 'w-custom15 mr-10' }) %>
+
+
+    <br>
+    <%= form.label :project_ids, "projects" %>
+    <div data-user-reports-target="projectsDiv">
+      <%= render partial: 'user_reports/projects_cb', locals: { report: @report, projects: @projects } %>
+    </div>
+
+
+
+    <%= form.label :task_ids, "tasks" %><br>
+    <div id="task-div">
+      <%= render partial: 'user_reports/tasks_cb', locals: { report: @report, tasks: @tasks } %>
+    </div>
+
+    <%= form.submit %>
+  <% end %>
+  
+</div>

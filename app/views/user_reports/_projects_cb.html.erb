@@ -1,0 +1,8 @@
+<br>
+<div data-controller="user-reports">
+  <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+    <%= check_box_tag "check_projects", 0, false, id: "check_all_projects" %>
+    <%= 'Check all' %>
+  </div>
+  <%= collection_check_boxes 'project', :ids, projects, :id, :name, class: 'project-checkboxes' %>
+</div>

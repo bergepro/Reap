@@ -4,17 +4,6 @@ Rails.application.routes.draw do
   get 'home/index'
   root 'home#index'
 
-  #resources :reports, only: [:index, :new, :create] do
-  #  collection do
-  #    get 'export_test'
-  #  end
-  #end
-  #get 'reports/update_groupes_select'
-  #get '/reports/index'
-  #get 'reports/update_task_checkboxes'
-  #get 'reports/update_member_checkboxes'
-  #get 'reports/render_custom_timeframe'
-  #get 'reports/update_projects_select'
 
   resources :project_reports do
     patch :update_group
@@ -24,6 +13,13 @@ Rails.application.routes.draw do
       get 'render_custom_timeframe'
       get 'update_projects_select'
       get 'export'
+    end
+  end
+
+  resources :user_reports do
+    collection do 
+      get 'update_projects'
+      get 'update_tasks'
     end
   end
 

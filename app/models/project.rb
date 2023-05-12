@@ -8,4 +8,8 @@ class Project < ApplicationRecord
   has_many :time_regs, through: :memberships
   has_many :assigned_tasks, dependent: :destroy
   has_many :tasks, through: :assigned_tasks
+
+  def project_id
+    id
+  end
 end
