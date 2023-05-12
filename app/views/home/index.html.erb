@@ -1,50 +1,127 @@
-<%= link_to "clients", clients_path, class: "border-2" %>
+<% t = Time.new %>
 
-    <body class=" border-2 border-orange-800 w-screen h-screen">
-
-        <nav>
-        </nav>
-
-        <div class=" border-2 border-green-800 w-full h-full flex justify-center">
+<div class="flex flex-row">
+  <div class="basis-1/12 justify-items-center">
 
 
-            <div class="w-3/5 h-60 border-black border-2 rounded-sm flex flex-col">
+    <div class="content-center self-center justify-items-center my-16">
+      <div class="flex flex-col self-center gap-y-2">
+        <div data-controller="modal" class="text-xs mt-2 m-auto self-center">
+          <button data-action="click->modal#toggle">
+            <div data-modal-target="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all" data-action="click->modal#preventClose">
 
-                <div class="w-full h-6 border border-purple-700 flex justify-center items-center">
-                    <%= image_tag "Sickle.png", :alt=>"Sickle logo", class:"h-5 w-5" %>
-
-                </div>
-
-                <div class="w-full h-fill border border-blue-700 flex">
-                    
-                    <div class="flex justify-center item-center space-x-1">
-                        <button class="rounded-md border border-orange-400 bg-orange-400"><-</button>
-                        <button class="rounded-md border border-orange-400 bg-orange-400">-></button>
-                    </div>
-
-                    <div>
-                    <h2>TODAY:<h2>
-                    <!-- Dato -->
-                    </div>
-                </div>
-
-                <div class="w-full h-20 border border-red-700 flex">
-
-                    <div class="w-1/12 h-10 border border-green-700 flex justify-center items-center">
-                        <button class="rounded-md border border-green-500 w-5 h-5 place-content-center">+</button>
-                    </div>
-
-                    <div class="w-full h-full border border-pink-700 flex">
-
-                    </div>
-
-
-
-                </div>
-                
-
+                <%= render "time_regs/new", time_reg: @time_reg, projects: @projects %>
+              </div>
+            </div>
+            <div class="bg-green-500 h-16 w-16 px-1 py-1 rounded-xl self-center m-auto ">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="white" class="w-14 h-14 self-center">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </div>
+            <p class='mt-4 text-lg'>
+            Track time</p>
+          </button>
         </div>
-    </body>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="basis-10/12 flex flex-col h-100 ">
+    <div class="grid grid-cols-12">
+      <div class="col-span-1 flex  ">
+        <div class="border rounded p-2 ">
+          <%= link_to root_path(date: @chosen_date - 1.day) do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+          <% end %>
+        </div>
+        <div class="border rounded p-2">
+          <%= link_to root_path(date: @chosen_date + 1.day) do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-span-8 flex text-3xl self-end">
+        <% if @chosen_date == Date.today %>
+          <p class="bold mr-2">
+          Today: 
+        <% end %>
+
+        <p class="text-2xl  ">
+        <%= @chosen_date.strftime("%A, %d %B") %>
+        </p>
+      </div>
+
+      <div class="col-span-3 flex">
+        <div class="flex flex-col">
+          <%= form_tag(root_path, method: "get") do %>
+            <%= date_field_tag :date, @chosen_date %>
+            <%= submit_tag "Go to date", class: "bg-green-200 p-1 rounded" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="flex flex-row items-center content-center mt-6">
+      <% Date::DAYNAMES.rotate.each_with_index do |day, i| %>
+        <div class="grid grow <%= 'border-b-4 border-red-300' if @chosen_date.wday == (i+1)%7 %>">
+          <%= day %><br>
+          <% day_minutes = @time_regs_week.select{ |tr| tr.date_worked.wday == (i+1) % 7 }.sum(&:minutes) %>
+          <%= format_duration(day_minutes) %>
+        </div>
+      <% end %>
+
+      <div class="grid grow">
+        Week total
+        <br />
+        <%= format_duration(@total_minutes_week) %>
+      </div>
+
+    </div>
+
+
+
+    <div class="border-y-2 divide-y-2">
+      <table>
+        <tbody>
+          <% @time_regs.each do |time_reg| %>
+            <tr>
+              <div class="bg-yellow-100 p-2 divide-y-2">
+                <div class="flex ">
+                  <div class="grow">
+                    <b class="mr-2"> Example Project</b>(Example client)
+                    <br>
+                    <%= time_reg.notes %>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-semibold"><%= convert_time(time_reg)%></span>
+                    <%= link_to "Edit entry", edit_time_reg_path(time_reg), class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 whitespace-nowrap' %>
+                    <% if time_reg.active %>
+                      <%= button_to "Stop", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300" %>
+                    <% else %>
+                      <%= button_to "Start", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm r ounded bg-green-200 p-1 hover:bg-green-300" %>
+                    <% end %>   
+                  </div> 
+                </div>  
+                <!-- Add more cells for other TimeEntry attributes -->
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+              </div>
+              <div class='text-end mt-6 mr-24'>
+                Total: <%= format_duration(@total_minutes_day) %>
+              </div>
+    </div>
+  </div>
 
 
 
@@ -54,15 +131,9 @@
 
 
 
-<!--
-<div class="">
-    <%= image_tag "Sickle.png", :alt=>"Sickle logo", class:"h-20 w-20" %>
-</div>
-<div class="max-h-50 max-w-50 bg-blue-500">
-    <p> hei </p>
-</div>
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
-<p class="text-slate-500">
-Denne siden er her :))</p>
--->
+
+
+  <%= link_to "clients", clients_path, class: "border-2" %>
+
+
+

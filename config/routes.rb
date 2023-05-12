@@ -39,10 +39,10 @@ Rails.application.routes.draw do
       post 'import'
       get 'update_tasks_select'
       get 'update_minutes_view'
+      get 'new_modal', to: 'time_regs#new', as: :new_modal
     end
   end
   
-
   resources :projects do
     resources :memberships
     resources :assigned_tasks
