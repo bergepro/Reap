@@ -43,30 +43,32 @@ export default class extends Controller {
   }
 
   sendCheckboxesToServer(checkboxes, tasks_url, taskDiv){
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', event =>{
-        let selectedCheckboxes = [];
-        checkboxes.forEach(check =>{
-          if(check.checked){
-            selectedCheckboxes.push(check.value);
-          }
-        })
+    if(checkboxes.length > 0){
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', event =>{
+          let selectedCheckboxes = [];
+          checkboxes.forEach(check =>{
+            if(check.checked){
+              selectedCheckboxes.push(check.value);
+            }
+          })
 
-        const selectedCheckboxesJSON = JSON.stringify(selectedCheckboxes);
-        $.ajax({
-          type: 'GET',
-          url: tasks_url,
-          data: {project_ids_json: selectedCheckboxesJSON},
-          success: (data) =>{
-            taskDiv.innerHTML = data;
-          },
-          error: (data) =>{
-              console.error(data);
-          }
-        });
-        console.log("hei")
-      })
-    });
+          const selectedCheckboxesJSON = JSON.stringify(selectedCheckboxes);
+          $.ajax({
+            type: 'GET',
+            url: tasks_url,
+            data: {project_ids_json: selectedCheckboxesJSON},
+            success: (data) =>{
+              taskDiv.innerHTML = data;
+            },
+            error: (data) =>{
+                console.error(data);
+            }
+          });
+          console.log("hei")
+        })
+      });      
+    }
   }
  
 

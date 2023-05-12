@@ -4,11 +4,9 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   connect() {
     const checkAllTasks = document.querySelector("#check_all_tasks");
-    const checkAllProjects = document.querySelector("#check_all_projects");
 
     if (checkAllTasks){
       this.checkAll(checkAllTasks, 'task');
-
     }
 
   }

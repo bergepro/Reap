@@ -256,7 +256,7 @@ class ProjectReportsController < ApplicationController
     if group == "task"
       grouped_report = time_regs.group_by { |time_reg| time_reg.task.name }
     elsif group == "user"
-      grouped_report = time_regs.group_by { |time_reg| "#{time_reg.user.first_name} #{time_reg.user.last_name}" }
+      grouped_report = time_regs.group_by { |time_reg| time_reg.user.name }
     elsif group == "date"
       grouped_report = time_regs.group_by { |time_reg | time_reg.date_worked}
     end

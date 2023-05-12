@@ -1,10 +1,14 @@
-<br>
 <div data-controller="user-project-taskboxes">
-    <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
-        <%= check_box_tag "check_projects", 0, false, id: "check_all_tasks" %>
-        <%= 'Check all' %>
-        <br>
+  <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+    <%= check_box_tag "check_projects", 0, false, id: "check_all_tasks" %>
+    <%= 'Check all' %>
+    <br>
+  </div>
+  <%= collection_check_boxes 'task', :ids, tasks, :id, :name do |b| %>
+    <div class="mr-4 border border-yellow-600 rounded p-1 w-fit float-left m-1">
+      <%= b.check_box %>
+      <%= b.label %>  
     </div>
-    <%= collection_check_boxes 'task', :ids, tasks, :id, :name, class: 'task-checkboxes' %>
+  <% end %>
 </div>
 

@@ -2,7 +2,7 @@ class UserReportsController < ApplicationController
     def new
         @report = UserReport.new
         @users = User.all
-        @projects = []
+        @projects_by_client = []
         @tasks = []
     end
 
@@ -13,9 +13,10 @@ class UserReportsController < ApplicationController
 
     def update_projects
         report = UserReport.new
-        projects = User.find(params[:user_id]).projects
-        render partial: 'user_reports/projects_cb', locals: {report: report, projects: projects}
-    end
+        projects_by_client = User.find(params[:user_id]).projects.group_by(&:client)
+        render partial: 'user_reports/projects_cb', locals: { report: report, projects_by_client: projects_by_client }
+      end
+      
 
     def update_tasks
         report = UserReport.new
