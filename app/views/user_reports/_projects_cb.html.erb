@@ -1,4 +1,4 @@
-<div data-controller="user-reports">
+<div data-controller="user-reports" data-selected-tasks="<%= report.task_ids %>">
   <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
     <%= check_box_tag "check_projects", 0, false, id: "check_all_projects" %>
     <%= 'Check all' %>
@@ -8,7 +8,8 @@
       <h3 class="italic"><%= client.name %></h3>
       <% client_projects.each do |project| %>
         <div class="mr-4 border border-yellow-600 rounded p-1 w-fit float-left m-1">
-          <%= check_box_tag 'project_ids[]', project.id %>
+          <% checked = Array(params[:project_ids]).include?(project.id.to_s) %>
+          <%= check_box_tag 'project_ids[]', project.id, checked %>
           <%= label_tag "project_#{project.id}", project.name %>  
         </div>
       <% end %>  

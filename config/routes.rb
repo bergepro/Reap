@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     collection do 
       get 'update_projects'
       get 'update_tasks'
+      get 'render_custom_timeframe'
     end
   end
 

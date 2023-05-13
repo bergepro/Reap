@@ -4,11 +4,13 @@
     <%= 'Check all' %>
     <br>
   </div>
-  <%= collection_check_boxes 'task', :ids, tasks, :id, :name do |b| %>
-    <div class="mr-4 border border-yellow-600 rounded p-1 w-fit float-left m-1">
-      <%= b.check_box %>
-      <%= b.label %>  
-    </div>
-  <% end %>
+<% tasks.each do |task| %>
+  <div class="mr-4 border border-yellow-600 rounded p-1 w-fit float-left m-1">
+    <% checked = selected_tasks.include?(task.id.to_s) %>
+    <%= check_box_tag 'task_ids[]', task.id, checked %>
+    <%= label_tag "task_#{task.id}", task.name %>
+  </div>
+<% end %>
+
 </div>
 
