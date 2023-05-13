@@ -23,8 +23,9 @@ export default class extends Controller {
       selectedTasks = JSON.parse(this.element.dataset.selectedTasks);
     }
 
-    this.CreateCheckboxListeners(checkboxes, tasks_url, taskDiv)
-    this.checkboxesToServer(checkboxes, tasks_url, taskDiv, selectedTasks)
+
+    this.CreateCheckboxListeners(checkboxes, tasks_url, taskDiv, selectedTasks)
+    this.checkboxesToServer(checkboxes, tasks_url, taskDiv,selectedTasks)
 
     if(checkAllProjects){
       this.checkAll(checkAllProjects,checkboxes, tasks_url, taskDiv);

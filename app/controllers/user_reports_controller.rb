@@ -1,9 +1,21 @@
 class UserReportsController < ReportsController
   GROUPES = ["task", "project", "date"] # columns to group report by
   START_GROUP = "date"
+
   def show
+    @report = UserReport.find(params[:id])
 
   end
+
+  def edit
+    @report = UserReport.find(params[:id])
+    @TimeFrameOptions = get_timeframe_options
+    @users = User.all
+    @projects_by_client = User.find(@report.user).projects.group_by(&:client)
+    @tasks = @report.project_ids.present? ? Task.joins(:assigned_tasks).where(assigned_tasks: { project_id: @report.project_ids }) : []
+    @selected_tasks = @report.task_ids || []
+  end
+  
   def new
       @selected_tasks = []
       @report = UserReport.new
