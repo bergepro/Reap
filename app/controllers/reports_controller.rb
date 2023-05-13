@@ -60,4 +60,7 @@ class ReportsController < ApplicationController
                           "All Time" => 'allTime'
                         }
   end
+
+
+  
 end
