@@ -27,6 +27,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :user_reports do
+    collection do
+      get 'update_projects_checkboxes'
+      get 'update_tasks_checkboxes'
+    end
+  end
+
   resources :clients
 
   resources :tasks

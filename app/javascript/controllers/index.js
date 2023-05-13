@@ -19,6 +19,9 @@ application.register("dynamic-minutes", DynamicMinutesController)
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+import ModalController from "./modal_controller"
+application.register("modal", ModalController)
+
 import ProjectReportEditController from "./project_report_edit_controller"
 application.register("project-report-edit", ProjectReportEditController)
 
@@ -30,3 +33,9 @@ application.register("reports", ReportsController)
 
 import TimeTasksController from "./time_tasks_controller"
 application.register("time-tasks", TimeTasksController)
+
+import UserReportsBoxesController from "./user_reports_boxes_controller"
+application.register("user-reports-boxes", UserReportsBoxesController)
+
+import UserReportsController from "./user_reports_controller"
+application.register("user-reports", UserReportsController)
