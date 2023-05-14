@@ -13,6 +13,10 @@ class TimeRegsController < ApplicationController
   def new
     @projects = current_user.projects
     @time_reg = TimeReg.new
+    respond_to do |format|
+      format.turbo_stream
+      format.html
+    end
   end
 
 
@@ -21,6 +25,7 @@ class TimeRegsController < ApplicationController
     @time_reg = @project.time_regs.build(time_reg_params.except(:project_id))
    
     membership = @project.memberships.find_by(user_id: current_user.id, project_id: @project.id)
+
     @time_reg.active = false
     @time_reg.updated = Time.now
     @time_reg.membership_id = membership.id
@@ -40,8 +45,8 @@ class TimeRegsController < ApplicationController
     @time_reg = TimeReg.find(params[:id])
     @projects = current_user.projects
     @assigned_tasks = Task.joins(:assigned_tasks)
-          .where(assigned_tasks: { project_id: @time_reg.project.id })
-          .pluck(:name, 'assigned_tasks.id')
+      .where(assigned_tasks: { project_id: @time_reg.project.id })
+      .pluck(:name, 'assigned_tasks.id')
   end 
 
   def update
@@ -68,8 +73,8 @@ class TimeRegsController < ApplicationController
     else
       @projects = current_user.projects
       @assigned_tasks = Task.joins(:assigned_tasks)
-            .where(assigned_tasks: { project_id: @time_reg.project.id })
-            .pluck(:name, 'assigned_tasks.id')
+        .where(assigned_tasks: { project_id: @time_reg.project.id })
+        .pluck(:name, 'assigned_tasks.id')
 
       flash[:alert] = "cannot delete time entry"
       render :edit, status: :unprocessable_entity
@@ -105,7 +110,7 @@ class TimeRegsController < ApplicationController
   def update_minutes_view
     active_times = User.find(params[:user_id]).time_regs.where(active: true)
     update_minutes(active_times)
-    
+
     @time_regs = User.find(params[:user_id]).time_regs.order('time_regs.date_worked DESC', 'time_regs.assigned_task_id', 'time_regs.created_at DESC')
     render partial: @time_regs
   end
