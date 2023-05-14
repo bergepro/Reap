@@ -1,35 +1,37 @@
-<div class="flex justify-evenly pt-4">
-  <div class="max-w-md">
-    <div>
-      <div class="w-96"></div>
-      <div class="w-96"></div>
-    </div>
-    <h1 class="font-bold text-lg mb-5">Your projects: </h1>
-
-    <% @clients.each do |client| %>
-      <div class="mb-6">
-        <% @projects = current_user.projects.where(projects: {client_id: client.id}) %>
-
-        <div class="flex justify-between border-b border-gray-300 pb-1">
-          <h2 class="font-semibold text-lg"><%= client.name %></h2>
-        </div>
-
-        <% @projects.each do |project| %>
-          <div class="border-b text-gray-700 border-gray-300 pb-1 pt-1 ">
-            <%= 
-              link_to project.name, project_path(project), 
-              class: 'italic text-stone-700 ml-4' 
-            %>
+<div class="flex flex-col items-center pt-4">
+  <div class="max-w-md md:min-w-custom35">
+    <div class="p-1 my-2 pt-2">
+      <h1 class="font-bold text-3xl italic pb-4 ml-2">Your projects </h1>
+      <% @clients.each do |client| %>
+        <div class="mb-6">
+          <% @projects = current_user.projects.where(projects: {client_id: client.id}) %>
+          <div class="flex justify-between border-b border-gray-300 pb-1">
+            <%= link_to client.name, client, class: 'font-semibold text-xl"' %>
           </div>
-        <% end %>       
-      </div>
-    <% end %>
+          <% if @projects.count < 1%>
+            <div class="border-b border-gray-300 pb-1 pt-1 ">
+              <p class="italic text-stone-700 ml-4 ">You have no projects for this client yet</p>
+            </div>
+          <% end %>
+          <% @projects.each do |project| %>
+            <div class="border-b border-gray-300 pb-1 pt-1 ">
+              <%= 
+                link_to project.name, project, 
+                class: 'italic text-stone-700 ml-4' 
+              %>
+            </div>
+          <% end %>       
+        </div>
+      <% end %>    
+    </div>
     <div class="flex justify-evenly">
       <%= link_to "New Project", new_project_path, class: ' bg-blue-200 rounded p-2 hover:bg-blue-300'%>
     </div>
-    <%= form_with url: projects_import_path do |form| %>
-      <%= submit_tag "Import CSV", class: 'rounded bg-blue-300 p-2 my-8'%>
-      <%= form.file_field :file %>
-    <% end %>
+    <div  class="mb-20">
+      <%= form_with url: projects_import_path do |form| %>
+        <%= submit_tag "Import CSV", class: 'rounded bg-blue-200 hover:bg-blue-300 p-2 my-8 mr-2'%>
+        <%= form.file_field :file %>
+      <% end %>    
+    </div>
   </div>
 </div>

@@ -37,7 +37,7 @@ class AssignedTasksController < ApplicationController
   private
 
   def assigned_task_params
-    params.require(:assigned_task).permit(:project_id, :task_id, :name)
+    params.require(:assigned_task).permit(:project_id, :task_id)
   end
 
   def ensure_membership

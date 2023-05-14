@@ -1,0 +1,32 @@
+<!-- takes two local variables, the string as txt, and a list of objects -->
+
+<!--checks if list is empty -->
+<% if list.length < 1 %>
+  <p>No <%= txt %>s found</p>
+<% else %>
+
+  <!--check all boxes box-->
+  <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+    <%= check_box_tag "check_#{txt}s", 0, false, id: "check_all_#{txt}s" %>
+    <%= 'Check all' %>
+  </div>
+
+  <!-- if it was no errors getting the project show all the objects as checkboxes -->
+  <% if !@report.errors.full_messages_for(:project).any? %>
+
+    <!-- iterates over each item in the list and creates a checkbox-->
+    <% list.each do |item| %>
+      <div class="mr-4 border border-yellow-600 rounded p-1 w-fit float-left m-1">
+        <%= check_box_tag "#{txt}_ids[]", item.id, @report.send("#{txt}_ids").include?(item.id.to_s), id: "check_#{txt}_#{item.id}" %>
+
+        <!-- checks what text it should display with the checkbox-->
+        <% if txt == "member" %>
+          <%= "#{item.first_name} #{item.last_name}" %>
+        <% elsif txt == "task" %>
+          <%= item.name %>
+        <% end %>
+      </div>
+
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,42 +1,27 @@
-<div class="flex flex-col items-center pt-4">
-  <div class="max-w-md">
-    <div>
-      <div class="w-96"></div>
-      <div class="w-96"></div>
+<div class="flex flex-col items-center pt-9">
+  <div class="max-w-md md:min-w-custom35">
+
+    <div class='flex justify-between'>
+      <p class='text-3xl mr-4'> <%= @project.name %></p> 
+      <div class="flex flex-row justify-end space-x-2 pb-4 ">
+        <%= link_to "Edit client", edit_project_path(@project), class: 'rounded bg-blue-300 p-2 hover:bg-blue-400 mr-10' %>
+      </div>
     </div>
 
-    <div class="p-1 my-2">
-      <div class="flex items-center justify-between mr-2">
-        <p class="text-xl mr-4"> <%= @project.name %></p>
-        <%= link_to "Edit project", edit_project_path(@project), 
-          class: 'rounded bg-blue-300 p-2 mr-2 hover:bg-blue-400'
-        %>
-      <%= 
-        link_to "Delete project", project_path(@project), 
-          class: 'rounded bg-red-400 p-2  hover:bg-red-500',
-          data:{
-            turbo_method: :delete,
-            turbo_confirm: "Are you sure?"
-          }
-        %>
-      </div>		
-    </div>
-
-    <div class="p-1 my-4">		
+    <div class="p-1">		
       <h2 class="text-md"> <%= @project.description %></h2>
     </div>	
 
-    <div class="p-1 my-4">
-      <h4 class="font-medium">Project members: </h4>
-      <h4 class="m-1 border-t text-gray-700 border-gray-300"><%= render @project.memberships %></h4>
-    </div>		
+    <div class="border-gray-300 mb-10 pt-10">
+      <h4 class="font-medium text-lg italic pb-2">Project members </h4>
+      <h4 class="border-t text-gray-700 border-gray-300"><%= render @project.memberships %></h4>
+    </div>
 
-    <div class="p-1 my-4">
+    <div>
       <div class="flex justify-between border-b border-gray-300">
-        <h4 class="font-bold">Project tasks:</h4>
-        <h4 class="font-bold mr-16">Hours:</h4>
+        <h4 class="font-bold">Project tasks</h4>
+        <h4 class="font-bold mr-16">Hours</h4>
       </div>
-
       <div data-controller="collapse-hours">
         <% @assigned_tasks.each do |assigned_task| %>
           <div class="border-b text-gray-700 border-gray-300 pb-1 pt-1">
@@ -52,32 +37,30 @@
               <h4 class="font-medium mr-16"><%= convert_time_int(assigned_task.time_regs.sum(:minutes)) %></h4>
             </div>
           </div>
-
           <div class="hidden bg-gray-100" id="collapsible-<%= assigned_task.id %>">
             <% grouped_time_regs(assigned_task).each do |grouped_user| %>
               <div class="flex justify-between p-1 border-b border-gray-300">
                 <% user = user_data(grouped_user[0]) %>
                 <h4 class="ml-2"><%= "#{user.first_name} #{user.last_name}" %></h4>
-                <h4 class="mr-14"><%= convert_time_int(grouped_user[1]) %></h4>              
+                <h4 class="mr-14 pr-1"><%= convert_time_int(grouped_user[1]) %></h4>              
               </div>
             <% end %>
           </div>
-        <% end %>         
-      </div>
+          <% end %>         
+        </div>    
     </div>
 
-    <div class="flex justify-between">
+
+    <div class="flex justify-between p-10">
       <%= link_to "Assign task", new_project_assigned_task_path(@project), 
         class: 'rounded bg-blue-200 p-2 ml-6 hover:bg-blue-300' 
       %>
+      <%= link_to "Quick export to CSV", export_time_regs_path(project_id: @project.id, format: :csv), 
+        class: 'rounded bg-blue-200 p-2 mr-6 hover:bg-blue-300' 
+      %>
     </div>
     <br>
-    <br>
-    <%= link_to "Quick export to CSV", export_time_regs_path(project_id: @project.id, format: :csv), class: 'rounded bg-blue-300 p-2' %>
-    <br>
-    <br>
     <%= link_to "back to client", client_path(@project.client_id), class: "text-gray-600 italic text-sm" %>
-  </div>
 </div>
 
 

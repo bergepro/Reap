@@ -1,0 +1,36 @@
+<%= form_with model: @report do |form| %>
+
+  <div id="user-container" class="clear-both">
+  <div>
+    <% @report.errors.full_messages_for(:user).each do |message| %>
+      <div class="text-sm italic text-gray-600"><%= message %></div>
+    <% end %>
+  </div>
+  <div class="flex justify-between">
+    <%= form.label :user %>
+      <%= form.collection_select(:user, @users, :id, :name,
+          { include_blank: "Select a user" }, 
+          { data: { action: "change->user-reports#handleChange" }, class: 'w-custom15 mr-10' }) %>
+  </div>
+  </div>
+  <br>
+  <div id="projects-container">
+    <%= form.label :project_ids, "projects" %>
+    <div data-user-reports-target="projectsDiv">
+      <%= render partial: 'user_reports/projects_cb', locals: { report: @report, projects_by_client: @projects_by_client } %>
+    </div>  
+  </div>
+  <br>
+  
+  <div class="clear-both mt-10">
+    <%= form.label :task_ids, "tasks" %>
+    <div id="task-div">
+      <%= render partial: 'user_reports/tasks_cb', locals: { report: @report, tasks: @tasks } %>
+    </div>
+  </div> 
+  <div class="clear-both flex justify-center">
+    <%= form.submit "Create user report", class: "rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow clear-both" %>    
+  </div>
+
+<% end %> 
+
