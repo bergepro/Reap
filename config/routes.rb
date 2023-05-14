@@ -28,7 +28,9 @@ Rails.application.routes.draw do
   end
 
   resources :user_reports do
+    patch :update_group
     collection do
+      get 'export'
       get 'update_projects_checkboxes'
       get 'update_tasks_checkboxes'
     end

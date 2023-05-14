@@ -1,7 +1,6 @@
-class ProjectReportsController < ApplicationController
-  before_action :authenticate_user!
+class ProjectReportsController < ReportsController
 
-  GROUPES = ["task", "user", "date"] # columns to group report by
+  GROUPES = {"Task" => "task", "Date" => "date", "User" => "user"} # columns to group report by
   START_GROUP = "date" # standard grouping when creating new report
 
   # show report
@@ -63,8 +62,7 @@ class ProjectReportsController < ApplicationController
       @clients = Client.all
       @projects = @report.client.present? ? Client.find(@report.client).projects : []
       @members = @report.project.to_i > 0 ? Project.find(@report.project).users : []
-      @tasks = @report.project.to_i > 0 ? Project.find(@report.project).tasks : []
-
+      @tasks = @report.project.to_i.present? ? Project.find(@report.project).tasks : []
       render :show, status: :unprocessable_entity
     end
   end
@@ -256,11 +254,10 @@ class ProjectReportsController < ApplicationController
     if group == "task"
       grouped_report = time_regs.group_by { |time_reg| time_reg.task.name }
     elsif group == "user"
-      grouped_report = time_regs.group_by { |time_reg| "#{time_reg.user.first_name} #{time_reg.user.last_name}" }
+      grouped_report = time_regs.group_by { |time_reg| time_reg.user.name }
     elsif group == "date"
       grouped_report = time_regs.group_by { |time_reg | time_reg.date_worked}
     end
-
     grouped_report
   end
 end

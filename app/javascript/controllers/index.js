@@ -28,6 +28,9 @@ application.register("project-report-edit", ProjectReportEditController)
 import ProjectReportsController from "./project_reports_controller"
 application.register("project-reports", ProjectReportsController)
 
+import ReportEditController from "./report_edit_controller"
+application.register("report-edit", ReportEditController)
+
 import ReportsController from "./reports_controller"
 application.register("reports", ReportsController)
 

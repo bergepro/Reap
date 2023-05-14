@@ -1,52 +1,52 @@
 <table class="w-full">
   <thead class="w-fill">
     <tr class="bg-gray-200 text-left">
-      <% if group_name != "date" %>
-        <th class="border-b-2	border-gray-300">Date</th>
+      <% header_columns = {
+          "date" => "Date",
+          "client" => "Client",
+          "project" => "Project",
+          "task" => "Task",
+          "user" => "Person"
+      } %>
+      <% header_columns.each do |group, title| %>
+        <% if @report.group_by != group %>
+          <th class="border-b-2 border-gray-300"><%= title %></th>
+        <% end %>
       <% end %>
-      <th class="border-b-2	border-gray-300">Client</th>
-      <th class="border-b-2	border-gray-300">Project</th>
-      <% if group_name != "task" %>
-        <th class="border-b-2	border-gray-300">Task</th>
-      <% end %>
-      <% if group_name != "user" %>
-        <th class="border-b-2	border-gray-300">Person</th>
-      <% end %>
-      <th class="border-b-2	border-gray-300">hours</th>  
+      <th class="border-b-2 border-gray-300">hours</th>
     </tr>
   </thead>
   <tbody class="w-full">
-    <% grouped_report.each do |group, time_regs| %>
+
+    <% grouped_report.each do | group, time_regs| %>
       <tr class="bg-gray-100">
         <td class="p-1 text-sm font-semibold  border-b-2 border-gray-300"><%= group %><br></td>
-        <td class="border-b-2 border-gray-300"></td>
-        <td class="border-b-2 border-gray-300"></td>
-        <td class="border-b-2 border-gray-300"></td>
-        <td class="border-b-2 border-gray-300"></td>
+        <% 4.times do %>
+          <td class="border-b-2 border-gray-300"></td>
+        <% end %>
       </tr>
+
+      <!-- iterates over each time_reg in each group -->
       <% time_regs.each do |time_reg |%>
-        <tr class="border-b-2	 border-gray-300">
-          <% if group_name != "date" %>
-            <td><%= time_reg.date_worked %></td>
+        <tr class="border-b-2 border-gray-300">
+          <%  content_columns = {
+                "date" => time_reg.date_worked,
+                "client" => time_reg.project.client.name,
+                "project" => time_reg.project.name,
+                "task" => time_reg.task.name,
+                "user" => time_reg.user.name
+          }%>
+          <% content_columns.each do |group, text |%>
+            <% if @report.group_by != group %>
+              <td class="pb-1"><%= text %></td>
+            <% end %>
           <% end %>
-          <td><%= time_reg.project.client.name %></td>
-          <td class="pb-1"><%= time_reg.project.name %></td>
-          <% if group_name != "task" %>
-            <td><%= time_reg.task.name %></td>
-          <% end %>
-          <% if group_name != "user" %>
-            <td><%= time_reg.user.first_name %> <%= time_reg.user.last_name%></td>
-          <% end %>
-          <td><%= convert_time_int(time_reg.minutes) %></td>
+          <td class="pb-1"><%= convert_time_int(time_reg.minutes)%></td>
         </tr>
       <% end %>
+      <!-- filler-row at bottom to space out the groups -->
       <tr class="">
-        <td><%=  %><br></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><br></td>
       </tr>
     <% end %>
   </tbody>

@@ -8,7 +8,7 @@
     </div>
     <div id="timeframe-select" class="flex justify-between">
       <%= form.label :timeframe %>
-      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'mr-6 w-60', id: 'timeframe-selection'} %>
+      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'mr-6 w-80', id: 'timeframe-selection'} %>
     </div>
     <div id="custom-timeframe-error-container">
       <% @report.errors.full_messages_for(:custom_timeframe).each do |message| %>
@@ -29,7 +29,7 @@
     </div>
     <div class="flex justify-between">
       <%= form.label :user_id %>
-      <%= form.collection_select :user_id, @users, :id, :name, {include_blank: 'Select a user' }, {class: 'mr-6 w-60', id: 'user-selection'} %>   
+      <%= form.collection_select :user_id, @users, :id, :name, {include_blank: 'Select a user' }, {class: 'mr-6 w-80', id: 'user-selection'} %>   
     </div>
  </div>
 
@@ -69,8 +69,8 @@
   </div>
 
 
-  <div id="submit-container" class="clear-both flex justify-center">
-    <%= form.submit 'submit' , class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300  shadow' %>
+  <div id="submit-container" class="clear-both flex justify-center mt-10">
+    <%= form.submit 'Update report' , class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300  shadow' %>
   </div>
 
 <% end %>

@@ -15,6 +15,7 @@ module.exports = {
       },
       minWidth: {
         '6': '6em',
+        'custom60': '60rem',
         'custom50': '50rem',
         'custom45': '45rem',
         'custom35': '35rem',
