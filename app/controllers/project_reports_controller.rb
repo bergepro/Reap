@@ -5,14 +5,60 @@ class ProjectReportsController < ReportsController
 
   # show report
   def show
+    @show_edit_form = false
+    @report = ProjectReport.find(params[:id])
+    @time_regs = get_time_regs(@report, @report.member_ids, @report.project_id, @report.task_ids)
+    @grouped_report = group_time_regs(@time_regs, @report.group_by)
+    @groupes = GROUPES
 
+    @timeframeOptions = get_timeframe_options
+    @clients = Client.all
+    @projects = Client.find(@report.client_id).projects
+    project = Project.find(@report.project_id)
+    @members = project.users
+    @tasks = project.tasks
+  end
+
+  def update
+    @report = ProjectReport.find(params[:id])
+    @time_regs = get_time_regs(@report, @report.member_ids, @report.project_id, @report.task_ids)
+    @grouped_report = group_time_regs(@time_regs, @report.group_by)
+
+
+    @report.member_ids = [] unless project_report_params[:member_ids].present?
+    @report.task_ids = [] unless project_report_params[:task_ids].present? 
+
+    @report.assign_attributes(project_report_params.except(:project_id))
+    @report.project_id = Project.exists?(project_report_params[:project_id]) ? project_report_params[:project_id] : nil
+
+    set_dates(@report) unless @report.timeframe == "custom"
+
+    if @report.save
+      redirect_to @report
+    else
+      @show_edit_form = true
+      @groupes = GROUPES
+      @show_custom_timeframe = @report.timeframe == "custom" ? true : false
+      @timeframeOptions = get_timeframe_options
+      @clients = Client.all
+      @projects = @report.client_id.present? ? Client.find(@report.client_id).projects : []
+      if @report.project_id.present?
+        project = Project.find(@report.project_id)
+        @members = @report.member_ids.present? ? project.users : []
+        @tasks = @report.task_ids.present? ? project.tasks : []
+      else
+        @members = []
+        @tasks = []
+      end
+      render :show, status: :unprocessable_entity
+    end
   end
 
   def new
     @report = ProjectReport.new
     @show_custom_timeframe = false
     @timeframeOptions = get_timeframe_options
-    @clients = Client.all
+    @clients = Client.all 
     @projects = []
     @members = []
     @tasks = []
@@ -31,15 +77,32 @@ class ProjectReportsController < ReportsController
       @clients = Client.all
       @projects = @report.client_id.present? ? Project.where(client_id: @report.client_id) : []
       if @report.project_id.present?
-        @members = @report.member_ids.present? ? Project.find(@report.project_id).users : []
-        @tasks = @report.task_ids.present? ? Project.find(@report.project_id).tasks : []   
+        project = Project.find(@report.project_id)
+        @members = @report.member_ids.present? ? project.users : []
+        @tasks = @report.task_ids.present? ? project.tasks : []   
       else 
         @members = []
         @tasks = []
       end
       render :new, status: :unprocessable_entity 
     end
-    
+  end
+
+
+  def update_group
+    @report = ProjectReport.find(params[:project_report_id])
+    if GROUPES.values.include?(params[:group_by])
+      @report.group_by = params[:group_by]
+      if @report.save
+        redirect_to @report
+      else
+        flash[:alert] = "Could not change the grouping"
+        redirect_to @report
+      end 
+    else
+      flash[:alert] = "Invalid group"
+      redirect_to @report    
+    end
   end
 
   def update_projects_selection

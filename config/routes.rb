@@ -6,10 +6,12 @@ Rails.application.routes.draw do
 
 
   resources :project_reports do
+    patch :update_group
     collection do
       get 'update_projects_selection'
       get 'update_members_checkboxes'
       get 'update_tasks_checkboxes'
+      get 'export'
     end
   end
 

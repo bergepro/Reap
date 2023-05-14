@@ -69,7 +69,6 @@ class UserReportsController < ReportsController
     if @report.save
       redirect_to @report
     else
-      puts params.inspect
       @show_edit_form = true
       @groupes = GROUPES
       @show_custom_timeframe = @report.timeframe == "custom" ? true : false
