@@ -1,6 +1,4 @@
-
 <%= form_with model: @report do |form| %>
-
   <div id="timeframe-container">
     <div id="timeframe-error-container">
       <% @report.errors.full_messages_for(:timeframe).each do |message| %>

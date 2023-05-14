@@ -10,6 +10,7 @@ class ProjectReportsController < ReportsController
 
   def new
     @report = ProjectReport.new
+    @show_custom_timeframe = false
     @timeframeOptions = get_timeframe_options
     @clients = Client.all
   end

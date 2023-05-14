@@ -4,9 +4,6 @@
 
 import { application } from "./application"
 
-import CheckBoxesController from "./check_boxes_controller"
-application.register("check-boxes", CheckBoxesController)
-
 import CollapseDeleteController from "./collapse_delete_controller"
 application.register("collapse-delete", CollapseDeleteController)
 
@@ -22,17 +19,11 @@ application.register("hello", HelloController)
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
 
-import ProjectReportEditController from "./project_report_edit_controller"
-application.register("project-report-edit", ProjectReportEditController)
-
 import ProjectReportsController from "./project_reports_controller"
 application.register("project-reports", ProjectReportsController)
 
 import ReportEditController from "./report_edit_controller"
 application.register("report-edit", ReportEditController)
-
-import ReportsController from "./reports_controller"
-application.register("reports", ReportsController)
 
 import TimeTasksController from "./time_tasks_controller"
 application.register("time-tasks", TimeTasksController)
