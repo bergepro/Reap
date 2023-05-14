@@ -4,8 +4,6 @@ class UserReport < ApplicationRecord
   validate :validate_project_ids_presence
   validate :valdiate_task_ids_presence
 
-  has_one :y, class_name: "User", foreign_key: "user_id"
-
   def custom_timeframe?
     timeframe == 'custom'
   end

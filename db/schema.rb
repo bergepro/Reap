@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_13_185611) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_14_120051) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,13 +45,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_13_185611) do
     t.string "timeframe"
     t.date "date_start"
     t.date "date_end"
-    t.string "client"
-    t.string "project"
+    t.string "client_id"
+    t.string "project_id"
     t.text "task_ids", default: [], array: true
     t.text "member_ids", default: [], array: true
+    t.string "group_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "group_by"
   end
 
   create_table "projects", force: :cascade do |t|
