@@ -14,6 +14,8 @@ class ProjectReportsController < ReportsController
     @timeframeOptions = get_timeframe_options
     @clients = Client.all
     @projects = []
+    @members = []
+    @tasks
   end
 
   def create
@@ -22,9 +24,17 @@ class ProjectReportsController < ReportsController
   end
 
   def update_projects_selection
-    puts "dssdiokdsidsijsdi--------------------------"
     projects = Project.where(client_id: params[:client_id])
-    puts projects.count
     render partial: 'projects', locals: {projects: projects}
+  end
+
+  def update_members_checkboxes
+    members = Project.find(params[:project_id]).users
+    render partial: 'checkboxes', locals: {report: ProjectReport.new, checkboxes: members, text: 'member',}
+  end
+
+  def update_tasks_checkboxes
+    tasks = Project.find(params[:project_id]).tasks
+    render partial: 'checkboxes', locals: {report: ProjectReport.new, checkboxes: tasks, text: 'task',}
   end
 end

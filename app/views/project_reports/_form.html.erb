@@ -37,6 +37,24 @@
     </div>
   </div>
 
+  <div id="members-container" class="clear-both pt-10">
+    <div>
+      <%= form.label :member_ids, 'Members'%>
+    </div>
+    <div id="members-checkboxes">
+      <%= render partial: 'checkboxes', locals: {report: @report, text: 'member',checkboxes: @members} %>
+    </div>
+  </div>
+
+  <div id="tasks-container" class="clear-both pt-10">
+    <div>
+      <%= form.label :task_ids, 'Tasks'%>
+    </div>
+    <div id="tasks-checkboxes">
+      <%= render partial: 'checkboxes', locals: { report: @report, text: 'task',checkboxes: @tasks } %>
+    </div>
+  </div>
+
   <div id="submit-container" class="flex justify-center mt-10">
     <%= form.submit 'Create report', class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300  shadow'  %>
   </div>
