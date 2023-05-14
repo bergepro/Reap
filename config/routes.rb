@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
 
   resources :project_reports do
+    collection do
+      get 'update_projects_selection'
+    end
   end
 
   resources :user_reports do

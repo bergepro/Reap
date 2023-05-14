@@ -21,10 +21,19 @@
  
   <div id="client-container" class="flex justify-between clear-both pt-10">
     <div>
-      <%= form.label :user_id %>
+      <%= form.label :client_id %>
     </div>
     <div>
       <%= form.collection_select :client_id, @clients, :id, :name, {include_blank: 'Select a client' }, {class: 'mr-6 w-80', id: 'client-selection'} %>   
+    </div>
+  </div>
+
+  <div id="project-container" class="flex justify-between clear-both pt-10">
+    <div>
+      <%= form.label :project_id %>
+    </div>
+    <div>
+      <%= form.collection_select :project_id, @projects, :id, :name, {include_blank: 'Select a project' }, {class: 'mr-6 w-80', id: 'project-selection'} %>   
     </div>
   </div>
 

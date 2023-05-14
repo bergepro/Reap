@@ -13,10 +13,18 @@ class ProjectReportsController < ReportsController
     @show_custom_timeframe = false
     @timeframeOptions = get_timeframe_options
     @clients = Client.all
+    @projects = []
   end
 
   def create
     params.inspect
     redirect_to new_project_report_path
+  end
+
+  def update_projects_selection
+    puts "dssdiokdsidsijsdi--------------------------"
+    projects = Project.where(client_id: params[:client_id])
+    puts projects.count
+    render partial: 'projects', locals: {projects: projects}
   end
 end
