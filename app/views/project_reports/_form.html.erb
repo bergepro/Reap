@@ -14,30 +14,50 @@
         <div class="text-sm italic text-gray-600"><%= message %></div>
       <% end %>
     </div>
-    <div id="custom-timeframe-container" class="<%= "hidden" if @show_custom_timeframe == false %>">
+    <div id="custom-timeframe-container" class="<%= "hidden" unless @show_custom_timeframe %>">
       <%= render partial: 'timeframe' %>
     </div> 
   </div>
  
-  <div id="client-container" class="flex justify-between clear-both pt-10">
-    <div>
-      <%= form.label :client_id %>
+  <div id="client-container" class="clear-both pt-10">
+    <div id="client-error-container">
+      <% @report.errors.full_messages_for(:client_id).each do |message| %>
+        <div class="text-sm italic text-gray-600"><%= message %></div>
+      <% end %>
     </div>
-    <div>
-      <%= form.collection_select :client_id, @clients, :id, :name, {include_blank: 'Select a client' }, {class: 'mr-6 w-80', id: 'client-selection'} %>   
+    <div class="flex justify-between ">
+      <div>
+        <%= form.label :client_id %>
+      </div>
+      <div>
+        <%= form.collection_select :client_id, @clients, :id, :name, {include_blank: 'Select a client' }, {class: 'mr-6 w-80', id: 'client-selection'} %>   
+      </div>    
     </div>
+
   </div>
 
-  <div id="project-container" class="flex justify-between clear-both pt-10">
-    <div>
-      <%= form.label :project_id %>
+  <div id="project-container" class="clear-both pt-10">
+    <div id="project-error-container">
+      <% @report.errors.full_messages_for(:project_id).each do |message| %>
+        <div class="text-sm italic text-gray-600"><%= message %></div>
+      <% end %>
     </div>
-    <div>
-      <%= form.collection_select :project_id, @projects, :id, :name, {include_blank: 'Select a project' }, {class: 'mr-6 w-80', id: 'project-selection'} %>   
+    <div class="flex justify-between" >
+      <div>
+        <%= form.label :project_id %>
+      </div>
+      <div>
+        <%= form.collection_select :project_id, @projects, :id, :name, {include_blank: 'Select a project' }, {class: 'mr-6 w-80', id: 'project-selection'} %>   
+      </div>    
     </div>
   </div>
 
   <div id="members-container" class="clear-both pt-10">
+    <div id="members-error-container">
+      <% @report.errors.full_messages_for(:member_ids).each do |message| %>
+        <div class="text-sm italic text-gray-600">Please select atleast one user</div>
+      <% end %>
+    </div>
     <div>
       <%= form.label :member_ids, 'Members'%>
     </div>
@@ -51,6 +71,11 @@
   </div>
 
   <div id="tasks-container" class="clear-both pt-10">
+    <div id="tasks-error-container">
+      <% @report.errors.full_messages_for(:task_ids).each do |message| %>
+        <div class="text-sm italic text-gray-600">Please select atleast one task</div>
+      <% end %>
+    </div>
     <div>
       <%= form.label :task_ids, 'Tasks'%>
     </div>

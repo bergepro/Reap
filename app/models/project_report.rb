@@ -1,5 +1,5 @@
 class ProjectReport < ApplicationRecord
-  validates_presence_of :timeframe, :client_id, :project_id, :group_by, :member_ids, :task_ids
+  validates_presence_of :timeframe, :client_id, :project_id, :group_by
   validate :timeframe_dates_present, if: :custom_timeframe?
   validate :validate_member_ids_presence
   validate :valdiate_task_ids_presence

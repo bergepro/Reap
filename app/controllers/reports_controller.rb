@@ -40,9 +40,7 @@ class ReportsController < ApplicationController
     time_regs = TimeReg.includes(:membership, :assigned_task)
 
     # sets a timeframe unless it is allTime
-    if report.timeframe != "allTime"
-      time_regs = time_regs.where(date_worked: report.date_start..report.date_end)
-    end
+    time_regs = time_regs.where(date_worked: report.date_start..report.date_end) unless report.timeframe == "allTime"
 
     # filters the time_regs to show the correct ones
     time_regs = time_regs.where(membership: {user_id: users, project_id: projects})
@@ -71,7 +69,6 @@ class ReportsController < ApplicationController
 
   # sets the timeframe for the report if it is custom or allTime
   def set_dates(report)
-    puts "SET DATES --------------------"
     if report.timeframe == "allTime"
       report.date_start = nil
       report.date_end = nil
@@ -83,12 +80,8 @@ class ReportsController < ApplicationController
 
   # sets the reports timeframe if it is not allTime or custom
   def set_timeframe(report)
-    puts "SET TIMEFRAME --------------------"
     timeframe = report.timeframe
     today = Date.today
-
-    new_date_start = nil
-    new_date_end = nil
 
     if timeframe == "thisWeek"
       new_date_start = today.beginning_of_week

@@ -73,7 +73,7 @@ export default class extends Controller {
         })       
       }
       else{
-        projectSelection.innerHTML = '<option value="0">Select a project</option>';
+        projectSelection.innerHTML = '<option>Select a project</option>';
       }
       membersCheckboxes.innerHTML = null;
       tasksCheckboxes.innerHTML = null;
@@ -86,7 +86,6 @@ export default class extends Controller {
 
     const members_url = `/project_reports/update_members_checkboxes`;
     const tasks_url = `/project_reports/update_tasks_checkboxes`;
-
 
     projectSelection.addEventListener('change', event=>{
       const projectId = projectSelection.value;

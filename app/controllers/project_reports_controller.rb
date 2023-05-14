@@ -19,8 +19,27 @@ class ProjectReportsController < ReportsController
   end
 
   def create
-    params.inspect
-    redirect_to new_project_report_path
+    @report = ProjectReport.new(project_report_params)
+    set_dates(@report) unless @report.timeframe == "custom"
+    @report.group_by = START_GROUP
+
+    if @report.save
+      redirect_to @report
+    else
+      @show_custom_timeframe = @report.timeframe == "custom" ? true : false
+      @timeframeOptions = get_timeframe_options
+      @clients = Client.all
+      @projects = @report.client_id.present? ? Project.where(client_id: @report.client_id) : []
+      if @report.project_id.present?
+        @members = @report.member_ids.present? ? Project.find(@report.project_id).users : []
+        @tasks = @report.task_ids.present? ? Project.find(@report.project_id).tasks : []   
+      else 
+        @members = []
+        @tasks = []
+      end
+      render :new, status: :unprocessable_entity 
+    end
+    
   end
 
   def update_projects_selection
@@ -40,6 +59,6 @@ class ProjectReportsController < ReportsController
 
   private 
   def project_report_params
-    params.require(:project_report).permits()
+    params.require(:project_report).permit(:timeframe, :date_start, :date_end, :client_id, :project_id, member_ids: [], task_ids: [])
   end
 end

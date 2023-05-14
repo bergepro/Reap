@@ -15,7 +15,7 @@
         <div class="text-sm italic text-gray-600"><%= message %></div>
       <% end %>
     </div>
-    <div id="custom-timeframe-container" class="<%= "hidden" if @show_custom_timeframe == false %>">
+    <div id="custom-timeframe-container" class="<%= "hidden" unless @show_custom_timeframe %>">
       <%= render partial: 'timeframe' %>
     </div>
   </div>

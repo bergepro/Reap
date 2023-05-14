@@ -28,7 +28,9 @@ class UserReportsController < ReportsController
   def create
     @report = UserReport.new(user_report_params)
     @report.group_by = START_GROUP
-    @report = set_dates(@report)
+
+    set_dates(@report) unless @report.timeframe == "custom"
+
     if @report.save
       redirect_to @report
     else 
@@ -57,11 +59,12 @@ class UserReportsController < ReportsController
 
     puts params.inspect
 
-    @report.project_ids = [] if user_report_params[:user_id] != @report.user_id
-    @report.task_ids = [] if !user_report_params[:project_ids].present? 
+    @report.project_ids = [] unless user_report_params[:user_id] == @report.user_id
+    @report.task_ids = [] unless user_report_params[:project_ids].present? 
     
     @report.assign_attributes(user_report_params)
-    @report = set_dates(@report)
+
+    set_dates(@report) unless @report.timeframe == "custom"
 
     if @report.save
       redirect_to @report
