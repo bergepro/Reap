@@ -11,6 +11,8 @@ export default class extends Controller {
     const timeframeSelection = document.querySelector('#timeframe-selection');
     const clientSelection = document.querySelector('#client-selection');
     const projectSelection = document.querySelector('#project-selection');
+    const checkAllTasks = document.querySelector('#check-all-tasks');
+    const checkAllMembers = document.querySelector('#check-all-members');
 
     if(timeframeSelection)
       this.addCustomTimeframeListener(timeframeSelection);
@@ -21,6 +23,22 @@ export default class extends Controller {
     if(projectSelection)
       this.addProjectSelectionListener(projectSelection);
 
+    if(checkAllTasks)
+      this.addCheckAllListener(checkAllTasks, "task");
+    
+    if(checkAllMembers)
+      this.addCheckAllListener(checkAllMembers, "member");
+  }
+
+  addCheckAllListener(checkAlltasks, string){      
+    checkAlltasks.addEventListener('click', (event) =>{
+      const checkboxesIdString = '[id^="project_report_'+string+'_ids"]';
+      const checkboxes = document.querySelectorAll(checkboxesIdString);
+
+      checkboxes.forEach( inspectBox  => {
+        inspectBox.checked = event.target.checked;
+      })
+    });
   }
 
   addCustomTimeframeListener(timeframeSelection){

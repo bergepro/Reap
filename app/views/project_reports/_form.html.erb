@@ -41,6 +41,10 @@
     <div>
       <%= form.label :member_ids, 'Members'%>
     </div>
+    <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+      <%= check_box_tag "check_all_members", 0, false, id: "check-all-members" %>
+      <%= 'Check all'%>
+    </div>
     <div id="members-checkboxes">
       <%= render partial: 'checkboxes', locals: {report: @report, text: 'member',checkboxes: @members} %>
     </div>
@@ -49,6 +53,10 @@
   <div id="tasks-container" class="clear-both pt-10">
     <div>
       <%= form.label :task_ids, 'Tasks'%>
+    </div>
+    <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+      <%= check_box_tag "check_all_tasks", 0, false, id: "check-all-tasks" %>
+      <%= 'Check all'%>
     </div>
     <div id="tasks-checkboxes">
       <%= render partial: 'checkboxes', locals: { report: @report, text: 'task',checkboxes: @tasks } %>

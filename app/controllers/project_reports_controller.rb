@@ -15,7 +15,7 @@ class ProjectReportsController < ReportsController
     @clients = Client.all
     @projects = []
     @members = []
-    @tasks
+    @tasks = []
   end
 
   def create
@@ -36,5 +36,10 @@ class ProjectReportsController < ReportsController
   def update_tasks_checkboxes
     tasks = Project.find(params[:project_id]).tasks
     render partial: 'checkboxes', locals: {report: ProjectReport.new, checkboxes: tasks, text: 'task',}
+  end
+
+  private 
+  def project_report_params
+    params.require(:project_report).permits()
   end
 end
