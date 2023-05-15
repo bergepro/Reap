@@ -1,0 +1,22 @@
+<div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all p-10" data-action="click->modal#preventClose">
+  <div class="">
+    <h4 class="font-semibold text-center">CAREFUL! this action will:</h4>
+    <div class="flex justify-center">
+      <ul class="italic">
+        <li>- Delete the client permanently</li>
+      </ul>              
+    </div>
+  </div>
+  <br>
+  <% if @projects_exists %>
+    <h4 class="text-center">This client cannot be deleted with active projects</h4>
+  <% else %>
+    <%= form_tag(client_path(client), method: :delete) do %>
+      <span class="flex justify-center pb-2">Please enter "<span class="font-semibold">DELETE</span>" to confirm</span>
+      <div class="flex justify-center">
+      <%= text_field_tag :confirmation, nil, class: "form-control" %>
+      <%= submit_tag "Delete client", class: "ml-2 bg-red-400 p-2 hover:bg-red-500 rounded" %>
+      </div>
+    <% end %>
+  <% end %>
+</div>    

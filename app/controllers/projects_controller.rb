@@ -64,7 +64,7 @@ class ProjectsController < ApplicationController
         redirect_to projects_path
       else
         flash[:notice] = "Could not delete project"
-        render :new, status: :unprocessable_entity
+        render :edit, status: :unprocessable_entity
       end
     else
       flash[:alert] = "Could not confirm"

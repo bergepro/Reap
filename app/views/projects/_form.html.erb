@@ -8,7 +8,7 @@
       </div>
     <% end %>
   </div> 
-
+  <br>
   <div>
     <%= form.label :name %> <br>
     <%= form.text_area :name, class: 'w-full' %>
@@ -18,7 +18,7 @@
       </div>
     <% end %>
   </div>
-
+  <br>
   <div>
     <%= form.label :description %> <br>
     <%= form.text_area :description, class: 'w-full' %>
@@ -28,7 +28,7 @@
     </div>            
   <% end %>
   </div>
-
+  <br>
   <% if form.object.new_record? %>
     <div>
       <%= form.label :task_ids, 'Tasks' %><br>
@@ -39,7 +39,6 @@
       <% end %>
     </div>  
   <% end %>
-
   <div class="actions text-center p-1 m-1 clear-both">
       <%= form.submit class: "rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow" %>
   </div>
