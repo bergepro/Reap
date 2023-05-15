@@ -4,7 +4,7 @@
     <div class='flex justify-between'>
       <p class='text-3xl mr-4'> <%= @project.name %></p> 
       <div class="flex flex-row justify-end space-x-2 pb-4 ">
-        <%= link_to "Edit client", edit_project_path(@project), class: 'rounded bg-blue-300 p-2 hover:bg-blue-400 mr-10' %>
+        <%= link_to "Edit project", edit_project_path(@project), class: 'rounded bg-blue-300 p-2 hover:bg-blue-400 mr-10' %>
       </div>
     </div>
 
@@ -60,7 +60,6 @@
       %>
     </div>
     <br>
-    <%= link_to "back to client", client_path(@project.client_id), class: "text-gray-600 italic text-sm" %>
 </div>
 
 
