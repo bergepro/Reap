@@ -1,7 +1,7 @@
  <%= form_with model: @task do |form| %>
   <div>
     <%= form.label :name %> <br>
-    <%= form.text_area :name, class: 'w-full' %>
+    <%= form.text_area :name, class: 'w-full rounded-md p-1' %>
     <% @task.errors.full_messages_for(:name).each do |message|%>
       <div class="text-sm italic text-gray-600">
         <%= message %>

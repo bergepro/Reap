@@ -2,7 +2,7 @@
   <div class="flex flex-wrap">
     <% if checkboxes.present? %>
       <%= collection_check_boxes :project_report, "#{text}_ids" , checkboxes, :id, :name do |checkbox|%>
-        <div class="border-2 mr-8 m-1 p-1" >
+        <div class="border-2 border-gray-300 mr-8 m-1 p-2 rounded-md" >
           <%= checkbox.check_box checked: report.send("#{text}_ids".to_sym).include?(checkbox.value.to_s)%> <!--checks if box was checked earlier-->
           <%= checkbox.label %>      
         </div>

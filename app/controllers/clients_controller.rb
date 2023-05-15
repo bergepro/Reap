@@ -21,7 +21,7 @@ class ClientsController < ApplicationController
         @client = Client.new(client_params)
 
         if @client.save
-            redirect_to '/clients#index'
+            redirect_to @client
         else
             render :new, status: :unprocessable_entity
         end
@@ -30,6 +30,7 @@ class ClientsController < ApplicationController
      # initialiserer  klienten
     def edit        
         @client = Client.find(params[:id])
+        @projects_exists = @client.projects.exists?
     end
     
     # oppdaterer klient i databasen
@@ -48,15 +49,28 @@ class ClientsController < ApplicationController
 
     # sletter klient fra databasen
     def destroy
-        @client = Client.find(params[:id])
-        @client.destroy
-    
-        redirect_to '/clients#index', status: :see_other
+        @client = Client.find(delete_params[:id])
+        if delete_params[:confirmation] == "DELETE"
+            if @client.destroy
+                flash[:notice] = "Project deleted"
+                redirect_to projects_path
+            else
+                flash[:notice] = "Could not delete project"
+                render :edit, status: :unprocessable_entity
+            end
+        else
+            flash[:alert] = "Could not confirm"
+            render :edit, status: :unprocessable_entity
+        end
     end
 
     private
     # tillater kun data fra formet med .permit til klientopprettelse
     def client_params
       params.require(:client).permit(:name, :description)
+    end
+
+    def delete_params
+        params.permit(:confirmation, :id)
     end
 end
