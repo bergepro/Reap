@@ -1,103 +1,96 @@
 <%= form_with model: @report do |form| %>
-
   <div id="timeframe-container">
-    <div>
-      <!-- shows possible error for the timeframe -->
+    <div id="timeframe-error-container">
       <% @report.errors.full_messages_for(:timeframe).each do |message| %>
         <div class="text-sm italic text-gray-600"><%= message %></div>
       <% end %>
     </div>
-    <div class="flex justify-between">
-      <%= form.label :timeframe, "Timeframe:" %>
-      <%= form.select(:timeframe, @TimeFrameOptions,
-                    { include_blank: "Select a time" },
-                    { id: 'timeframe-select', class: 'w-custom15 mr-10' })
-      %>
+    <div id="timeframe-select" class="flex justify-between">
+      <%= form.label :timeframe %>
+      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'mr-6 w-80', id: 'timeframe-selection'} %>
     </div>
-
-    <div class="text-sm italic text-gray-600 mt-4">
+    <div id="custom-timeframe-error-container">
       <% @report.errors.full_messages_for(:custom_timeframe).each do |message| %>
-        <p><%= message %></p>
-      <% end %>
-    </div>
-    <div id="custom-timeframe">
-      <!-- renders custom timeframe fields at start if it was the option when trying to create -->
-      <% if @report.timeframe == "custom" %>
-        <%= render partial: "timeframe" %>
-      <% end %>
-    </div>
-  </div>
-  <br>
-
-  <div id="client-container" class="clear-both">
-    <div>
-      <!-- shows possible error for the client -->
-      <% @report.errors.full_messages_for(:client).each do |message| %>
         <div class="text-sm italic text-gray-600"><%= message %></div>
       <% end %>
     </div>
-    <div class="flex justify-between">
-      <%= form.label :client, "Client: " %>
-      <%= form.collection_select(:client, @clients, :id, :name,
-                                { include_blank: "Select a client" }, { id: 'client-select', class: 'w-custom15 mr-10' }) %>
-    </div>
+    <div id="custom-timeframe-container" class="<%= "hidden" unless @show_custom_timeframe %>">
+      <%= render partial: 'timeframe' %>
+    </div> 
   </div>
-  <br>
-
-  <div id="project-container">
-    <div>
-      <!-- shows possible error for the project -->
-      <% @report.errors.full_messages_for(:project).each do |message| %>
+ 
+  <div id="client-container" class="clear-both pt-10">
+    <div id="client-error-container">
+      <% @report.errors.full_messages_for(:client_id).each do |message| %>
         <div class="text-sm italic text-gray-600"><%= message %></div>
       <% end %>
     </div>
-    <div class="flex justify-between">
-      <%= form.label :project, "Project:" %>
-      <%= form.collection_select(:project, @projects, :id, :name,
-                                { include_blank: "Select a project" },
-                                { id: 'project-select', class: 'w-custom15 mr-10' }) %>
+    <div class="flex justify-between ">
+      <div>
+        <%= form.label :client_id %>
+      </div>
+      <div>
+        <%= form.collection_select :client_id, @clients, :id, :name, {include_blank: 'Select a client' }, {class: 'mr-6 w-80', id: 'client-selection'} %>   
+      </div>    
     </div>
   </div>
-  <br>
 
-  <div id="task-member-container">
-    <div id="task-container">
-      <div>
-        <!-- shows possible error for the task -->
-        <% if @report.errors.full_messages_for(:task_ids).any? %>
-          <div class="text-sm italic text-gray-600"> <p>Please select at least one task</p> </div>
-        <% end %>
-        <div>
-          <%= form.label :task_ids, "Tasks: " %>
-          <div id="task-checkboxes" data-checkbox-group-target="container">
-            <!-- fills the tasks checkboxes if any from the project selected-->
-            <% if @tasks.count > 0 %>
-              <%= render partial: 'fill_cb', locals: { list: @tasks, txt: 'task' } %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-    <br>
-
-    <div id="member-container" class="clear-both">
-      <!-- shows possible error for the member -->
-      <% if @report.errors.full_messages_for(:member_ids).any? %>
-        <div class="text-sm italic text-gray-600"> <p>Please select at least one member</p> </div>
+  <div id="project-container" class="clear-both pt-10">
+    <div id="project-error-container">
+      <% @report.errors.full_messages_for(:project_id).each do |message| %>
+        <div class="text-sm italic text-gray-600"><%= message %></div>
       <% end %>
+    </div>
+    <div class="flex justify-between" >
       <div>
-        <%= form.label :member_ids, "Members: " %>
-        <div id="member-checkboxes" data-checkbox-group-target="container" data-controller="check-boxes">
-          <!-- fills the members checkboxes if any from the project selected-->
-          <% if @members.count > 0 %>
-            <%= render partial: 'fill_cb', locals: { list: @members, txt: 'member' } %>
-          <% end %>
-        </div>        
+        <%= form.label :project_id %>
       </div>
+      <div>
+        <!--selection gets dynamically re-filled on client change -->
+        <%= form.collection_select :project_id, @projects, :id, :name, {include_blank: 'Select a project' }, {class: 'mr-6 w-80', id: 'project-selection'} %>   
+      </div>    
     </div>
   </div>
 
-  <div class="clear-both text-center">
-    <%= form.submit "Create project report", class: "rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow clear-both" %>
+  <div id="members-container" class="clear-both pt-10">
+    <div id="members-error-container">
+      <% @report.errors.full_messages_for(:member_ids).each do |message| %>
+        <div class="text-sm italic text-gray-600">Please select atleast one user</div>
+      <% end %>
+    </div>
+    <div>
+      <%= form.label :member_ids, 'Members'%>
+    </div>
+    <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+      <%= check_box_tag "check_all_members", 0, false, id: "check-all-members" %>
+      <%= 'Check all'%>
+    </div>
+    <!--div gets dynamically re-filled with checkboxes on project change -->
+    <div id="members-checkboxes">
+      <%= render partial: 'checkboxes', locals: {report: @report, text: 'member',checkboxes: @members} %>
+    </div>
   </div>
-<% end %>  
+
+  <div id="tasks-container" class="clear-both pt-10">
+    <div id="tasks-error-container">
+      <% @report.errors.full_messages_for(:task_ids).each do |message| %>
+        <div class="text-sm italic text-gray-600">Please select atleast one task</div>
+      <% end %>
+    </div>
+    <div>
+      <%= form.label :task_ids, 'Tasks'%>
+    </div>
+    <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+      <%= check_box_tag "check_all_tasks", 0, false, id: "check-all-tasks" %>
+      <%= 'Check all'%>
+    </div>
+    <!--div gets dynamically re-filled with checkboxes on project change -->
+    <div id="tasks-checkboxes">
+      <%= render partial: 'checkboxes', locals: { report: @report, text: 'task',checkboxes: @tasks } %>
+    </div>
+  </div>
+
+  <div id="submit-container" class="flex justify-center mt-10">
+    <%= form.submit 'Create report', class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300  shadow'  %>
+  </div>
+<% end %>

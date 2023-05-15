@@ -1,36 +1,77 @@
 <%= form_with model: @report do |form| %>
 
-  <div id="user-container" class="clear-both">
-  <div>
-    <% @report.errors.full_messages_for(:user).each do |message| %>
-      <div class="text-sm italic text-gray-600"><%= message %></div>
-    <% end %>
+  <div id="timeframe-container">
+    <div id="timeframe-error-container">
+      <% @report.errors.full_messages_for(:timeframe).each do |message| %>
+        <div class="text-sm italic text-gray-600"><%= message %></div>
+      <% end %>
+    </div>
+    <div id="timeframe-select" class="flex justify-between">
+      <%= form.label :timeframe %>
+      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'mr-6 w-80', id: 'timeframe-selection'} %>
+    </div>
+    <div id="custom-timeframe-error-container">
+      <% @report.errors.full_messages_for(:custom_timeframe).each do |message| %>
+        <div class="text-sm italic text-gray-600"><%= message %></div>
+      <% end %>
+    </div>
+    <div id="custom-timeframe-container" class="<%= "hidden" unless @show_custom_timeframe %>">
+      <%= render partial: 'timeframe' %>
+    </div>
   </div>
-  <div class="flex justify-between">
-    <%= form.label :user %>
-      <%= form.collection_select(:user, @users, :id, :name,
-          { include_blank: "Select a user" }, 
-          { data: { action: "change->user-reports#handleChange" }, class: 'w-custom15 mr-10' }) %>
-  </div>
-  </div>
-  <br>
-  <div id="projects-container">
-    <%= form.label :project_ids, "projects" %>
-    <div data-user-reports-target="projectsDiv">
-      <%= render partial: 'user_reports/projects_cb', locals: { report: @report, projects_by_client: @projects_by_client } %>
+
+
+  <div id="user-container" class="clear-both mt-10">
+    <div id="user-error-container">
+      <% @report.errors.full_messages_for(:user_id).each do |message| %>
+        <span class="text-sm italic text-gray-600"><%= message %></span>
+      <% end %>
+    </div>
+    <div class="flex justify-between">
+      <%= form.label :user_id %>
+      <%= form.collection_select :user_id, @users, :id, :name, {include_blank: 'Select a user' }, {class: 'mr-6 w-80', id: 'user-selection'} %>   
+    </div>
+ </div>
+
+  <div id="projects-container"class="mt-10">
+    <div id="user-error-container">
+      <% @report.errors.full_messages_for(:project_ids).each do |message| %>
+        <span class="text-sm italic text-gray-600">Please select atleast one project</span>
+      <% end %>
+    </div>
+    <%= form.label :project_ids, 'Projects' %>
+    <div class="mr-4 font-semibold p-1 w-fit m-1" data-controller="user-reports-boxes">
+      <%= check_box_tag "check_all_projects", 0, false, {id: "check-all-projects", 'data-action': "click->user-reports-boxes#addCheckAllProjectsListener" } %>
+      <%= 'Check all'%>
+    </div>
+    <!-- div for re-rendering project checkboxes on user change -->
+    <div id="projects-checkboxes" class="clear-both" >
+      <%= render partial: 'projects', locals: {report: @report, grouped_projects: @grouped_projects}%>
     </div>  
   </div>
-  <br>
-  
-  <div class="clear-both mt-10">
-    <%= form.label :task_ids, "tasks" %>
-    <div id="task-div">
-      <%= render partial: 'user_reports/tasks_cb', locals: { report: @report, tasks: @tasks } %>
+
+  <div id="tasks-container" class="clear-both mt-10">
+    <div id="user-error-container">
+      <% @report.errors.full_messages_for(:task_ids).each do |message| %>
+        <span class="text-sm italic text-gray-600">Please select atleast one project</span>
+      <% end %>
     </div>
-  </div> 
-  <div class="clear-both flex justify-center">
-    <%= form.submit "Create user report", class: "rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow clear-both" %>    
+    <div class="clear-both">
+      <%= form.label :task_ids, 'Tasks'%>
+    </div>
+    <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
+      <%= check_box_tag "check_all_tasks", 0, false, id: "check-all-tasks" %>
+      <%= 'Check all'%>
+    </div>
+    <!-- div for re-rendering tasks checkboxes on project change -->
+    <div id="tasks-checkboxes" data-controller="user-reports-boxes">
+      <%= render partial: 'tasks', locals: {report: @report, tasks: @tasks} %>
+    </div>  
   </div>
 
-<% end %> 
 
+  <div id="submit-container" class="clear-both flex justify-center mt-10">
+    <%= form.submit 'Update report' , class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300  shadow' %>
+  </div>
+
+<% end %>

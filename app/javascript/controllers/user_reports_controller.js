@@ -2,102 +2,78 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="user-reports"
 export default class extends Controller {
-  static targets = ['projectsDiv'];
-
   connect() {
-    const tasks_url = `/user_reports/update_tasks` 
-    const checkboxes = document.querySelectorAll("[id^='project_ids']");
-    const taskDiv = document.querySelector("#task-div")
-    this.sendCheckboxesToServer(checkboxes, tasks_url, taskDiv)
-
-
-    const checkAllProjects = document.querySelector("#check_all_projects");
-
-    if(checkAllProjects){
-      this.checkAll(checkAllProjects,checkboxes, tasks_url, taskDiv);
-    }
+    this.addListeners();
   }
 
-  checkAll(checkAllProjects, checkboxes, tasks_url, taskDiv){
-    checkAllProjects.addEventListener('change', (event) =>{
-      let CheckedList = [];
-      for (let checkbox of checkboxes) {
-        checkbox.checked = event.target.checked;
-        if (event.target.checked)
-          CheckedList.push(checkbox.value);
-      }
-      const selectedCheckboxesJSON = JSON.stringify(CheckedList);
-
-      $.ajax({
-        type: 'GET',
-        url: tasks_url,
-        data: {project_ids_json: selectedCheckboxesJSON},
-        success: (data) =>{
-          taskDiv.innerHTML = data;
-        },
-        error: (data) =>{
-            console.error(data);
-        }
-      });
-    })
-  }
-
-  sendCheckboxesToServer(checkboxes, tasks_url, taskDiv){
-    if(checkboxes.length > 0){
-      checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', event =>{
-          let selectedCheckboxes = [];
-          checkboxes.forEach(check =>{
-            if(check.checked){
-              selectedCheckboxes.push(check.value);
-            }
-          })
-
-          const selectedCheckboxesJSON = JSON.stringify(selectedCheckboxes);
-          $.ajax({
-            type: 'GET',
-            url: tasks_url,
-            data: {project_ids_json: selectedCheckboxesJSON},
-            success: (data) =>{
-              taskDiv.innerHTML = data;
-            },
-            error: (data) =>{
-                console.error(data);
-            }
-          });
-          console.log("hei")
-        })
-      });      
-    }
-  }
- 
-
-  handleChange(event){
-    const userId = event.target.value;
-    const taskDiv = document.querySelector("#task-div")
-    if(userId < 1){
-      this.projectsDivTarget.innerHTML =  "no projects found"; 
-      taskDiv.innerHTML = "Please select atleast one project"
-      return;     
-    }
-    else{
-      const projects_url = `/user_reports/update_projects?user_id=${userId}`
-
-      // checks if timeframe == "custom" to render the date-fields
-      $.ajax({
-        type: 'GET',
-        url: projects_url,
-        success: (data) =>{
-          this.projectsDivTarget.innerHTML = data;
-          taskDiv.innerHTML = "Please select atleast one project"
-        },
-        error: (data) =>{
-            console.error(data);
-        }
-      });
-    }
-  }
-
+  // creates event listeners on the form fields
+  addListeners(){
+    const timeframeSelection = document.querySelector('#timeframe-selection');
+    const userSelection = document.querySelector('#user-selection');
+    const checkAlltasks = document.querySelector('#check-all-tasks');
   
+    if(timeframeSelection)
+      this.addCustomTimeframeListener(timeframeSelection);
+    
+    if(userSelection)
+      this.addUserListener(userSelection);
 
+    if(checkAlltasks)
+      this.addCheckAllTasksListener(checkAlltasks);
+  }
+
+  // event listener on the check all 
+  addCheckAllTasksListener(checkAlltasks){      
+    checkAlltasks.addEventListener('click', (event) =>{
+      // gets every checkboxes that is rendered
+      const taskCheckboxes = document.querySelectorAll('[id^="user_report_task_id"]');
+      
+      // checks every box with the value of the check-all box
+      taskCheckboxes.forEach( inspectBox  => {
+        inspectBox.checked = event.target.checked;
+      })
+    });
+  }
+
+  // eventlistener on the timeframe selection to toggle visibility if custom
+  addCustomTimeframeListener(timeframeSelection){
+    const customTimeframeDiv = document.querySelector('#custom-timeframe-container');
+
+    timeframeSelection.addEventListener('change', (event)=>{
+      if(timeframeSelection.value == "custom")
+        customTimeframeDiv.classList.remove('hidden');
+      else
+        customTimeframeDiv.classList.add('hidden');
+    });
+  }
+
+  // eventlistener on the user selection
+  addUserListener(userSelection){
+    const projectsDiv = document.querySelector('#projects-checkboxes');
+    const tasksDiv = document.querySelector('#tasks-checkboxes')
+
+    userSelection.addEventListener('change', (event) =>{
+      const userId = userSelection.value
+
+      // if valid user get the projects from server
+      if (userId > 0){
+        $.ajax({
+          type: 'GET',
+          url: `/user_reports/update_projects_checkboxes`,
+          data: {user_id: userId},
+          success:(data)=>{
+            projectsDiv.innerHTML = data;
+            tasksDiv.innerHTML = null;
+          },
+          error:(data)=>{
+            console.error(data);
+          }
+        })       
+      }
+      else{
+        projectsDiv.innerHTML = null;
+        tasksDiv.innerHTML = null;
+      }
+    });
+  }
 }

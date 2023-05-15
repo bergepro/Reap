@@ -4,7 +4,7 @@ class TimeReg < ApplicationRecord
   belongs_to :membership
   belongs_to :assigned_task
   has_one :project, through: :assigned_task
-  has_one :task, through: :assigned_task
+  has_one :task, through: :assigned_task, source: :task
   has_one :user, through: :membership
 
   validates :notes, presence: true, length: { maximum: 255 }

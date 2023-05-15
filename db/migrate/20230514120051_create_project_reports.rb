@@ -5,10 +5,11 @@ class CreateProjectReports < ActiveRecord::Migration[7.0]
       t.string :timeframe
       t.date :date_start
       t.date :date_end
-      t.string :client
-      t.string :project
+      t.string :client_id
+      t.string :project_id
       t.text :task_ids, array: true, default: []
       t.text :member_ids, array: true, default: []
+      t.string :group_by
 
       t.timestamps
     end

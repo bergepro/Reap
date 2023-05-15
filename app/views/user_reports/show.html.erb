@@ -3,6 +3,7 @@
       <div data-controller="report-edit" >
       <div class="flex justify-between ml-4 mb-10">
         <h1 class="font-medium italic text-2xl">Your report</h1>
+        <!-- button for viewing the edit form -->
         <button class="pl-3 pr-3 p-1 mr-10 rounded bg-blue-200 hover:bg-blue-300" 
                 data-action="click->report-edit#editReport">edit</button>
       </div>
@@ -10,11 +11,10 @@
         <%= render partial: 'edit' %>
       </div>    
     </div>
-
       <div class="flex justify-between mb-3">
       <div class="flex justify-center">
         <!-- form for changing the group_by -->
-        <%= form_with url: project_report_update_group_path(@report), method: :patch do |form| %>
+        <%= form_with url: user_report_update_group_path(@report), method: :patch do |form| %>
           <%= form.label :group_by, 'Group by:', class: 'mr-2' %>
           <%= form.select :group_by, options_for_select(@groupes, @report.group_by),{}, class: 'pr-8 mr-2' %>
           <%= form.submit 'Update', class: 'text-sm rounded bg-blue-200 p-1 hover:bg-blue-300 h-full'%>
@@ -22,7 +22,7 @@
       </div>
       <div class="mr-20">
         <!-- form for exporting the report -->
-        <%= form_with url: { action: :export, format: :csv }, method: :get do |form| %>
+        <%= form_with url: { action: :export, format: :csv }, method: :post do |form| %>
           <%= form.hidden_field :time_regs_hash, value: @time_regs.to_json %>
           <%= form.submit 'Export to CSV', class: ' rounded bg-blue-200 p-1 hover:bg-blue-300' %>
         <% end %>       

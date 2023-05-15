@@ -8,18 +8,19 @@ Rails.application.routes.draw do
   resources :project_reports do
     patch :update_group
     collection do
-      get 'update_task_checkboxes'
-      get 'update_member_checkboxes'
-      get 'render_custom_timeframe'
-      get 'update_projects_select'
+      get 'update_projects_selection'
+      get 'update_members_checkboxes'
+      get 'update_tasks_checkboxes'
       get 'export'
     end
   end
 
   resources :user_reports do
-    collection do 
-      get 'update_projects'
-      get 'update_tasks'
+    patch :update_group
+    collection do
+      post 'export'
+      get 'update_projects_checkboxes'
+      get 'update_tasks_checkboxes'
     end
   end
 
@@ -34,7 +35,6 @@ Rails.application.routes.draw do
       get 'export'
       post 'import'
       get 'update_tasks_select'
-      get 'update_minutes_view'
       get 'new_modal', to: 'time_regs#new', as: :new_modal
     end
   end
