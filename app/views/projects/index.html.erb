@@ -1,7 +1,20 @@
-<div class="flex flex-col items-center pt-4">
+<div class="flex flex-col items-center">
   <div class="max-w-md md:min-w-custom35">
-    <div class="p-1 my-2 pt-2">
-      <h1 class="font-bold text-3xl italic pb-4 ml-2">Your projects </h1>
+    <div class="p-1">
+      <div class="flex justify-between pb-4 ml-2 flex items-center">
+        <h1 class="font-bold text-3xl italic" >Your projects </h1>
+        <div class=" flex-justify-between h-10">
+          <div data-controller="modal" class="float-left h-10 rounded bg-blue-200 hover:bg-blue-300 ">
+            <button data-action="click->modal#toggle" class="h-10 p-1 pl-3 pr-3" > Import </button> 
+            <div class="hidden modal hidden fixed inset-0 bg-black pb-60 bg-opacity-50 flex items-center justify-center z-50"  data-modal-target="modal">
+              <%= render "projects/import" %>
+            </div>
+          </div>
+          <div class="float-left rounded bg-blue-200 hover:bg-blue-300 p-1 pl-3 pr-3 h-10 mr-5 ml-5">
+              <%= link_to 'Export',new_project_report_path, class: 'flex items-center h-full' %>                    
+          </div>
+        </div>
+      </div>
       <% @clients.each do |client| %>
         <div class="mb-6">
           <% @projects = current_user.projects.where(projects: {client_id: client.id}) %>
@@ -27,7 +40,6 @@
     <div class="flex justify-evenly">
       <%= link_to "New project", new_project_path, class: ' bg-blue-200 rounded p-2 hover:bg-blue-300'%>
       <%= link_to "New client", new_client_path, class: 'bg-blue-200 rounded p-2 hover:bg-blue-300' %>
-
     </div>
     <div  class="mb-20">
       <%= form_with url: projects_import_path do |form| %>
