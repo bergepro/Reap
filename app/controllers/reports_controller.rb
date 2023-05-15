@@ -1,6 +1,7 @@
 class ReportsController < ApplicationController
   before_action :authenticate_user!
 
+  # exports the the report as a .CSV
   def export
     time_regs = JSON.parse(params[:time_regs_hash])
     csv_data = CSV.generate(headers: true) do |csv|
@@ -19,6 +20,7 @@ class ReportsController < ApplicationController
   end
 
   private
+  # returns a hash of the correrct timeframe options
   def get_timeframe_options 
     thisMonthName = I18n.t("date.month_names")[Date.today.month]
     lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
@@ -35,6 +37,8 @@ class ReportsController < ApplicationController
   
   # gets all the time_regs for the report with the filters in the report object
   def get_time_regs(report, users, projects, tasks)
+
+    # includes tables to decrease the number of queries 
     time_regs = TimeReg.includes(
       :task,
       :user,
@@ -51,7 +55,8 @@ class ReportsController < ApplicationController
                           .where(assigned_task: {task_id: tasks})
                           .order(date_worked: :desc, created_at: :desc)
 
-    return time_regs.map do |time_reg|
+    # converts a time_reg to hash and maps it
+    time_regs.map do |time_reg|
       {
         date: time_reg.date_worked,
         client: time_reg.project.client.name,

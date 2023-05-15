@@ -1,14 +1,13 @@
 class UserReportsController < ReportsController
   GROUPES = {"Client" => "client", "Project" => "project", "Task" => "task", "Date" => "date"} # columns to group report by
-  START_GROUP = "date"
+  START_GROUP = "date" # start date when creating a user report
 
   def show
     @report = UserReport.find(params[:id])
     @time_regs = get_time_regs(@report, @report.user_id, @report.project_ids, @report.task_ids)
     @grouped_report = group_time_regs(@time_regs, @report.group_by)
-    puts @grouped_report
-    puts "---------------------"
 
+    # data for the edit form
     @show_edit_form = false
     @groupes = GROUPES
     @timeframeOptions = get_timeframe_options
@@ -19,6 +18,7 @@ class UserReportsController < ReportsController
   end
 
   def new
+    # data for the new form
     @show_custom_timeframe = false
     @report = UserReport.new
     @timeframeOptions = get_timeframe_options
@@ -29,13 +29,15 @@ class UserReportsController < ReportsController
 
   def create
     @report = UserReport.new(user_report_params)
-    @report.group_by = START_GROUP
 
-    set_dates(@report) unless @report.timeframe == "custom"
+    @report.group_by = START_GROUP # sets standard group from a const
+    set_dates(@report) unless @report.timeframe == "custom" #  sets the correct dates
 
+    # tries to save the report
     if @report.save
       redirect_to @report
-    else 
+    else
+      # data for the new form incase of re-rendering
       @show_custom_timeframe = @report.timeframe == "custom" ? true : false
       @timeframeOptions = get_timeframe_options
       @users = User.all
@@ -46,6 +48,7 @@ class UserReportsController < ReportsController
   end
 
   def edit 
+    # data for the edit form
     @report = UserReport.find(params[:id])
     @timeframeOptions = get_timeframe_options
     @users = User.all
@@ -56,21 +59,24 @@ class UserReportsController < ReportsController
 
   def update
     @report = UserReport.find(params[:id])
+
+    # stores the old time_regs incase of re-rendering
     @time_regs = get_time_regs(@report, @report.user_id, @report.project_ids, @report.task_ids)
     @grouped_report = group_time_regs(@time_regs, @report.group_by)
 
-    puts params.inspect
-
+    # clears data if invalid
     @report.project_ids = [] unless user_report_params[:user_id] == @report.user_id
     @report.task_ids = [] unless user_report_params[:project_ids].present? 
     
     @report.assign_attributes(user_report_params)
 
-    set_dates(@report) unless @report.timeframe == "custom"
+    set_dates(@report) unless @report.timeframe == "custom" # sets the correct dates
 
+    # tries to save the changes 
     if @report.save
       redirect_to @report
     else
+      # data for the show page incase of re-rendering
       @show_edit_form = true
       @groupes = GROUPES
       @show_custom_timeframe = @report.timeframe == "custom" ? true : false
@@ -84,10 +90,9 @@ class UserReportsController < ReportsController
  
   # changes the grouping of the report
   def update_group
-    # changes the correct report to the new group_by
     @report = UserReport.find(params[:user_report_id])
 
-
+    # checks for valid new grouping
     if GROUPES.values.include?(params[:group_by])
       @report.group_by = params[:group_by]
       # tries to save the new changes
@@ -107,20 +112,23 @@ class UserReportsController < ReportsController
   # AJAX form updates *
   # *******************
 
+  # updates the report form with projects from a specific user
+  # returns a partial 
   def update_projects_checkboxes
     grouped_projects = User.find(params[:user_id]).projects.group_by(&:client)
     render partial: 'projects', locals: {report: UserReport.new, grouped_projects: grouped_projects}
   end
 
+  # updates the report form with tasks from specific projects
+  # returns a partial 
   def update_tasks_checkboxes
     @tasks = Task.joins(:assigned_tasks).where(assigned_tasks: {project_id: params[:project_ids]}).distinct
     render partial: 'tasks', locals: {report: UserReport.new, tasks: @tasks }
   end
 
-
+  # permits only valid attributes
   private 
   def user_report_params 
     params.require(:user_report).permit(:timeframe, :date_start, :user_id, :date_end, project_ids: [], task_ids: [])
   end
-
 end
