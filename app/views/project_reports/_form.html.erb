@@ -33,7 +33,6 @@
         <%= form.collection_select :client_id, @clients, :id, :name, {include_blank: 'Select a client' }, {class: 'mr-6 w-80', id: 'client-selection'} %>   
       </div>    
     </div>
-
   </div>
 
   <div id="project-container" class="clear-both pt-10">
@@ -47,6 +46,7 @@
         <%= form.label :project_id %>
       </div>
       <div>
+        <!--selection gets dynamically re-filled on client change -->
         <%= form.collection_select :project_id, @projects, :id, :name, {include_blank: 'Select a project' }, {class: 'mr-6 w-80', id: 'project-selection'} %>   
       </div>    
     </div>
@@ -65,6 +65,7 @@
       <%= check_box_tag "check_all_members", 0, false, id: "check-all-members" %>
       <%= 'Check all'%>
     </div>
+    <!--div gets dynamically re-filled with checkboxes on project change -->
     <div id="members-checkboxes">
       <%= render partial: 'checkboxes', locals: {report: @report, text: 'member',checkboxes: @members} %>
     </div>
@@ -83,6 +84,7 @@
       <%= check_box_tag "check_all_tasks", 0, false, id: "check-all-tasks" %>
       <%= 'Check all'%>
     </div>
+    <!--div gets dynamically re-filled with checkboxes on project change -->
     <div id="tasks-checkboxes">
       <%= render partial: 'checkboxes', locals: { report: @report, text: 'task',checkboxes: @tasks } %>
     </div>

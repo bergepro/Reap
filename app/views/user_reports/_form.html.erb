@@ -44,6 +44,7 @@
       <%= check_box_tag "check_all_projects", 0, false, {id: "check-all-projects", 'data-action': "click->user-reports-boxes#addCheckAllProjectsListener" } %>
       <%= 'Check all'%>
     </div>
+    <!-- div for re-rendering project checkboxes on user change -->
     <div id="projects-checkboxes" class="clear-both" >
       <%= render partial: 'projects', locals: {report: @report, grouped_projects: @grouped_projects}%>
     </div>  
@@ -58,11 +59,11 @@
     <div class="clear-both">
       <%= form.label :task_ids, 'Tasks'%>
     </div>
-    
     <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
       <%= check_box_tag "check_all_tasks", 0, false, id: "check-all-tasks" %>
       <%= 'Check all'%>
     </div>
+    <!-- div for re-rendering tasks checkboxes on project change -->
     <div id="tasks-checkboxes" data-controller="user-reports-boxes">
       <%= render partial: 'tasks', locals: {report: @report, tasks: @tasks} %>
     </div>  

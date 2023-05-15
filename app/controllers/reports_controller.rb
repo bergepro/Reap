@@ -67,7 +67,7 @@ class ReportsController < ApplicationController
         minutes: time_reg.minutes,
         user_first_name: time_reg.user.first_name,
         user_last_name: time_reg.user.last_name,
-        user_mail: time_reg.user.email
+        user_email: time_reg.user.email
       }
     end
   end

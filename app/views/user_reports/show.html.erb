@@ -3,6 +3,7 @@
       <div data-controller="report-edit" >
       <div class="flex justify-between ml-4 mb-10">
         <h1 class="font-medium italic text-2xl">Your report</h1>
+        <!-- button for viewing the edit form -->
         <button class="pl-3 pr-3 p-1 mr-10 rounded bg-blue-200 hover:bg-blue-300" 
                 data-action="click->report-edit#editReport">edit</button>
       </div>
@@ -10,7 +11,6 @@
         <%= render partial: 'edit' %>
       </div>    
     </div>
-
       <div class="flex justify-between mb-3">
       <div class="flex justify-center">
         <!-- form for changing the group_by -->
