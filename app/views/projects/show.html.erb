@@ -55,7 +55,7 @@
       <%= link_to "Assign task", new_project_assigned_task_path(@project), 
         class: 'rounded bg-blue-200 p-2 ml-6 hover:bg-blue-300' 
       %>
-      <%= link_to "Quick export to CSV", export_time_regs_path(project_id: @project.id, format: :csv), 
+      <%= link_to "Export project to CSV", export_time_regs_path(project_id: @project.id, format: :csv), 
         class: 'rounded bg-blue-200 p-2 mr-6 hover:bg-blue-300' 
       %>
     </div>
