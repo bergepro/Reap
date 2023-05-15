@@ -30,18 +30,18 @@
       <% time_regs.each do |time_reg |%>
         <tr class="border-b-2 border-gray-300">
           <%  content_columns = {
-                "date" => time_reg.date_worked,
-                "client" => time_reg.project.client.name,
-                "project" => time_reg.project.name,
-                "task" => time_reg.task.name,
-                "user" => time_reg.user.name
+                "date" => time_reg[:date],
+                "client" => time_reg[:client],
+                "project" => time_reg[:project],
+                "task" => time_reg[:task],
+                "user" => time_reg[:user]
           }%>
           <% content_columns.each do |group, text |%>
             <% if @report.group_by != group %>
               <td class="pb-1"><%= text %></td>
             <% end %>
           <% end %>
-          <td class="pb-1"><%= convert_time_int(time_reg.minutes)%></td>
+          <td class="pb-1"><%= convert_time_int(time_reg[:minutes])%></td>
         </tr>
       <% end %>
       <!-- filler-row at bottom to space out the groups -->

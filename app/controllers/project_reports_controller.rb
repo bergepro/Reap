@@ -7,13 +7,14 @@ class ProjectReportsController < ReportsController
   def show
     @show_edit_form = false
     @report = ProjectReport.find(params[:id])
+    
     @time_regs = get_time_regs(@report, @report.member_ids, @report.project_id, @report.task_ids)
     @grouped_report = group_time_regs(@time_regs, @report.group_by)
     @groupes = GROUPES
 
     @timeframeOptions = get_timeframe_options
     @clients = Client.all
-    @projects = Client.find(@report.client_id).projects
+    @projects = @clients.find(@report.client_id).projects
     project = Project.find(@report.project_id)
     @members = project.users
     @tasks = project.tasks
@@ -87,7 +88,6 @@ class ProjectReportsController < ReportsController
       render :new, status: :unprocessable_entity 
     end
   end
-
 
   def update_group
     @report = ProjectReport.find(params[:project_report_id])

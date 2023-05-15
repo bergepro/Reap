@@ -2,17 +2,16 @@ class ReportsController < ApplicationController
   before_action :authenticate_user!
 
   def export
-    time_regs_ids = JSON.parse(params[:time_reg_ids])
+    time_regs = JSON.parse(params[:time_regs_hash])
     csv_data = CSV.generate(headers: true) do |csv|
       # Add CSV header row
       # csv << ['id', 'user_email', 'task_name', 'minutes','created_at', 'updated_at','assigned_task_id', 'user_id', 'membership_id']
       csv << ['date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email']
       # Add CSV data rows for each time_reg
-      time_regs_ids.each do |time_reg_id|
-        time_reg = TimeReg.find(time_reg_id)
+      time_regs.each do |time_reg|
 
-        csv << [time_reg.date_worked, time_reg.project.client.name, time_reg.project.name, time_reg.assigned_task.task.name, 
-                time_reg.notes, time_reg.minutes, time_reg.user.first_name, time_reg.user.last_name, time_reg.user.email]
+        csv << [time_reg['date'], time_reg['client'], time_reg['project'], time_reg['task'], 
+                time_reg['notes'], time_reg['minutes'], time_reg['user_first_name'], time_reg['user_last_name'], time_reg['user_email']]
       end
     end
     # downloads the report as a .CSV
@@ -20,7 +19,6 @@ class ReportsController < ApplicationController
   end
 
   private
-
   def get_timeframe_options 
     thisMonthName = I18n.t("date.month_names")[Date.today.month]
     lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
@@ -37,8 +35,14 @@ class ReportsController < ApplicationController
   
   # gets all the time_regs for the report with the filters in the report object
   def get_time_regs(report, users, projects, tasks)
-    time_regs = TimeReg.includes(:membership, :assigned_task)
-
+    time_regs = TimeReg.includes(
+      :task,
+      :user,
+      membership: [:user],
+      assigned_task: [:project, :task],
+      project: :client,
+    )
+    
     # sets a timeframe unless it is allTime
     time_regs = time_regs.where(date_worked: report.date_start..report.date_end) unless report.timeframe == "allTime"
 
@@ -47,25 +51,38 @@ class ReportsController < ApplicationController
                           .where(assigned_task: {task_id: tasks})
                           .order(date_worked: :desc, created_at: :desc)
 
-    time_regs.all
+    return time_regs.map do |time_reg|
+      {
+        date: time_reg.date_worked,
+        client: time_reg.project.client.name,
+        project: time_reg.project.name,
+        task: time_reg.task.name,
+        user: time_reg.user.name,
+        notes: time_reg.notes,
+        minutes: time_reg.minutes,
+        user_first_name: time_reg.user.first_name,
+        user_last_name: time_reg.user.last_name,
+        user_mail: time_reg.user.email
+      }
+    end
   end
 
   # groupes the time_regs for the different columns
-  def group_time_regs(time_regs, group)
-
+  def group_time_regs(time_regs_hash, group)
     if group == "task"
-      grouped_report = time_regs.group_by { |time_reg| time_reg.task.name }
+      grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:task] }
     elsif group == "user"
-      grouped_report = time_regs.group_by { |time_reg| time_reg.user.name }
+      grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:user] }
     elsif group == "date"
-      grouped_report = time_regs.group_by { |time_reg| time_reg.date_worked }
+      grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:date] }
     elsif group == "project"
-      grouped_report = time_regs.group_by { |time_reg| time_reg.project.name }
+      grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:project] }
     elsif group == "client"
-      grouped_report = time_regs.group_by{|time_reg| time_reg.project.client.name}
+      grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:client]}
     end
     grouped_report
   end
+  
 
   # sets the timeframe for the report if it is custom or allTime
   def set_dates(report)

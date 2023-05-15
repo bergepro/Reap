@@ -23,7 +23,7 @@
       <div class="mr-20">
         <!-- form for exporting the report -->
         <%= form_with url: { action: :export, format: :csv }, method: :get do |form| %>
-          <%= form.hidden_field :time_reg_ids, value: @time_regs.pluck(:id).to_json %>
+          <%= form.hidden_field :time_regs_hash, value: @time_regs.to_json %>
           <%= form.submit 'Export to CSV', class: ' rounded bg-blue-200 p-1 hover:bg-blue-300' %>
         <% end %>       
       </div>

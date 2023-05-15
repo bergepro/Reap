@@ -6,12 +6,14 @@ class UserReportsController < ReportsController
     @report = UserReport.find(params[:id])
     @time_regs = get_time_regs(@report, @report.user_id, @report.project_ids, @report.task_ids)
     @grouped_report = group_time_regs(@time_regs, @report.group_by)
+    puts @grouped_report
+    puts "---------------------"
 
     @show_edit_form = false
     @groupes = GROUPES
     @timeframeOptions = get_timeframe_options
     @users = User.all
-    @grouped_projects = User.find(@report.user_id).projects.group_by(&:client)
+    @grouped_projects = @users.find(@report.user_id).projects.group_by(&:client)
     @tasks = Task.joins(:assigned_tasks).where(assigned_tasks: {project_id: @report.project_ids}).distinct
     @show_custom_timeframe = @report.timeframe == "custom" ? true : false  
   end
@@ -47,7 +49,7 @@ class UserReportsController < ReportsController
     @report = UserReport.find(params[:id])
     @timeframeOptions = get_timeframe_options
     @users = User.all
-    @grouped_projects = User.find(@report.user_id).projects.group_by(&:client)
+    @grouped_projects = @users.find(@report.user_id).projects.group_by(&:client)
     @tasks = Task.joins(:assigned_tasks).where(assigned_tasks: {project_id: @report.project_ids}).distinct
     @show_custom_timeframe = @report.timeframe == "custom" ? true : false
   end
@@ -85,7 +87,6 @@ class UserReportsController < ReportsController
     # changes the correct report to the new group_by
     @report = UserReport.find(params[:user_report_id])
 
-    puts params.inspect
 
     if GROUPES.values.include?(params[:group_by])
       @report.group_by = params[:group_by]
@@ -118,7 +119,6 @@ class UserReportsController < ReportsController
 
 
   private 
-
   def user_report_params 
     params.require(:user_report).permit(:timeframe, :date_start, :user_id, :date_end, project_ids: [], task_ids: [])
   end

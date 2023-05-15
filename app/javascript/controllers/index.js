@@ -10,9 +10,6 @@ application.register("collapse-delete", CollapseDeleteController)
 import CollapseHoursController from "./collapse_hours_controller"
 application.register("collapse-hours", CollapseHoursController)
 
-import DynamicMinutesController from "./dynamic_minutes_controller"
-application.register("dynamic-minutes", DynamicMinutesController)
-
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 

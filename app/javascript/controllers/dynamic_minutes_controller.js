@@ -13,7 +13,7 @@ export default class extends Controller {
   startUpdatingMinutes(userId, timeView) {
     this.intervalId = setInterval(() => {
       this.updateMinutes(userId, timeView);
-    }, 60500);
+    }, 5000);
   }
 
   updateMinutes(userId, timeView){
@@ -22,6 +22,7 @@ export default class extends Controller {
       type: 'GET',
       url: `/time_regs/update_minutes_view?user_id=${userId}`,
       success: (data) =>{
+        console.log("hei");
         timeView.innerHTML = data;
       },
       error: (data) =>{
