@@ -5,7 +5,6 @@ import "./src/jquery"
 
 import { Application } from "@hotwired/stimulus"
 
-import ModalController from "./controllers/modal_controller"
 
 const application = Application.start()
 
