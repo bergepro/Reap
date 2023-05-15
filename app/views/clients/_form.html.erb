@@ -1,27 +1,26 @@
-<div class="max-w-md"> 
-  <%= form_with model: @client do |form|%>
-    <div>
-      <%= form.label :name %> <br>
-      <%= form.text_area :name, class: "w-full" %>
-      <% @client.errors.full_messages_for(:name).each do |message|%>
-        <div class="text-sm italic text-gray-600">
-          <%= message %>
-        </div>
-      <% end %>
-    </div>
+<%= form_with model: @client do |form|%>
+  <div>
+    <%= form.label :name %> <br>
+    <%= form.text_area :name, class: "w-full" %>
+    <% @client.errors.full_messages_for(:name).each do |message|%>
+      <div class="text-sm italic text-gray-600">
+        <%= message %>
+      </div>
+    <% end %>
+  </div>
 
-    <div>
-      <%= form.label :description %> <br>
-      <%= form.text_area :description, class: "w-full" %>
-      <% @client.errors.full_messages_for(:description).each do |message|%>
-        <div class="text-sm italic text-gray-600">
-          <%= message %>
-        </div>            
-      <% end %>
-    </div>  
+  <div>
+    <%= form.label :description %> <br>
+    <%= form.text_area :description, class: "w-full" %>
+    <% @client.errors.full_messages_for(:description).each do |message|%>
+      <div class="text-sm italic text-gray-600">
+        <%= message %>
+      </div>            
+    <% end %>
+  </div>  
 
-    <div class="actions text-center p-1 m-1">
-      <%= form.submit class: "rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow" %>
-    </div>
-  <% end %>
-</div>
+  <div class="actions text-center p-1 m-1">
+    <%= form.submit class: "rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow" %>
+  </div>
+<% end %>
+

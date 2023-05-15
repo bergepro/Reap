@@ -31,14 +31,13 @@ class AssignedTasksController < ApplicationController
       flash[:notice] = "Task succesfully removed from project"
     end
 
-
     redirect_to edit_project_path(@project)
   end
 
   private
 
   def assigned_task_params
-    params.require(:assigned_task).permit(:project_id, :task_id, :name)
+    params.require(:assigned_task).permit(:project_id, :task_id)
   end
 
   def ensure_membership

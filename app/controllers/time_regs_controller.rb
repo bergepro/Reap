@@ -23,8 +23,9 @@ class TimeRegsController < ApplicationController
   def create
     @project = Project.find(time_reg_params[:project_id])
     @time_reg = @project.time_regs.build(time_reg_params.except(:project_id))
+   
+    membership = @project.memberships.find_by(user_id: current_user.id, project_id: @project.id)
 
-    membership = @project.memberships.find_by(user_id: current_user.id)
     @time_reg.active = false
     @time_reg.updated = Time.now
     @time_reg.membership_id = membership.id
@@ -137,23 +138,24 @@ class TimeRegsController < ApplicationController
     @project = Project.find(params[:project_id])
     @client = @project.client
     @time_regs = @project.time_regs
+
     csv_data = CSV.generate(headers: true) do |csv|
       # Add CSV header row
       # csv << ['id', 'user_email', 'task_name', 'minutes','created_at', 'updated_at','assigned_task_id', 'user_id', 'membership_id']
       csv << ['date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email']
       # Add CSV data rows for each time_reg
       @time_regs.each do |time_reg|
-        membership = Membership.find(time_reg.membership.id)
+        membership = Membership.find(time_reg.membership_id)
 
         date = time_reg.date_worked
         client = @client.name
         project = @project.name
-        task = Task.find(time_reg.assigned_task.task_id).name
+        task = time_reg.assigned_task.task.name
         notes = time_reg.notes
         minutes = time_reg.minutes
-        first_name = User.find(time_reg.user.id).first_name
-        last_name = User.find(time_reg.user.id).last_name
-        email = User.find(time_reg.user.id).email
+        first_name = time_reg.user.first_name
+        last_name = time_reg.user.last_name
+        email = time_reg.user.email
 
         csv << [date, client, project, task, notes, minutes, first_name, last_name, email]
       end

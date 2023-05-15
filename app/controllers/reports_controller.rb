@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  require 'activerecord-import/base'
+  before_action :authenticate_user!
   require 'csv'
 
   def index
@@ -21,7 +21,7 @@ class ReportsController < ApplicationController
 
   def new
     @clients = Client.all
-    @report = Report.new
+    @report = ProjectReport.new
 
     thisMonthName = I18n.t("date.month_names")[Date.today.month]
     lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
@@ -117,11 +117,11 @@ class ReportsController < ApplicationController
     end
     send_data csv_data, filename: "#{Time.now.to_i}_time_regs_for_custom_report.csv"
   end
+  
 
   private
   def filtered_params
     params.permit(:timeframe, :client, :project, task_ids: [], member_ids: [])
-
   end
 
   def set_timeframe(report)
@@ -178,4 +178,5 @@ class ReportsController < ApplicationController
     grouped_report
   end
 
+  
 end
