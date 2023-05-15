@@ -6,6 +6,7 @@ export default class extends Controller {
   connect() {
   }
 
+  // toggles hidden on the edit form
   editReport(event) {
     this.toggleDivTarget.classList.toggle('hidden');
   }
