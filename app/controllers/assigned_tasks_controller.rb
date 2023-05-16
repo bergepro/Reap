@@ -14,7 +14,7 @@ class AssignedTasksController < ApplicationController
     
     if @assigned_task.save
       flash[:notice] = "Task successfully added to project"
-      redirect_to new_project_assigned_task_path(@project)
+      redirect_to edit_project_path(@project)
     else
       render :new, status: :unprocessable_entity
     end

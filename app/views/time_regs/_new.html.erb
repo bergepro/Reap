@@ -5,7 +5,7 @@
       <%= form_with(model: @time_reg) do |form| %>
         <div class="field my-4 w-80">
           <%= form.label :project_id %>       
-          <%= form.collection_select :project_id, @projects , :id, :name, { include_blank: "select a project:"}, {class: 'w-full', id: 'timeproject-select'}  %>
+          <%= form.collection_select :project_id, @projects , :id, :name, { include_blank: "select a project:"}, {class: 'w-full rounded-md p-1', id: 'timeproject-select'}  %>
           <% @time_reg.errors.full_messages_for(:project_id).each do |message| %>
             <div class="text-sm italic text-gray-600"><%= message %></div>
           <% end %>
@@ -13,7 +13,7 @@
 
         <div class="field my-4 w-80">
           <%= form.label :assigned_task_id %>
-          <%= form.collection_select :assigned_task_id, {}, :id, :name, {}, {class: 'w-full', id: 'timetask-select'}  %>
+          <%= form.collection_select :assigned_task_id, {}, :id, :name, {}, {class: 'w-full rounded-md p-1', id: 'timetask-select'}  %>
           <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
             <div class="text-sm italic text-gray-600"><%= message %></div>
           <% end %>
@@ -24,7 +24,7 @@
             <div class="text-sm italic text-gray-600"><%= message %></div>
           <% end %>
           <br>
-          <%= form.text_area :notes, class: 'w-full' %>
+          <%= form.text_area :notes, class: 'w-full rounded-md p-1' %>
         </div>
 
         <div class="field my-45">
@@ -33,14 +33,14 @@
             <div class="text-sm	italic text-gray-600"><%= message %></div>
           <% end %>
           <br>  
-          <%= form.number_field :minutes, class: 'w-full'  %>
+          <%= form.number_field :minutes, value: 0,class: 'w-full rounded-md p-1'  %>
         </div>
 
         <div class="field my-4">
           <%= form.label :date_worked %>
           <br>
             <div class="flex justify-between">
-              <%= form.date_select :date_worked, {}, class: "w-24" %>
+              <%= form.date_select :date_worked, {}, class: "w-24 rounded-md p-1" %>
             </div>
         </div>
 

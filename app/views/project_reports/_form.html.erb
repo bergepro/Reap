@@ -7,7 +7,7 @@
     </div>
     <div id="timeframe-select" class="flex justify-between">
       <%= form.label :timeframe %>
-      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'mr-6 w-80', id: 'timeframe-selection'} %>
+      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'mr-6 w-80 rounded-md p-1', id: 'timeframe-selection'} %>
     </div>
     <div id="custom-timeframe-error-container">
       <% @report.errors.full_messages_for(:custom_timeframe).each do |message| %>
@@ -30,7 +30,7 @@
         <%= form.label :client_id %>
       </div>
       <div>
-        <%= form.collection_select :client_id, @clients, :id, :name, {include_blank: 'Select a client' }, {class: 'mr-6 w-80', id: 'client-selection'} %>   
+        <%= form.collection_select :client_id, @clients, :id, :name, {include_blank: 'Select a client' }, {class: 'mr-6 w-80 rounded-md p-1', id: 'client-selection'} %>   
       </div>    
     </div>
   </div>
@@ -47,7 +47,7 @@
       </div>
       <div>
         <!--selection gets dynamically re-filled on client change -->
-        <%= form.collection_select :project_id, @projects, :id, :name, {include_blank: 'Select a project' }, {class: 'mr-6 w-80', id: 'project-selection'} %>   
+        <%= form.collection_select :project_id, @projects, :id, :name, {include_blank: 'Select a project' }, {class: 'mr-6 w-80 rounded-md p-1', id: 'project-selection'} %>   
       </div>    
     </div>
   </div>

@@ -19,23 +19,25 @@
 
     <div class="pt-10">
       <h1 class="font-medium border-b border-gray-300 text-lg italic pb-2">Project tasks</h1>
-        <%= render @project.assigned_tasks %>
+        <%= render @assigned_tasks %>
     </div>
+    
+    <div class="pt-4">
+      <h1 class="font-medium text-lg italic">Add task</h1>
+      <%= render "assigned_tasks/new" %>
+      <p class="text-sm">Need more tasks to the project? Create one <%= link_to 'here', new_task_path, class: 'text-blue-600'%></p>
+    </div>
+
 
     <div class="pt-10">
       <h1 class="font-medium border-b border-gray-300 text-lg italic pb-2">Project members</h1>
       <%= render @project.memberships %>
     </div>
 
-    <div class="pt-10">
+    <div class="pt-6">
       <h1 class="font-medium text-lg italic pb-2">Add member</h1>
       <%= render "memberships/new" %>
     </div>
 
-    <br>
-    <%= 
-      link_to "back to project", @project, 
-        class: "text-gray-600 italic text-sm" 
-    %>
   </div>
 </div>

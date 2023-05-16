@@ -1,0 +1,17 @@
+<div class="flex flex-col items-center">
+  <%= form_with model: [@project, @assigned_task] do |form| %>
+    <div class="max-w-md md:min-w-custom35 flex justify-normal h-20">
+      <div class="flex justify-between items-center">
+        <%= form.collection_select :task_id, @tasks, :id, :name, { include_blank: false }, { class: ' pr-40 rounded-md p-1' }  %>
+        <% @assigned_task.errors.full_messages_for(:name).each do |message|%>
+          <div class="text-sm italic text-gray-600">
+            <%= message %>
+          </div>
+        <% end %>
+      </div>
+      <div class="actions text-center flex items-center ml-4">
+        <%= form.submit 'Assign task', class: "rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow" %>
+      </div>  
+    </div>
+  <% end %>
+</div>

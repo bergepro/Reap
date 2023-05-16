@@ -2,6 +2,8 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="time-tasks"
 export default class extends Controller {
+
+  // updates the tasks in the time_reg form on a project change
   connect() {
     const projectSelect = document.querySelector('#timeproject-select');
     const taskSelect = document.querySelector('#timetask-select');
@@ -12,8 +14,9 @@ export default class extends Controller {
         type: 'GET',
         url: `/time_regs/update_tasks_select?project_id=${projectId}`,
         success:(data)=>{
-          taskSelect.innerHTML = data;
 
+          // checks if the project id returned any tasks from the server
+          taskSelect.innerHTML = data;
           const taskId = projectSelect.value
           if(taskId < 1){
             taskSelect.innerHTML = "<option>No Tasks found</option>";
