@@ -52,12 +52,16 @@ class TimeRegsController < ApplicationController
   def update
     @time_reg = TimeReg.find(params[:id])
 
+    # changes the membership id on project change
     membership = Membership.find_by(user_id: current_user.id, project_id: time_reg_params[:project_id])
     @time_reg.membership_id = membership.id
+
+    # tries to update the time_Reg with new values
     if @time_reg.update(time_reg_params.except(:project_id))
       redirect_to time_regs_path
       flash[:notice] = "Time entry has been updated"
     else
+      # re-renders form with errors
       @projects = current_user.projects
       @assigned_tasks = Task.joins(:assigned_tasks)
         .where(assigned_tasks: { project_id: @time_reg.project.id })
@@ -70,10 +74,12 @@ class TimeRegsController < ApplicationController
   def destroy
     @time_reg = TimeReg.find(params[:id])
 
+    # tries to delete the time_reg
     if @time_reg.destroy
       redirect_to time_regs_path
       flash[:notice] = "Time entry has been deleted"
     else
+       # re-renders form with errors
       @projects = current_user.projects
       @assigned_tasks = Task.joins(:assigned_tasks)
         .where(assigned_tasks: { project_id: @time_reg.project.id })
@@ -84,6 +90,9 @@ class TimeRegsController < ApplicationController
     end
   end
 
+  # every time a user toggles the start/stop button
+  # if active: it takes the Time.now - last time it was updated
+  # else not active: it sets the last updated as Time.new av changes status to active
   def toggle_active
     @time_reg = TimeReg.find(params[:time_reg_id])
     @project = @time_reg.project
@@ -110,6 +119,7 @@ class TimeRegsController < ApplicationController
     end
   end
 
+  # exports every time_reg in a project as a .CSV
   def export
     project = Project.find(params[:project_id])
     client = project.client
@@ -121,28 +131,33 @@ class TimeRegsController < ApplicationController
       csv << ['date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email']
       # Add CSV data rows for each time_reg
       time_regs.each do |time_reg|
-
         csv << [time_reg.date_worked, project.client.name, project.name, time_reg.task.name, time_reg.notes, 
                     time_reg.minutes, time_reg.user.first_name, time_reg.user.first_name, time_reg.user.email]
       end
     end
-
+    # downloads the .CSV
     send_data csv_data, filename: "#{Time.now.to_i}_time_regs_for_#{project.name}.csv"
   end
 
+  # updates the tasks dynamically in the form on project change
   def update_tasks_select
     @tasks = Task.joins(:assigned_tasks).where(assigned_tasks: { project_id: params[:project_id] }).pluck(:name, 'assigned_tasks.id')
     render partial: '/time_regs/select', locals: {tasks: @tasks}
   end
 
   private
+
+  # permits only valid attributes
   def time_reg_params
     params.require(:time_reg).permit(:notes, :minutes, :assigned_task_id, :date_worked, :project_id)
   end
 
+=begin
   def skip_ensure_membership_for_toggle_active
     skip_before_action :ensure_membership
   end
+=end
+
 =begin
   def ensure_membership
     if params[:id]
@@ -157,6 +172,4 @@ class TimeRegsController < ApplicationController
     end
   end
 =end
-
-
 end
