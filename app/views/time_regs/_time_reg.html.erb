@@ -1,12 +1,12 @@
-<div class="bg-yellow-100 p-2 divide-y-2">
-  <div class="flex ">
+<div class="bg-yellow-100 p-2 divide-y-2"  <%= 'data-controller=dynamic-minutes' if time_reg.active %> >
+  <div class="flex"> 
     <div class="grow">
       <b class="mr-2"> Example Project</b>(Example client)
       <br>
       <%= time_reg.notes %>
     </div>
     <div class="flex items-center justify-between">
-      <span class="font-semibold"><%= convert_time(time_reg)%></span>
+    <span class="font-semibold" data-dynamic-minutes-target="output" ><%= convert_time(time_reg)%></span>
       <%= link_to "Edit entry", edit_time_reg_path(time_reg), class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 whitespace-nowrap' %>
       <% if time_reg.active %>
         <%= button_to "Stop", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300" %>
@@ -14,6 +14,8 @@
         <%= button_to "Start", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm r ounded bg-green-200 p-1 hover:bg-green-300" %>
       <% end %>   
     </div> 
-  </div>  
+  </div> 
+  <span data-minutes="<%= time_reg.minutes %>" data-dynamic-minutes-target="minutes" class="hidden"></span>
+  <span data-updated="<%= time_reg.updated %>" data-dynamic-minutes-target="updated" class="hidden"></span> 
   <!-- Add more cells for other TimeEntry attributes -->
 </div>
