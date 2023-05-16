@@ -90,48 +90,13 @@
 
 
     <div class="border-y-2 divide-y-2">
-      <table>
-        <tbody>
-          <% @time_regs.each do |time_reg| %>
-            <tr>
-              <div class="bg-yellow-100 p-2 divide-y-2">
-                <div class="flex ">
-                  <div class="grow">
-                    <b class="mr-2"> Example Project</b>(Example client)
-                    <br>
-                    <%= time_reg.notes %>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <span class="font-semibold"><%= convert_time(time_reg)%></span>
-                    <%= link_to "Edit entry", edit_time_reg_path(time_reg), class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 whitespace-nowrap' %>
-                    <% if time_reg.active %>
-                      <%= button_to "Stop", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300" %>
-                    <% else %>
-                      <%= button_to "Start", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm r ounded bg-green-200 p-1 hover:bg-green-300" %>
-                    <% end %>   
-                  </div> 
-                </div>  
-                <!-- Add more cells for other TimeEntry attributes -->
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-              </div>
-              <div class='text-end mt-6 mr-24'>
-                Total: <%= format_duration(@total_minutes_day) %>
-              </div>
+      <%= render @time_regs %>
+      </div>
+      <div class='text-end mt-6 mr-24'>
+        Total: <%= format_duration(@total_minutes_day) %>
+      </div>
     </div>
   </div>
-
-
-
-
-
-
-
-
-
-
 
   <%= link_to "clients", clients_path, class: "border-2" %>
 

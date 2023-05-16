@@ -19,6 +19,9 @@ application.register("modal", ModalController)
 import ProjectReportsController from "./project_reports_controller"
 application.register("project-reports", ProjectReportsController)
 
+import RefreshMinutesController from "./refresh_minutes_controller"
+application.register("refresh-minutes", RefreshMinutesController)
+
 import ReportEditController from "./report_edit_controller"
 application.register("report-edit", ReportEditController)
 
