@@ -25,7 +25,7 @@ class TimeRegsController < ApplicationController
     @time_reg = @project.time_regs.build(time_reg_params.except(:project_id))
    
     membership = @project.memberships.find_by(user_id: current_user.id, project_id: @project.id)
-    @time_reg.active = false
+    @time_reg.active = @time_reg.minutes.zero?
     @time_reg.updated = Time.now
     @time_reg.membership_id = membership.id
 
