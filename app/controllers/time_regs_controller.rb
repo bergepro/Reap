@@ -21,20 +21,20 @@ class TimeRegsController < ApplicationController
 
 
   def create
+    # gives the time_reg all the attributes
     @project = Project.find(time_reg_params[:project_id])
     @time_reg = @project.time_regs.build(time_reg_params.except(:project_id))
-   
     membership = @project.memberships.find_by(user_id: current_user.id, project_id: @project.id)
-
-    @time_reg.active = @time_reg.minutes == 0 ? true : false
+    @time_reg.active = @time_reg.minutes == 0 ? true : false # start as active?
     @time_reg.updated = Time.now
     @time_reg.membership_id = membership.id
 
-    @projects = current_user.projects
+    # tries to save the time_reg
     if @time_reg.save
       flash[:notice] = 'Time entry has been created'
       redirect_to time_regs_path
     else
+      @projects = current_user.projects
       flash[:alert] = 'Cannot create time entry'
       render :new, status: :unprocessable_entity 
     end
@@ -50,15 +50,18 @@ class TimeRegsController < ApplicationController
   end 
 
   def update
-    puts "-----------"
-    puts params.inspect
-
     @time_reg = TimeReg.find(params[:id])
 
+    membership = Membership.find_by(user_id: current_user.id, project_id: time_reg_params[:project_id])
+    @time_reg.membership_id = membership.id
     if @time_reg.update(time_reg_params.except(:project_id))
       redirect_to time_regs_path
       flash[:notice] = "Time entry has been updated"
     else
+      @projects = current_user.projects
+      @assigned_tasks = Task.joins(:assigned_tasks)
+        .where(assigned_tasks: { project_id: @time_reg.project.id })
+        .pluck(:name, 'assigned_tasks.id')   
       flash[:alert] = "cannot update time entry" 
       render :edit, status: :unprocessable_entity
     end
