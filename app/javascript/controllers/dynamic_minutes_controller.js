@@ -6,38 +6,47 @@ export default class extends Controller {
 
   
   connect() {
-    const divTarget = this.outputTarget; 
+    // gets every minutes and updated value from time_reg. get output target
+    const outputTarget = this.outputTarget; 
     const timeRegminutes = this.minutesTarget.dataset.minutes;
-    const targetDateTime = new Date(this.updatedTarget.dataset.updated);
+    const timeRegDate = this.updatedTarget.dataset.updated;
 
-    if (divTarget) {
-      this.updateMinutes(divTarget, targetDateTime, timeRegminutes);
-      this.intervalId = setInterval(() => this.updateMinutes(divTarget, targetDateTime, timeRegminutes), 2000); // 2 second margin
-    } else {
+    // checks if it found the output target
+    if (outputTarget) {
+      this.updateMinutes(outputTarget, timeRegDate, timeRegminutes); // updates on time
+
+      // updates the minutes every minutes
+      this.intervalId = setInterval(() => this.updateMinutes(outputTarget, timeRegDate, timeRegminutes), 62000); // 2 second margin
+    } 
+    else 
       console.error('missing target');
-    }
   }
 
-  updateMinutes(divTarget, targetDateTime, timeRegminutes){
-    const currentTime = new Date();
-    divTarget.innerHTML = this.convertTime(targetDateTime, currentTime, timeRegminutes)
+  // function for updating the minutes
+  updateMinutes(outputTarget, timeRegDate, timeRegminutes){
+    outputTarget.innerHTML = this.convertTime(timeRegDate, currentTime, timeRegminutes) // changes the targets html
   }
 
+  // stops the interval
   disconnect() {
-    const divTarget = this.outputTarget;
-
-    if (divTarget) 
+    const outputTarget = this.outputTarget;
+    if (outputTarget) 
       clearInterval(this.intervalId);
   }
 
-  convertTime(targetDateTime, currentTime, timeRegminutes){
-    const timeDifference = currentTime - targetDateTime;
+  convertTime(timeRegDate, currentTime, timeRegminutes){
+    // gets the dates
+    const currentTime = new Date();
+    const lastUpdatedTime = new Date(timeRegDate)
+
+    // converts to total minutes worked
+    const timeDifference = currentTime - lastUpdatedTime;
     const minutesDifference = Math.floor((timeDifference / 1000 / 60));
     const minutesTotal = minutesDifference+Number(timeRegminutes);
 
+    // converts minutes to "0:00" format
     const hours = Math.floor(minutesTotal/60);
     const minutes = Math.floor(minutesTotal%60);
-
     return `${hours}:${minutes}`;
   }
 }
