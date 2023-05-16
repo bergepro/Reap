@@ -41,7 +41,6 @@ class ClientsController < ApplicationController
             redirect_to @client
             flash[:notice] = "client has been updated"
         else
-            flash[:alert] = "cannot update client" 
             render :new, status: :unprocessable_entity
         end
         # redirect_to request.referrer

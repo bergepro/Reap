@@ -35,10 +35,11 @@ class TasksController < ApplicationController
 
     if @task.update(task_params)
       flash[:notice] = 'task has been updated'
+      redirect_to tasks_path
     else
-      flash[:alert] = 'cannot update task'
+      
+      render :edit, status: :unprocessable_entity
     end
-    redirect_to tasks_path
   end
 
   def destroy

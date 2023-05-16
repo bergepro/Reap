@@ -6,8 +6,8 @@
         <div class="field my-4 w-80">
           <%= form.label :project_id %>       
           <%= form.collection_select :project_id, @projects , :id, :name, { include_blank: "select a project:"}, {class: 'w-full rounded-md p-1', id: 'timeproject-select'}  %>
-          <% @time_reg.errors.full_messages_for(:project_id).each do |message| %>
-            <div class="text-sm italic text-gray-600"><%= message %></div>
+          <% @time_reg.errors.full_messages_for(:membership).any? do |message| %>
+            <div class="text-sm italic text-gray-600">Please select a project </div>
           <% end %>
         </div>
 
