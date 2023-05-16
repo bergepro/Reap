@@ -1,6 +1,16 @@
 <div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all p-10" data-action="click->modal#preventClose">
   <h4 class="font-semibold text-center">Projects import</h4>
-  <div class="">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>             
+  <div class="mt-2">
+    <p>Choose a CSV file with these columns in the same order: </p>
+    <br>
+    <p class="font-semibold">date;client;project;task;notes;minutes;first name;last name;email</p>         
+    <br>
+    <p>Please include the header rows in your CSV file</p>   
+    <div >
+      <%= form_with url: projects_import_path do |form| %>
+        <%= submit_tag "Import CSV", class: 'rounded bg-blue-200 hover:bg-blue-300 p-2 my-8 mr-2'%>
+        <%= form.file_field :file %>
+      <% end %>    
+    </div>
   </div>
 </div>  

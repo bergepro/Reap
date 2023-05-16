@@ -41,11 +41,5 @@
       <%= link_to "New project", new_project_path, class: ' bg-blue-200 rounded p-2 hover:bg-blue-300'%>
       <%= link_to "New client", new_client_path, class: 'bg-blue-200 rounded p-2 hover:bg-blue-300' %>
     </div>
-    <div  class="mb-20">
-      <%= form_with url: projects_import_path do |form| %>
-        <%= submit_tag "Import CSV", class: 'rounded bg-blue-200 hover:bg-blue-300 p-2 my-8 mr-2'%>
-        <%= form.file_field :file %>
-      <% end %>    
-    </div>
   </div>
 </div>
