@@ -108,33 +108,23 @@ class TimeRegsController < ApplicationController
   end
 
   def export
-    @project = Project.find(params[:project_id])
-    @client = @project.client
-    @time_regs = @project.time_regs
+    project = Project.find(params[:project_id])
+    client = project.client
+    time_regs = project.time_regs.includes(:user, :task)
 
     csv_data = CSV.generate(headers: true) do |csv|
       # Add CSV header row
       # csv << ['id', 'user_email', 'task_name', 'minutes','created_at', 'updated_at','assigned_task_id', 'user_id', 'membership_id']
       csv << ['date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email']
       # Add CSV data rows for each time_reg
-      @time_regs.each do |time_reg|
-        membership = Membership.find(time_reg.membership_id)
+      time_regs.each do |time_reg|
 
-        date = time_reg.date_worked
-        client = @client.name
-        project = @project.name
-        task = time_reg.assigned_task.task.name
-        notes = time_reg.notes
-        minutes = time_reg.minutes
-        first_name = time_reg.user.first_name
-        last_name = time_reg.user.last_name
-        email = time_reg.user.email
-
-        csv << [date, client, project, task, notes, minutes, first_name, last_name, email]
+        csv << [time_reg.date_worked, project.client.name, project.name, time_reg.task.name, time_reg.notes, 
+                    time_reg.minutes, time_reg.user.first_name, time_reg.user.first_name, time_reg.user.email]
       end
     end
 
-    send_data csv_data, filename: "#{Time.now.to_i}_time_regs_for_#{@project.name}.csv"
+    send_data csv_data, filename: "#{Time.now.to_i}_time_regs_for_#{project.name}.csv"
   end
 
   def update_tasks_select
