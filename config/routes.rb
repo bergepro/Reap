@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get 'update_projects_selection'
       get 'update_members_checkboxes'
       get 'update_tasks_checkboxes'
-      get 'export'
+      post 'export'
     end
   end
 

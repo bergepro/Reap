@@ -10,7 +10,7 @@ class TimeRegsController < ApplicationController
 
   def index
     @chosen_date = params[:date] ? Date.parse(params[:date]) : Date.today
-    @time_regs = current_user.time_regs.where('date(date_worked) = ?', @chosen_date).includes(:project, :assigned_task)
+    @time_regs = current_user.time_regs.where('date(date_worked) = ?', @chosen_date).includes(:project, :assigned_task).order(created_at: :desc)
     @total_minutes_day = @time_regs.sum(:minutes)
     @minutes_by_day = minutes_by_day_of_week(@chosen_date, current_user)
     @projects = current_user.projects
