@@ -5,9 +5,11 @@ export default class extends Controller {
   static targets = ['toggleDiv'];
 
   connect() {
-    
   }
   deleteProject(event) {
+    this.toggleDivTarget.classList.toggle('hidden');
+  }
+  deleteClient(event) {
     this.toggleDivTarget.classList.toggle('hidden');
   }
 }

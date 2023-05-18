@@ -4,13 +4,6 @@
       <p class='text-3xl mr-4'> <%= @client.name %></p> 
       <div class="flex flex-row justify-end space-x-2 pb-4 ">
         <%= link_to "Edit client", edit_client_path(@client), class: 'rounded bg-blue-300 p-2 hover:bg-blue-400' %>
-        <%= 
-          link_to "Delete client", client_path(@client),  class: ' rounded bg-red-400 p-2 hover:bg-red-500',
-            data:{
-              turbo_method: :delete,
-              turbo_confirm: "Are you sure?"
-            }
-          %>
       </div>
     </div>
 
