@@ -81,6 +81,7 @@ class ProjectsController < ApplicationController
 
   def import
     imported_time_regs = []
+    valid_entries = 0
 
     if params[:file].blank?
       flash[:alert] = "Please select a file to import."
@@ -88,60 +89,58 @@ class ProjectsController < ApplicationController
     end
 
     file = params[:file].read
-    begin
-      CSV.parse(file, headers: true) do |row|
-        time_reg_params = row.to_hash.slice('date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email')
+    CSV.parse(file, headers: true) do |row|
+      time_reg_params = row.to_hash.slice('date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email')
+      time_reg_params['date_worked'] = row['date']
+      time_reg_params.delete('date')
 
-        time_reg_params['date_worked'] = row['date']
-        time_reg_params.delete('date')
+      # Client-håndtering
+      client = row['client']
+      check_client client
+      time_reg_params.delete('client')
 
-        # Client-håndtering
-        client = row['client']
-        check_client client
-        time_reg_params.delete('client')
+      # Project-håndtering
+      project = row['project']
+      check_project project
+      time_reg_params.delete('project')
 
-        # Project-håndtering
-        project = row['project']
-        check_project project
-        time_reg_params.delete('project')
+      # Task-håndtering
+      task = row['task']
+      check_task task 
+      time_reg_params.delete('task')
 
-        # Task-håndtering
-        task = row['task']
-        check_task task 
-        time_reg_params.delete('task')
+      # AssignedTask-håndtering
+      check_assigned_task task_id: @task.id
+      time_reg_params['assigned_task_id'] = @assigned_task.id
+       
+      time_reg_params.delete('first name')
+      time_reg_params.delete('last name')
 
-        # AssignedTask-håndtering
-        check_assigned_task task_id: @task.id
-        time_reg_params['assigned_task_id'] = @assigned_task.id
+      email = row['email']
+      @user = User.find_by(email: email)
+      @membership = Membership.find_by(user_id: @user.id, project_id: @project.id)
+      time_reg_params.delete('email')
+      time_reg_params['membership_id'] = @membership.id
         
-        time_reg_params.delete('first name')
-        time_reg_params.delete('last name')
-
-        email = row['email']
-        @user = User.find_by(email: email)
-        @membership = Membership.find_by(user_id: @user.id, project_id: @project.id)
-        time_reg_params.delete('email')
-        time_reg_params['membership_id'] = @membership.id
-
-        imported_time_reg = @project.time_regs.new(time_reg_params)
-        if imported_time_reg.valid?
-          imported_time_regs << imported_time_reg
-        else
-          Rails.logger.debug "Invalid time entry: #{imported_time_reg.errors.full_messages}"
-        end
-      end
-
-      if imported_time_regs.present?
-        TimeReg.import(imported_time_regs)
-        flash[:notice] = "Time entries imported successfully."
+      imported_time_reg = @project.time_regs.new(time_reg_params)
+      if imported_time_reg.valid?
+        imported_time_regs << imported_time_reg
+        valid_entries = valid_entries + 1
       else
-        flash[:alert] = "No valid time entries found in the file."
+        Rails.logger.debug "Invalid time entry: #{imported_time_reg.errors.full_messages}"
       end
-      redirect_to projects_path
-      rescue StandardError => e
-        flash[:alert] = "There was an error importing the file: #{e.message}"
-        redirect_to projects_path
     end
+
+    if imported_time_regs.present?
+      TimeReg.import(imported_time_regs)
+      flash[:notice] = "#{valid_entries} time entries imported successfully."
+    else
+      flash[:alert] = "No valid time entries found in the file."
+    end
+    redirect_to projects_path
+    rescue StandardError => e
+      flash[:alert] = "Invalid e-mail. Please double check the e-mail column for every row."
+      redirect_to projects_path
   end
 
   private
