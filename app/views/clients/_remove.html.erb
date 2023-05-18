@@ -8,11 +8,15 @@
     </div>
   </div>
   <br>
-  <%= form_tag(client_path(client), method: :delete) do %>
-    <span class="flex justify-center pb-2">Please enter "<span class="font-semibold">DELETE</span>" to confirm</span>
-    <div class="flex justify-center">
-      <%= text_field_tag :confirmation, nil, class: "form-control" %>
-      <%= submit_tag "Delete client", class: "ml-2 bg-red-400 p-2 hover:bg-red-500 rounded" %>
-    </div>
+  <% if client.projects.count < 1%>
+    <%= form_tag(client_path(client), method: :delete) do %>
+        <span class="flex justify-center pb-2">Please enter "<span class="font-semibold">DELETE</span>" to confirm</span>
+        <div class="flex justify-center">
+        <%= text_field_tag :confirmation, nil, class: "form-control" %>
+        <%= submit_tag "Delete client", class: "ml-2 bg-red-400 p-2 hover:bg-red-500 rounded" %>
+        </div>
+    <% end %>
+  <% else %>
+    <p class="text-center">Cannot delete client with active projects</p>
   <% end %>
 </div>  
