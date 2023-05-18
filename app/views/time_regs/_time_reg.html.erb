@@ -1,7 +1,7 @@
 <div class="bg-yellow-100 p-2 divide-y-2"  <%= 'data-controller=refresh-minutes' if time_reg.active %> > 
   <div class="flex"> 
     <div class="grow">
-      <b class="mr-2"> Example Project</b>(Example client)
+      <b class="mr-2"> <%= time_reg.project.name %></b>(<%= time_reg.project.client.name %>)
       <br>
       <%= time_reg.notes %>
     </div>
