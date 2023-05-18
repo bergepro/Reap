@@ -1,7 +1,17 @@
 <div class="flex flex-col items-center pt-4">
   <div class="max-w-md md:min-w-custom35">
-    <div class="p-1 my-2 pt-2">
-      <h1 class="font-bold text-3xl italic pb-4 ml-2">Your projects </h1>
+    <div class="p-1 my-2 pt-2" data-controller="collapse-delete">
+    <!-- NOT A DELETE BUTTON BUT I USES THE SAME STIMULUS CONTROLLER AS THE DELETE BUTTONS-->
+      <div class='flex justify-between'>
+        <h1 class="font-medium italic text-2xl ml-4">Your projects</h1><br>
+        <button data-action="click->collapse-delete#deleteDiv" 
+          class="rounded bg-blue-200 p-2 hover:bg-blue-300" 
+          data-task-id="delete-button">Import
+        </button>
+      </div>
+      <div class="hidden" data-collapse-delete-target="toggleDiv">
+        <%= render "projects/import" %>
+      </div>
       <% @clients.each do |client| %>
         <div class="mb-6">
           <% @projects = current_user.projects.where(projects: {client_id: client.id}) %>
@@ -27,13 +37,6 @@
     <div class="flex justify-evenly">
       <%= link_to "New Project", new_project_path, class: ' bg-blue-200 rounded p-2 hover:bg-blue-300'%>
       <%= link_to "New Client", new_client_path, class: ' bg-blue-200 rounded p-2 hover:bg-blue-300'%>
-
-    </div>
-    <div  class="mb-20">
-      <%= form_with url: projects_import_path do |form| %>
-        <%= submit_tag "Import CSV", class: 'rounded bg-blue-200 hover:bg-blue-300 p-2 my-8 mr-2'%>
-        <%= form.file_field :file %>
-      <% end %>    
     </div>
   </div>
 </div>

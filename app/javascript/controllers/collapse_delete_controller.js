@@ -6,10 +6,8 @@ export default class extends Controller {
 
   connect() {
   }
-  deleteProject(event) {
+  deleteDiv(event) {
     this.toggleDivTarget.classList.toggle('hidden');
   }
-  deleteClient(event) {
-    this.toggleDivTarget.classList.toggle('hidden');
-  }
+
 }
