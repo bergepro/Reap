@@ -42,6 +42,13 @@ class ProjectsController < ApplicationController
     @is_in_update = true
     @project = Project.find(params[:id])
     @clients = Client.all
+
+    @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
+    .joins(:task)
+    .where(project_id: @project.id)
+
+    @assigned_task = @project.assigned_tasks.new
+    @tasks = Task.all.where.not(id: @project.assigned_tasks.select(:task_id)).select(:id, :name)  
   end
 
   def update

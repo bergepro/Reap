@@ -51,7 +51,7 @@ export default class extends Controller {
     if (minutes > 9)
       return `${hours}:${minutes}`;
     else
-    return `${hours}:0${minutes}`;
+      return `${hours}:0${minutes}`;
   }
 
 }

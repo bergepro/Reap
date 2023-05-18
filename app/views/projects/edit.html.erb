@@ -15,7 +15,13 @@
 
     <div class="pt-10">
       <h1 class="font-medium border-b border-gray-300 text-lg italic pb-2">Project tasks</h1>
-        <%= render @project.assigned_tasks %>
+        <%= render @assigned_tasks %>
+    </div>
+
+    <div>
+      <h1 class="font-medium text-lg italic mt-8">Add task</h1>
+      <%= render 'assigned_tasks/new' %>
+      <p class="text-sm">Need more tasks to the project? Create one <%= link_to 'here', new_task_path, class: 'text-blue-600'%></p>
     </div>
 
     <div class="pt-10">
