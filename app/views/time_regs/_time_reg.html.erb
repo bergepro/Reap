@@ -1,16 +1,22 @@
-<div class="flex items-center justify-between mr-2 pt-2 pb-2 border-b border-gray-300">
-  <div>  
-    <p class="mr-20"><%= time_reg.assigned_task.task.name %></p>
-    <p class="text-sm italic text-gray-700 mr-10"><%= time_reg.notes %> </p>
-    <p class="text-xs italic text-gray-600"><%= time_reg.date_worked %> </p>
-  </div>
-  <div class="flex items-center justify-between">
-    <span class="font-semibold"><%= convert_time(time_reg)%></span>
-    <%= link_to "Edit entry", edit_time_reg_path(time_reg), class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 whitespace-nowrap' %>
-    <% if time_reg.active %>
-      <%= button_to "Stop", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300" %>
-    <% else %>
-      <%= button_to "Start", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-green-200 p-1 hover:bg-green-300" %>
-    <% end %>
-  </div>
+<div class="bg-yellow-100 p-2 divide-y-2"  <%= 'data-controller=refresh-minutes' if time_reg.active %> > 
+  <div class="flex"> 
+    <div class="grow">
+      <b class="mr-2"> <%= time_reg.project.name %></b>(<%= time_reg.project.client.name %>)
+      <br>
+      <%= time_reg.notes %>
+    </div>
+    <div class="flex items-center justify-between">
+    <span class="font-semibold" data-refresh-minutes-target="output" ><%= convert_time_int(time_reg.minutes)%></span>
+      <%= link_to "Edit entry", edit_time_reg_path(time_reg), class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 whitespace-nowrap' %>
+      <% if time_reg.active %>
+        <%= button_to "Stop", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm rounded bg-red-200 p-1 hover:bg-red-300" %>
+      <% else %>
+        <%= button_to "Start", time_reg_toggle_active_path(time_reg_id: time_reg.id), method: :patch, class: "text-sm r ounded bg-green-200 p-1 hover:bg-green-300" %>
+      <% end %>   
+    </div> 
+  </div> 
+  <!-- values for the dynamic minutes updating -->
+  <span data-minutes="<%= time_reg.minutes %>" data-refresh-minutes-target="minutes" class="hidden"></span>
+  <span data-updated="<%= time_reg.updated.iso8601 %>" data-refresh-minutes-target="updated" class="hidden"></span> 
+  <!-- Add more cells for other TimeEntry attributes -->
 </div>

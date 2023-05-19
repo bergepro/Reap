@@ -1,62 +1,55 @@
 class ClientsController < ApplicationController
-    before_action :authenticate_user!
-    # henter alle klienter 
-    def index
-        @clients = Client.all
-    end
+  before_action :authenticate_user!
 
-    # viser et enkelt klient til bruker
-    def show
-        @client = Client.find(params[:id])
-        @projects = current_user.projects.where(projects: {client_id: @client.id})
-    end
+  def index
+    @clients = Client.all
+  end
 
-    # initialiserer nytt klient
-    def new 
-        @client = Client.new
-    end
+  def show
+    @client = Client.find(params[:id])
+    @projects = current_user.projects.where(projects: {client_id: @client.id})
+  end
 
-    # lager nytt klient i databasen og legger oppretter som member
-    def create
-        @client = Client.new(client_params)
 
-        if @client.save
-            redirect_to '/clients#index'
-        else
-            render :new, status: :unprocessable_entity
-        end
-    end
+  def new 
+    @client = Client.new
+  end
 
-     # initialiserer  klienten
-    def edit        
-        @client = Client.find(params[:id])
-    end
-    
-    # oppdaterer klient i databasen
-    def update
-        @client = Client.find(params[:id])
+  def create
+    @client = Client.new(client_params)
 
-        if @client.update(client_params)
-            redirect_to @client
-            flash[:notice] = "client has been updated"
-        else
-            flash[:alert] = "cannot update client" 
-            render :new, status: :unprocessable_entity
-        end
-        # redirect_to request.referrer
+    if @client.save
+      redirect_to @client
+    else
+      render :new, status: :unprocessable_entity
     end
+  end
 
-    # sletter klient fra databasen
-    def destroy
-        @client = Client.find(params[:id])
-        @client.destroy
-    
-        redirect_to '/clients#index', status: :see_other
-    end
+  def edit        
+    @client = Client.find(params[:id])
+  end
+  
+  def update
+    @client = Client.find(params[:id])
 
-    private
-    # tillater kun data fra formet med .permit til klientopprettelse
-    def client_params
-      params.require(:client).permit(:name, :description)
+    if @client.update(client_params)
+      redirect_to @client
+      flash[:notice] = "client has been updated"
+    else
+      flash[:alert] = "cannot update client" 
+      render :new, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @client = Client.find(params[:id])
+    @client.destroy
+  
+    redirect_to '/clients#index', status: :see_other
+  end
+
+  private
+  def client_params
+    params.require(:client).permit(:name, :description)
+  end
 end

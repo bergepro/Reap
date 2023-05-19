@@ -102,7 +102,7 @@ export default class extends Controller {
     projectSelection.addEventListener('change', event=>{
       const projectId = projectSelection.value;
       this.updateCheckboxes(membersCheckboxes, projectId, members_url);
-      this.updateCheckboxes(tasksCheckboxes, projectId, tasks_url)
+      this.updateCheckboxes(tasksCheckboxes, projectId, tasks_url);
     });
   }
 

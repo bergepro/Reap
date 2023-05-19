@@ -7,7 +7,7 @@
       <%= form_with(model: @time_reg) do |form| %>
         <div class="field my-4 w-80">
           <%= form.label :project_id %>       
-          <%= form.collection_select :project_id, @projects , :id, :name, { selected: @time_reg.project.id }, { class: 'w-full', id: 'timeproject-select' } %>
+          <%= form.collection_select :project_id, @projects , :id, :name, { selected: @time_reg.project.id }, { class: 'w-full rounded-md p-1', id: 'timeproject-select' } %>
           <% @time_reg.errors.full_messages_for(:project_id).each do |message| %>
             <div class="text-sm italic text-gray-600"><%= message %></div>
           <% end %>
@@ -15,7 +15,7 @@
 
         <div class="field my-4 w-80">
           <%= form.label :assigned_task_id %>
-          <%= form.collection_select :assigned_task_id, @assigned_tasks, :last, :first, {}, {class: 'w-full', id: 'timetask-select'}  %>
+          <%= form.collection_select :assigned_task_id, @assigned_tasks, :last, :first, {}, {class: 'w-full rounded-md p-1', id: 'timetask-select'}  %>
           <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
             <div class="text-sm italic text-gray-600"><%= message %></div>
           <% end %>
@@ -26,7 +26,7 @@
             <div class="text-sm italic text-gray-600"><%= message %></div>
           <% end %>
           <br>
-          <%= form.text_area :notes, class: 'w-full' %>
+          <%= form.text_area :notes, class: 'w-full rounded-md p-1' %>
         </div>
 
         <div class="field my-45">
@@ -35,19 +35,20 @@
             <div class="text-sm	italic text-gray-600"><%= message %></div>
           <% end %>
           <br>  
-          <%= form.number_field :minutes, class: 'w-full'  %>
+          <%= form.number_field :minutes, class: 'w-full rounded-md p-1'  %>
         </div>
 
         <div class="field my-4">
           <%= form.label :date_worked %>
           <br>
             <div class="flex justify-between">
-              <%= form.date_select :date_worked, {end_year: Date.today.year}, class: "w-24" %>
+              <%= form.date_select :date_worked, {end_year: Date.today.year}, class: "w-24 rounded-md p-1" %>
             </div>
         </div>
 
         <div class="actions text-center">
           <%= form.submit class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow' %>
+          <%= link_to 'Cancel', :back, class: "rounded bg-gray-200 p-2 m-2 hover:bg-gray-300 shadow mt-6" %>
         </div>   
       <% end %> 
     </div>
@@ -64,13 +65,6 @@
           }
       %>        
     </div>
-
-    <div class="mt-4">
-      <%= 
-        link_to "Back to times", time_regs_path, 
-          class: "text-gray-600 italic text-sm text-left" 
-      %>        
-    </div> 
   </div>
 </div>
 

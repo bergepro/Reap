@@ -16,7 +16,7 @@
         <!-- form for changing the group_by -->
         <%= form_with url: user_report_update_group_path(@report), method: :patch do |form| %>
           <%= form.label :group_by, 'Group by:', class: 'mr-2' %>
-          <%= form.select :group_by, options_for_select(@groupes, @report.group_by),{}, class: 'pr-8 mr-2' %>
+          <%= form.select :group_by, options_for_select(@groupes, @report.group_by),{}, class: 'pr-8 mr-2 rounded p-1' %>
           <%= form.submit 'Update', class: 'text-sm rounded bg-blue-200 p-1 hover:bg-blue-300 h-full'%>
         <% end %>      
       </div>

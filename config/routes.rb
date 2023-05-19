@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'users/registrations/registrations' }
 
-  get 'home/index'
-  root 'home#index'
+  root 'time_regs#index'
 
 
   resources :project_reports do
@@ -11,7 +10,7 @@ Rails.application.routes.draw do
       get 'update_projects_selection'
       get 'update_members_checkboxes'
       get 'update_tasks_checkboxes'
-      get 'export'
+      post 'export'
     end
   end
 

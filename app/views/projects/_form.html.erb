@@ -1,7 +1,7 @@
 <%= form_with model: @project do |form| %>
   <div>
     <%= form.label :client %> <br>
-    <%= form.collection_select :client_id, @clients, :id, :name, { include_blank: false }, { class: 'w-full' }  %>
+    <%= form.collection_select :client_id, @clients, :id, :name, { include_blank: false }, { class: 'w-full rounded-md p-1' }  %>
     <% @project.errors.full_messages_for(:client).each do |message|%>
       <div class="text-sm italic text-gray-600">
         <%= message %>
@@ -11,7 +11,7 @@
 
   <div>
     <%= form.label :name %> <br>
-    <%= form.text_area :name, class: 'w-full' %>
+    <%= form.text_area :name, class: 'w-full rounded-md p-1' %>
     <% @project.errors.full_messages_for(:name).each do |message|%>
       <div class="text-sm italic text-gray-600">
         <%= message %>
@@ -21,7 +21,7 @@
 
   <div>
     <%= form.label :description %> <br>
-    <%= form.text_area :description, class: 'w-full' %>
+    <%= form.text_area :description, class: 'w-full rounded-md p-1' %>
     <% @project.errors.full_messages_for(:description).each do |message|%>
     <div class="text-sm italic text-gray-600">
       <%= message %>
@@ -42,5 +42,6 @@
 
   <div class="actions text-center p-1 m-1 clear-both">
       <%= form.submit class: "rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow" %>
+      <%= link_to 'Cancel', :back, class: "rounded bg-gray-200 p-2 m-2 hover:bg-gray-300 shadow mt-6" %>
   </div>
 <% end %>

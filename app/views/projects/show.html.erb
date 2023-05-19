@@ -4,7 +4,7 @@
     <div class='flex justify-between'>
       <p class='text-3xl mr-4'> <%= @project.name %></p> 
       <div class="flex flex-row justify-end space-x-2 pb-4 ">
-        <%= link_to "Edit client", edit_project_path(@project), class: 'rounded bg-blue-300 p-2 hover:bg-blue-400 mr-10' %>
+        <%= link_to "Edit project", edit_project_path(@project), class: 'rounded bg-blue-300 p-2 hover:bg-blue-400 mr-10' %>
       </div>
     </div>
 
@@ -51,18 +51,11 @@
     </div>
 
 
-    <div class="flex justify-between p-10">
-      <%= link_to "Assign task", new_project_assigned_task_path(@project), 
-        class: 'rounded bg-blue-200 p-2 ml-6 hover:bg-blue-300' 
-      %>
-      <%= link_to "Quick export to CSV", export_time_regs_path(project_id: @project.id, format: :csv), 
+    <div class="flex justify-center p-10">
+      <%= link_to "Export to CSV", export_time_regs_path(project_id: @project.id, format: :csv), 
         class: 'rounded bg-blue-200 p-2 mr-6 hover:bg-blue-300' 
       %>
     </div>
     <br>
-    <%= link_to "back to client", client_path(@project.client_id), class: "text-gray-600 italic text-sm" %>
 </div>
 
-
-
-<br><br><br><br><br><br>
