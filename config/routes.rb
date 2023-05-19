@@ -1,21 +1,27 @@
 Rails.application.routes.draw do
-  devise_for :users
-  get 'home/index'
-  root 'home#index'
+  devise_for :users, controllers: { registrations: 'users/registrations/registrations' }
+
+  root 'time_regs#index'
 
 
-
-  resources :reports, only: [:index, :new, :create] do
+  resources :project_reports do
+    patch :update_group
     collection do
-      get 'export_test'
+      get 'update_projects_selection'
+      get 'update_members_checkboxes'
+      get 'update_tasks_checkboxes'
+      post 'export'
     end
   end
-  get 'reports/update_groupes_select'
-  get '/reports/index'
-  get 'reports/update_task_checkboxes'
-  get 'reports/update_member_checkboxes'
-  get 'reports/render_custom_timeframe'
-  get 'reports/update_projects_select'
+
+  resources :user_reports do
+    patch :update_group
+    collection do
+      post 'export'
+      get 'update_projects_checkboxes'
+      get 'update_tasks_checkboxes'
+    end
+  end
 
   resources :clients
 
@@ -28,12 +34,10 @@ Rails.application.routes.draw do
       get 'export'
       post 'import'
       get 'update_tasks_select'
-      get 'update_minutes_view'
+      get 'new_modal', to: 'time_regs#new', as: :new_modal
     end
-
   end
   
-
   resources :projects do
     resources :memberships
     resources :assigned_tasks

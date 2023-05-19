@@ -1,10 +1,12 @@
-<div class="flex items-center justify-between mr-2 pt-2 pb-2 border-b border-gray-300">
-  <div class="mr-4">
-    <%= task.name %>   
+<div class="border-b text-gray-700 border-gray-300 pb-2 pt-2">
+  <div class="flex items-center justify-between">
+    <div class="mr-4">
+      <%= task.name %>   
+    </div>
+    <div>
+      <%= link_to "Edit", edit_task_path(task), 
+        class: "rounded bg-blue-200 p-1 pr-2 pl-2 hover:bg-blue-300 mr-4"
+      %>
+    </div>  
   </div>
-  <div class="m-1">
-    <%= link_to "Edit", edit_task_path(task), 
-      class: "rounded bg-blue-200 p-2 hover:bg-blue-300"
-    %>
-  </div>  
 </div>

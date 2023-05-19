@@ -14,9 +14,10 @@ class AssignedTasksController < ApplicationController
     
     if @assigned_task.save
       flash[:notice] = "Task successfully added to project"
-      redirect_to new_project_assigned_task_path(@project)
+      redirect_to edit_project_path(@project)
     else
-      render :new, status: :unprocessable_entity
+      flash[:alert] = "Task could not be added to the project"
+      redirect_to edit_project_path(@project)
     end
   end
 
@@ -37,7 +38,7 @@ class AssignedTasksController < ApplicationController
   private
 
   def assigned_task_params
-    params.require(:assigned_task).permit(:project_id, :task_id, :name)
+    params.require(:assigned_task).permit(:project_id, :task_id)
   end
 
   def ensure_membership

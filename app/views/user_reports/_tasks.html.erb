@@ -1,0 +1,12 @@
+<div class="" >
+  <div class="flex flex-wrap">
+    <% if tasks.present? %>
+      <%= collection_check_boxes :user_report, :task_ids , tasks, :id, :name do |checkbox|%>
+        <div class="border-2 mr-8 m-1 p-1 rounded" >
+          <%= checkbox.check_box checked: report.task_ids.include?(checkbox.value.to_s) %> <!--checks if box was checked earlier-->
+          <%= checkbox.label %>
+        </div>
+      <% end %>
+    <% end %>      
+  </div>
+</div>
