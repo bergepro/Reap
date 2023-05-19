@@ -34,9 +34,9 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
 
     if @task.update(task_params)
-      flash[:notice] = 'task has been updated'
+      flash[:notice] = 'Task has been updated'
     else
-      flash[:alert] = 'cannot update task'
+      flash[:alert] = 'Cannot update task'
     end
     redirect_to tasks_path
   end

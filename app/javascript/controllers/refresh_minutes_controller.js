@@ -37,8 +37,12 @@ export default class extends Controller {
 
   convertTime(timeRegDate, timeRegminutes){
     // gets the dates
+    const timeRegFormated = timeRegDate.replace(" ", "T")
+    const timeRegFormatedFinally = timeRegFormated.replace(" UTC", ".000Z")
+    // reformats the string. makes it valid
+
     const currentTime = new Date();
-    const lastUpdatedTime = new Date(timeRegDate);
+    const lastUpdatedTime = new Date(timeRegFormatedFinally);
 
     // converts to total minutes worked
     const timeDifference = currentTime - lastUpdatedTime;
