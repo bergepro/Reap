@@ -6,14 +6,17 @@ class MembershipsController < ApplicationController
         @project = Project.find(params[:id])
     end
 
+    # adds a member to the project
     def create
         @email = membership_params[:email]
         @project = Project.find(params[:project_id])
 
+        # checks if the user exists
         if User.exists?(email: @email)
             @user = User.find_by(email: @email)
             @membership = @project.memberships.build(user_id: @user.id)
 
+            # checks if the user is already a member
             if @project.memberships.exists?(user_id: @user.id)
                 flash[:alert] = "#{@email} is already a member of the project"
             elsif @membership.save
@@ -29,6 +32,7 @@ class MembershipsController < ApplicationController
         @project = Project.find(params[:project_id])
         @membership = @project.memberships.find(params[:id])
 
+        # tries to remove a user from the project
         if @project.memberships.count <= 1
             flash[:alert] = "cannot remove last member of the project"
         elsif @membership.time_regs.count >= 1
@@ -48,7 +52,7 @@ class MembershipsController < ApplicationController
     def ensure_membership
         project = Project.find(params[:project_id])
     
-        if !project.memberships.exists?(user_id: current_user)
+        unless project.memberships.exists?(user_id: current_user)
           flash[:alert] = "Access denied"
           redirect_to root_path
         end

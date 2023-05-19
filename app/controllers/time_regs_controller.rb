@@ -26,11 +26,13 @@ class TimeRegsController < ApplicationController
     @time_regs_week = current_user.time_regs.where('date(date_worked) BETWEEN ? AND ?', start_date, end_date)
     @total_minutes_week = @time_regs_week.sum(:minutes)
   end
+
 =begin  
   def index
     @time_regs = current_user.time_regs.order('time_regs.date_worked DESC', 'time_regs.assigned_task_id', 'time_regs.created_at DESC')
   end
 =end
+
   def new
     @projects = current_user.projects
     @time_reg = TimeReg.new

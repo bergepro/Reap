@@ -38,7 +38,7 @@ export default class extends Controller {
   convertTime(timeRegDate, timeRegminutes){
     // gets the dates
     const currentTime = new Date();
-    const lastUpdatedTime = new Date(timeRegDate)
+    const lastUpdatedTime = new Date(timeRegDate);
 
     // converts to total minutes worked
     const timeDifference = currentTime - lastUpdatedTime;

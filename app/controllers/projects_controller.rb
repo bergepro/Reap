@@ -20,16 +20,16 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    puts "------------"
-    puts project_params.inspect 
     @project = Project.new(project_params.except(:task_ids))
 
+    # adds each task to the project
     project_params[:task_ids].each do | task_id |
-      @project.tasks << Task.find(task_id) if task_id != ""
+      @project.tasks << Task.find(task_id) unless task_id.empty?
     end
-
+    # makes the creater of the project a member
     @project.users << current_user
 
+    # tries to save the project in the db
     if @project.save
       redirect_to @project
     else
@@ -44,11 +44,11 @@ class ProjectsController < ApplicationController
     @clients = Client.all
 
     @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
-    .joins(:task)
-    .where(project_id: @project.id)
+                                  .joins(:task)
+                                  .where(project_id: @project.id)
 
     @assigned_task = @project.assigned_tasks.new
-    @tasks = Task.all.where.not(id: @project.assigned_tasks.select(:task_id)).select(:id, :name)  
+    @tasks = Task.all.where.not(id: @project.assigned_tasks.select(:task_id)).select(:id, :name) # no tasks that is already a part om the project
   end
 
   def update
@@ -65,13 +65,15 @@ class ProjectsController < ApplicationController
   def destroy
     @clients = Client.all
     @project = Project.find(delete_params[:id])
+
+    # checks the confirmation field before trying to delete
     if delete_params[:confirmation] == "DELETE"
       if @project.destroy
         flash[:notice] = "Project deleted"
         redirect_to projects_path
       else
         flash[:notice] = "Could not delete project"
-        render :new, status: :unprocessable_entity
+        render :edit, status: :unprocessable_entity
       end
     else
       flash[:alert] = "Could not confirm"
@@ -161,7 +163,7 @@ class ProjectsController < ApplicationController
   def ensure_membership
     project = Project.find(params[:id])
 
-    if !project.memberships.exists?(user_id: current_user)
+    unless project.memberships.exists?(user_id: current_user)
       flash[:alert] = "Access denied"
       redirect_to root_path
     end
