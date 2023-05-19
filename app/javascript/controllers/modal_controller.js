@@ -12,13 +12,12 @@ export default class extends Controller {
   }
 
   toggle() {
-    console.log("HEI")
-    this.modalTarget.classList.toggle('hidden')
+    this.modalTarget.classList.toggle('hidden');
   }
 
   closeModal(event) {
     if (event.target === this.modalTarget) {
-      this.modalTarget.classList.add("hidden")
+      this.modalTarget.classList.add("hidden");
     }
   }
 

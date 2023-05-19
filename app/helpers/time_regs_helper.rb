@@ -1,17 +1,6 @@
 module TimeRegsHelper
-  def convert_time(time_reg)
-    time_minutes = time_reg.minutes
-    return nil if time_minutes.nil?
-    hours = time_minutes / 60
-    minutes = time_minutes % 60
 
-    if minutes > 9
-      return "#{hours}:#{minutes}"
-    else 
-      return "#{hours}:0#{minutes}"
-    end
-  end
-
+  #converts minutes to "0:00" format
   def convert_time_int(minutes)
     return nil if minutes.nil?
     hours = minutes / 60

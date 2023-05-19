@@ -6,11 +6,9 @@ class ReportsController < ApplicationController
     time_regs = JSON.parse(params[:time_regs_hash])
     csv_data = CSV.generate(headers: true) do |csv|
       # Add CSV header row
-      # csv << ['id', 'user_email', 'task_name', 'minutes','created_at', 'updated_at','assigned_task_id', 'user_id', 'membership_id']
       csv << ['date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email']
       # Add CSV data rows for each time_reg
       time_regs.each do |time_reg|
-
         csv << [time_reg['date'], time_reg['client'], time_reg['project'], time_reg['task'], 
                 time_reg['notes'], time_reg['minutes'], time_reg['user_first_name'], time_reg['user_last_name'], time_reg['user_email']]
       end

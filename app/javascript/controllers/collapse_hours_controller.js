@@ -6,6 +6,7 @@ export default class extends Controller {
   connect() {
     let collapsibles = document.getElementsByClassName('collapsible');
   
+    // toggle hidden on every task collapse div in a project
     for(let i = 0; i < collapsibles.length; i++){
       let button = collapsibles[i];
       let collapsibleId = "collapsible-" + button.dataset.taskId;

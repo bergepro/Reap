@@ -14,14 +14,12 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-
     if @task.save
       redirect_to tasks_path
     else
       render :new, status: :unprocessable_entity
     end
   end 
-
 
   def edit
     @is_in_update = true
@@ -49,7 +47,6 @@ class TasksController < ApplicationController
   end
 
   private
-
   def task_params
     params.require(:task).permit(:name)
   end

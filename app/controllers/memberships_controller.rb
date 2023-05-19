@@ -49,6 +49,7 @@ class MembershipsController < ApplicationController
         params.require(:membership).permit(:email)
     end
 
+    # ensures that only members have access
     def ensure_membership
         project = Project.find(params[:project_id])
     

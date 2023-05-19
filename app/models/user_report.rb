@@ -4,6 +4,10 @@ class UserReport < ApplicationRecord
   validate :validate_project_ids_presence
   validate :valdiate_task_ids_presence
 
+
+  # custom validations
+
+  
   def custom_timeframe?
     timeframe == 'custom'
   end

@@ -155,7 +155,6 @@ class ProjectsController < ApplicationController
   end
 
   private
-
   def project_params
     if action_name == 'create'
       params.require(:project).permit(:client_id, :name, :description, task_ids: [])
@@ -168,6 +167,7 @@ class ProjectsController < ApplicationController
     params.permit(:confirmation, :id)
   end
 
+  # ensures that only members have access
   def ensure_membership
     project = Project.find(params[:id])
 
