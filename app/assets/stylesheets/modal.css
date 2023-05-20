@@ -17,4 +17,14 @@
   border-radius: 8px;
   max-width: 90%;
   overflow: auto;
+  box-sizing: border-box; /* to include padding and border in element's total width and height */
 }
+
+@media (max-width: 800px) {
+  .modal-content {
+    width: 100vh;
+    height: 100vh;
+    position: absolute;
+  }
+}
+
