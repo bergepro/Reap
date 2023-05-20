@@ -41,7 +41,7 @@ class TimeRegsController < ApplicationController
       redirect_to time_regs_path
     else
       flash[:alert] = 'Cannot create time entry'
-      render :new, status: :unprocessable_entity 
+      render :index, status: :unprocessable_entity 
     end
   end
 
