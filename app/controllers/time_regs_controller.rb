@@ -41,9 +41,9 @@ class TimeRegsController < ApplicationController
     @time_reg = @project.time_regs.build(time_reg_params.except(:project_id))
    
     membership = @project.memberships.find_by(user_id: current_user.id, project_id: @project.id)
-    @time_reg.active = @time_reg.minutes.zero? # starts timer if minutes == 0. 
+    @time_reg.active = @time_reg.minutes == 0 ? true : false # starts timer if minutes == 0. 
     @time_reg.updated = Time.now
-    @time_reg.membership_id = membership.id
+    @time_reg.membership_id = membership.present? ? membership.id : nil
 
     @projects = current_user.projects
     if @time_reg.save
@@ -51,7 +51,7 @@ class TimeRegsController < ApplicationController
       redirect_to time_regs_path
     else
       flash[:alert] = 'Cannot create time entry'
-      render :new, status: :unprocessable_entity 
+      redirect_to time_regs_path
     end
   end
 
@@ -87,7 +87,6 @@ class TimeRegsController < ApplicationController
       @assigned_tasks = Task.joins(:assigned_tasks)
         .where(assigned_tasks: { project_id: @time_reg.project.id })
         .pluck(:name, 'assigned_tasks.id')
-
       flash[:alert] = "cannot delete time entry"
       render :edit, status: :unprocessable_entity
     end
