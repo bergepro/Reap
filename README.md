@@ -1,5 +1,5 @@
 
-# Harvest time tracking
+# Reap time tracking
 Time tracking application written in Ruby on Rails
 ## Getting Started
 

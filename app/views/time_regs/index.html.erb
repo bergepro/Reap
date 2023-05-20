@@ -2,14 +2,13 @@
 
 <div class="flex flex-row self-center m-auto w-full 2xl:w-3/4 ">
 
-  <div class=" justify-items-center max-[800px]:hidden mt-[5vh]">
-    <div class="content-center self-center justify-items-center ">
+  <div class=" justify-items-center  max-[800px]:hidden mt-[5vh]">
+    <div class="content-center self-center justify-items-center mx-8">
       <div class="flex flex-col self-center ">
         <div data-controller="modal" class="text-xs mt-2 m-auto self-center">
           <button data-action="click->modal#toggle">
             <div data-modal-target="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all" data-action="click->modal#preventClose">
-
                 <%= render "time_regs/new", time_reg: @time_reg, projects: @projects %>
               </div>
             </div>
@@ -30,6 +29,7 @@
     <div class="flex w-full justify-between">
       <div class=" flex space-x-4">
         <div class=" p-2 rounded-lg  bg-seaGreen text-white ">
+
           <%= link_to root_path(date: @chosen_date - 1.day) do %>
            
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
@@ -47,7 +47,7 @@
           <% end %>
         </div>
       </div>
-      <div class="flex lg:text-3xl text-xl w-3/4">
+      <div class="flex lg:text-3xl text-xl w-3/4  max-[800px]:hidden">
         <% if @chosen_date == Date.today %>
           <p class="bold ml-4 mr-4">
           Today: 
@@ -59,7 +59,7 @@
         </p>
       </div>
 
-      <div class="col-span-3 ">
+      <div class="col-span-3">
 
         <%= form_tag(root_path, method: "get", class: "flex space-x-2") do %>
           <%= date_field_tag :date, @chosen_date %>
@@ -98,19 +98,26 @@
     <div class="flex flex-row items-center content-center mt-6 max-[640px]:hidden max-[800px]:my-2">
       <% Date::DAYNAMES.rotate.each_with_index do |day, i| %>
         <div class="grid grow max-[800px]:text-xs <%= 'border-b-2 border-red-300' if @chosen_date.wday == (i+1)%7 %>">
-          <%= day %><br>
+          <% current_day_index = i + 1 %>
+
+          <% if @chosen_date.wday == 0 %>
+            <% diff =  current_day_index - 7%>
+          <% else %>
+            <% diff = current_day_index - @chosen_date.wday %>
+          <% end %>
+
+          <% puts("INSIDE LOOP @chosen_date", @chosen_date.wday) %>
+
+          <%= link_to day, root_path(date: @chosen_date + diff.days) %><br>
           <% day_minutes = @time_regs_week.select{ |tr| tr.date_worked.wday == (i+1) % 7 }.sum(&:minutes) %>
           <%= format_duration(day_minutes) %>
+
         </div>
       <% end %>
-
-      <div class="grid grow">
-        Week total
-        <br />
-        <%= format_duration(@total_minutes_week) %>
-      </div>
-
+      <% puts(" AFTER LOOP chosen chosen date: ",@chosen_date) %>
     </div>
+
+
 
 
 
