@@ -25,12 +25,6 @@ class TimeRegsController < ApplicationController
   def new
     @projects = current_user.projects
     @time_reg = TimeReg.new
-
-    respond_to do |format|
-      format.turbo_stream
-      format.html
-    end
-
   end
 
   def create
