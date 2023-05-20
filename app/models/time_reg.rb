@@ -8,7 +8,7 @@ class TimeReg < ApplicationRecord
   has_one :user, through: :membership
 
   validates :notes, length: { maximum: 255 }
-  validates :minutes, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :minutes, numericality: { greater_than_or_equal_to: 0 }
   validates :membership, presence: true
   validates :assigned_task, presence: true
   validates :assigned_task_id, presence: true
