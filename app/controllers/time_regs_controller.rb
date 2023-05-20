@@ -13,7 +13,6 @@ class TimeRegsController < ApplicationController
     @projects = current_user.projects
     @time_reg = TimeReg.new
 
-    end
     # calculate the start and end date of the week of @chosen_date
     start_date = @chosen_date.beginning_of_week
     end_date = @chosen_date.end_of_week
