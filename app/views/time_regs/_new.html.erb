@@ -3,19 +3,21 @@
     <div class="p-4 my-4" data-controller="time-tasks">
       <h1 class="font-bold text-2xl mb-4">New time entry:</h1>
       <%= form_with(model: @time_reg) do |form| %>
+        <%= hidden_field_tag :date, @chosen_date %>
         <div class="mb-4">
-          <%= form.label :project_id, class: 'block text-gray-700 text-sm font-bold mb-2' %>       
-          <%= form.collection_select :project_id, @projects , :id, :name, { include_blank: "select a project:"}, {class: 'w-full rounded-md p-2 border border-gray-300', id: 'timeproject-select'}  %>
-          <% @time_reg.errors.full_messages_for(:project_id).each do |message| %>
-            <div class="text-red-700 text-xs italic mt-1"><%= message %></div>
+          <%= form.label :project_id %>       
+          <%= form.collection_select :project_id, @projects , :id, :name, { include_blank: "select a project:"}, {class: 'w-full rounded-md p-1', id: 'timeproject-select'}  %>
+          <% @time_reg.errors.full_messages_for(:membership).any? do |message| %>
+            <div class="text-sm italic text-gray-600">Please select a project</div>
           <% end %>
         </div>
 
-        <div class="mb-4">
-          <%= form.label :assigned_task_id, class: 'block text-gray-700 text-sm font-bold mb-2' %>
-          <%= form.collection_select :assigned_task_id, {}, :id, :name, {}, {class: 'w-full rounded-md p-2 border border-gray-300', id: 'timetask-select'}  %>
-          <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
-            <div class="text-red-600 italic text-xs mt-1"><%= message %></div>
+        <div class="field my-4 mb-4">
+          <%= form.label :assigned_task_id %>
+          <%= form.collection_select :assigned_task_id, {} , :id, :name, {}, {class: 'w-full rounded-md p-1', id: 'timetask-select'}  %>
+          <% @time_reg.errors.full_messages_for(:assigned_task_id).any? do |message| %>
+            <div class="text-sm italic text-gray-600">Please select a task</div>
+
           <% end %>
         </div>
 
@@ -34,9 +36,10 @@
             <div class="text-sm	italic text-gray-600"><%= message %></div>
           <% end %>
           <br>  
+          <%= form.number_field :minutes, value: 0, class: 'w-full rounded-md p-1'  %>
           <%= form.number_field :minutes, value: 0, class: 'w-full rounded-md p-2 border border-gray-300' %>
-        </div>
 
+        </div>
          <div class="mb-4">
           <%= form.label :date_worked, class: 'block text-gray-700 text-sm font-bold mb-2' %>
           <br>

@@ -1,12 +1,14 @@
 <% t = Time.new %>
 
-<div class="flex flex-row self-center m-auto w-full 2xl:w-3/4 ">
+<div class="flex flex-row self-center m-auto w-full 2xl:w-3/4 " data-controller="modal">
+  <div class=" justify-items-center max-[800px]:hidden mt-[5vh]">
+    <div class="content-center self-center justify-items-center ">
 
-  <div class=" justify-items-center  max-[800px]:hidden mt-[5vh]">
-    <div class="content-center self-center justify-items-center mx-8">
       <div class="flex flex-col self-center ">
-        <div data-controller="modal" class="text-xs mt-2 m-auto self-center">
+        <div class="text-xs mt-2 m-auto self-center">
+          <!-- NORMAL BUTTON FOR SHOWING THE NEW FORM-->
           <button data-action="click->modal#toggle">
+
             <div data-modal-target="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all" data-action="click->modal#preventClose">
                 <%= render "time_regs/new", time_reg: @time_reg, projects: @projects %>
@@ -76,10 +78,12 @@
 
 
     </div>
-    <div class=" min-[800px]:hidden ">
 
-      <div data-controller="modal" class="">
+    <!-- MOBILE BUTTON FOR SHOWING THE NEW FORM-->
+    <div class=" min-[800px]:hidden ">
+      <div class="">
         <button data-action="click->modal#toggle">
+
           <div data-modal-target="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all" data-action="click->modal#preventClose">
               <%= render "time_regs/new", time_reg: @time_reg, projects: @projects %>
@@ -114,13 +118,25 @@
       <% puts(" AFTER LOOP chosen chosen date: ",@chosen_date) %>
     </div>
 
+      <div class="grid grow">
+        Week total
+        <br />
+        <%= format_duration(@total_minutes_week) %>
+      </div>
+    </div>
+ 
 
-
-
+    <!-- DIV FOR SHOWING THE NEW FORM-->
+    <div data-modal-target="modal" class="modal <%= "hidden" unless @show_new %> fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all" data-action="click->modal#preventClose">
+        <%= render "time_regs/new", time_reg: @time_reg, projects: @projects %>
+      </div>
+    </div>
 
     <div class="border-y-2 divide-y-2">
       <%= render @time_regs %>
     </div>
+    
     <div class='text-end mt-6 mr-24'>
       Total: <%= format_duration(@total_minutes_day) %>
     </div>

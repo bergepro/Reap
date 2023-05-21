@@ -1,13 +1,13 @@
 <div class="flex flex-col items-center pt-9">
-  <div class="max-w-md md:min-w-custom35">
-
-    <div class='flex justify-between'>
+  <div class="max-w-md md:min-w-custom35">    
+  <h2 class=" text-gray-700 text-sm italic"><%= @project.client.name %></h2>
+    <div class='flex justify-between'>        
       <p class='text-3xl mr-4'> <%= @project.name %></p> 
-      <div class="flex flex-row justify-end space-x-2 pb-4 ">
+      <div class="flex flex-row justify-end space-x-2 pb-4">
         <%= link_to "Edit project", edit_project_path(@project), class: 'rounded bg-blue-300 p-2 hover:bg-blue-400 mr-10' %>
       </div>
     </div>
-
+    
     <div class="p-1">		
       <h2 class="text-md"> <%= @project.description %></h2>
     </div>	
