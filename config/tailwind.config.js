@@ -12,6 +12,7 @@ module.exports = {
     extend: {
       colors: {
         'tastyWhite': '#F4EDE3',
+        'tastyWhiteLite': '#F9F6F1',
         'cream': '#F0E7DB',
         'seaGreen': '#319895',
         'seaGreenDark': "#285E61",
