@@ -1,17 +1,18 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_membership, only: [:show, :edit, :update, :destroy]
+  before_action :ensure_membership, only: %i[show edit update destroy]
 
   def index
     @clients = Client.all
   end
+
   # viser et enkelt prosjekt til bruker .where(assigned_tasks: { project_id: @project.id }
   def show
     @project = Project.find(params[:id])
     @tasks = Task.all
     @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
-                          .joins(:task)
-                          .where(project_id: @project.id)
+                                  .joins(:task)
+                                  .where(project_id: @project.id)
   end
 
   def new
@@ -23,7 +24,7 @@ class ProjectsController < ApplicationController
     @project = Project.new(project_params.except(:task_ids))
 
     # adds each task to the project
-    project_params[:task_ids].each do | task_id |
+    project_params[:task_ids].each do |task_id|
       @project.tasks << Task.find(task_id) unless task_id.empty?
     end
     # makes the creater of the project a member
@@ -63,8 +64,8 @@ class ProjectsController < ApplicationController
       @project = Project.find(delete_params[:id])
       @assigned_task = @project.assigned_tasks.new
       @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
-      .joins(:task)
-      .where(project_id: @project.id)
+                                    .joins(:task)
+                                    .where(project_id: @project.id)
 
       flash[:alert] = 'cannot update project'
       render :edit, status: :unprocessable_entity
@@ -78,23 +79,23 @@ class ProjectsController < ApplicationController
     @assigned_task = @project.assigned_tasks.new
 
     # checks the confirmation field before trying to delete
-    if delete_params[:confirmation] == "DELETE"
+    if delete_params[:confirmation] == 'DELETE'
       if @project.destroy
-        flash[:notice] = "Project deleted"
+        flash[:notice] = 'Project deleted'
         redirect_to projects_path
       else
         @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
-          .joins(:task)
-          .where(project_id: @project.id)
+                                      .joins(:task)
+                                      .where(project_id: @project.id)
 
-        flash[:alert] = "Could not delete project"
+        flash[:alert] = 'Could not delete project'
         render :edit, status: :unprocessable_entity
       end
     else
       @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
-        .joins(:task)
-        .where(project_id: @project.id)
-      flash[:alert] = "Invalid confirmation"
+                                    .joins(:task)
+                                    .where(project_id: @project.id)
+      flash[:alert] = 'Invalid confirmation'
       render :edit, status: :unprocessable_entity
     end
   end
@@ -106,14 +107,15 @@ class ProjectsController < ApplicationController
 
     # if file is empty or missing
     if params[:file].blank?
-      flash[:alert] = "Please select a file to import."
+      flash[:alert] = 'Please select a file to import.'
       redirect_to projects_path and return
     end
 
     file = params[:file].read
     begin
       CSV.parse(file, headers: true) do |row|
-        time_reg_params = row.to_hash.slice('date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email')
+        time_reg_params = row.to_hash.slice('date', 'client', 'project', 'task', 'notes', 'minutes', 'first name',
+                                            'last name', 'email')
 
         # "Renames" date column to date_worked, which is the name used in the database.
         time_reg_params['date_worked'] = row['date']
@@ -131,30 +133,30 @@ class ProjectsController < ApplicationController
 
         # Deletes redundant 'task' column and checks if the task exists
         task = row['task']
-        check_task task 
+        check_task task
         time_reg_params.delete('task')
 
         # Deletes redundant 'assigned_task' column and checks if the task exists
         check_assigned_task task_id: @task.id
         time_reg_params['assigned_task_id'] = @assigned_task.id
-          
+
         # Deletes redunant name columns
         time_reg_params.delete('first name')
         time_reg_params.delete('last name')
 
         # Checks if the e-mail and user is valid, and deletes redundant e-mail column
         email = row['email']
-        @user = User.find_by(email: email)
+        @user = User.find_by(email:)
         @membership = Membership.find_by(user_id: @user.id, project_id: @project.id)
         time_reg_params.delete('email')
         time_reg_params['membership_id'] = @membership.id
-        
+
         # Checks if the time entries are valid and adds them to the array if they are
         # Also adds 1 to the valid_entries variable
         imported_time_reg = @project.time_regs.new(time_reg_params)
         if imported_time_reg.valid?
           imported_time_regs << imported_time_reg
-          valid_entries = valid_entries + 1
+          valid_entries += 1
         else
           Rails.logger.debug "Invalid time entry: #{imported_time_reg.errors.full_messages}"
         end
@@ -164,17 +166,18 @@ class ProjectsController < ApplicationController
           TimeReg.import(imported_time_regs)
           flash[:notice] = "#{valid_entries} time entries imported successfully."
         else
-          flash[:alert] = "No valid time entries found in the file."
+          flash[:alert] = 'No valid time entries found in the file.'
         end
-          redirect_to projects_path
+        redirect_to projects_path
       end
     rescue StandardError => e # If the e-mail is invalid, flash and error and redirect
-      flash[:alert] = "Invalid e-mail. Please double check the e-mail column for every row."
+      flash[:alert] = 'Invalid e-mail. Please double check the e-mail column for every row.'
       redirect_to projects_path
     end
   end
 
   private
+
   def project_params
     if action_name == 'create'
       params.require(:project).permit(:client_id, :name, :description, task_ids: [])
@@ -191,27 +194,27 @@ class ProjectsController < ApplicationController
   def ensure_membership
     project = Project.find(params[:id])
 
-    unless project.memberships.exists?(user_id: current_user)
-      flash[:alert] = "Access denied"
-      redirect_to root_path
-    end
+    return if project.memberships.exists?(user_id: current_user)
+
+    flash[:alert] = 'Access denied'
+    redirect_to root_path
   end
 
   # Checks to see if the client already exists, and creates it if it doesn't
-  def check_client (client)
-    if (!Client.exists?(name: client))
-      client_params = {"name" => client, "description" => "Description."}
+  def check_client(client)
+    if !Client.exists?(name: client)
+      client_params = { 'name' => client, 'description' => 'Description.' }
       @client = Client.new(client_params)
       @client.save
-     else
+    else
       @client = Client.find_by(name: client)
-     end
+    end
   end
 
   # Checks to see if the project already exists, and creates it if it doesn't
-  def check_project (project)
-    if (!@client.projects.exists?(name: project))
-      project_params = {"client_id" => @client.id, "name" => project, "description" => "Description."}
+  def check_project(project)
+    if !@client.projects.exists?(name: project)
+      project_params = { 'client_id' => @client.id, 'name' => project, 'description' => 'Description.' }
       @project = @client.projects.new(project_params)
       @project.users << current_user
       @project.save
@@ -221,8 +224,8 @@ class ProjectsController < ApplicationController
   end
 
   # Checks to see if the task already exists, and creates it if it doesn't
-  def check_task (task)
-    if (!Task.exists?(name: task))
+  def check_task(task)
+    if !Task.exists?(name: task)
       @task = Task.new(name: task)
       @task.save
     else
@@ -230,14 +233,13 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # Checks to see if the assigned task already exists, and creates it if it doesn't  
-  def check_assigned_task (task_id)
-    if (!@project.assigned_tasks.exists?(task_id))
-      @assigned_task = @project.assigned_tasks.build("task_id" => @task.id)
+  # Checks to see if the assigned task already exists, and creates it if it doesn't
+  def check_assigned_task(task_id)
+    if !@project.assigned_tasks.exists?(task_id)
+      @assigned_task = @project.assigned_tasks.build('task_id' => @task.id)
       @assigned_task.save
     else
       @assigned_task = @project.assigned_tasks.find_by(task_id: @task.id)
     end
   end
-
 end

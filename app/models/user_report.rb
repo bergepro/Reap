@@ -4,30 +4,27 @@ class UserReport < ApplicationRecord
   validate :validate_project_ids_presence
   validate :valdiate_task_ids_presence
 
-
   # custom validations
 
-  
   def custom_timeframe?
     timeframe == 'custom'
   end
 
   def timeframe_dates_present
-    if date_start.blank? || date_end.blank?
-      errors.add(:custom_timeframe, 'requires both start and end dates to be present')
-    end
+    return unless date_start.blank? || date_end.blank?
+
+    errors.add(:custom_timeframe, 'requires both start and end dates to be present')
   end
 
   def validate_project_ids_presence
-    if project_ids.blank? || project_ids.all?(&:empty?)
-      errors.add(:project_ids, 'Please select atleast one project')
-    end
+    return unless project_ids.blank? || project_ids.all?(&:empty?)
+
+    errors.add(:project_ids, 'Please select atleast one project')
   end
 
   def valdiate_task_ids_presence
-    if task_ids.blank? || task_ids.all?(&:empty?)
-      errors.add(:task_ids, 'Please select atleast one task')
-    end
-  end
+    return unless task_ids.blank? || task_ids.all?(&:empty?)
 
+    errors.add(:task_ids, 'Please select atleast one task')
+  end
 end

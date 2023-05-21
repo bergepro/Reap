@@ -7,11 +7,10 @@ class ClientsController < ApplicationController
 
   def show
     @client = Client.find(params[:id])
-    @projects = current_user.projects.where(projects: {client_id: @client.id})
+    @projects = current_user.projects.where(projects: { client_id: @client.id })
   end
 
-
-  def new 
+  def new
     @client = Client.new
   end
 
@@ -25,16 +24,16 @@ class ClientsController < ApplicationController
     end
   end
 
-  def edit        
+  def edit
     @client = Client.find(params[:id])
   end
-  
+
   def update
     @client = Client.find(params[:id])
 
     if @client.update(client_params)
       redirect_to @client
-      flash[:notice] = "client has been updated"
+      flash[:notice] = 'client has been updated'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -43,21 +42,22 @@ class ClientsController < ApplicationController
   def destroy
     @client = Client.find(params[:id])
 
-    if delete_params[:confirmation] == "DELETE"
+    if delete_params[:confirmation] == 'DELETE'
       if @client.destroy
-        flash[:notice] = "Client deleted"
+        flash[:notice] = 'Client deleted'
         redirect_to clients_path
       else
-        flash[:alert] = "Could not delete client"
+        flash[:alert] = 'Could not delete client'
         redirect_to edit_client_path(@client)
-      end        
+      end
     else
-      flash[:alert] = "Invalid confirmation"
-      redirect_to edit_client_path(@client)      
+      flash[:alert] = 'Invalid confirmation'
+      redirect_to edit_client_path(@client)
     end
   end
 
   private
+
   def client_params
     params.require(:client).permit(:name, :description)
   end

@@ -9,7 +9,7 @@ class ReportsController < ApplicationController
       csv << ['date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email']
       # Add CSV data rows for each time_reg
       time_regs.each do |time_reg|
-        csv << [time_reg['date'], time_reg['client'], time_reg['project'], time_reg['task'], 
+        csv << [time_reg['date'], time_reg['client'], time_reg['project'], time_reg['task'],
                 time_reg['notes'], time_reg['minutes'], time_reg['user_first_name'], time_reg['user_last_name'], time_reg['user_email']]
       end
     end
@@ -18,40 +18,39 @@ class ReportsController < ApplicationController
   end
 
   private
+
   # returns a hash of the correrct timeframe options
-  def get_timeframe_options 
-    thisMonthName = I18n.t("date.month_names")[Date.today.month]
-    lastMonthName = I18n.t("date.month_names")[Date.today.month-1]
-    timeframeOptions = { 
-                          "All Time" => 'allTime',
-                          "Custom" => 'custom', 
-                          "This week" => 'thisWeek',
-                          "Last week" => 'lastWeek',
-                          "This Month (#{thisMonthName})" => 'thisMonth',
-                          "Last month (#{lastMonthName})" => 'lastMonth', 
-                        }
+  def get_timeframe_options
+    thisMonthName = I18n.t('date.month_names')[Date.today.month]
+    lastMonthName = I18n.t('date.month_names')[Date.today.month - 1]
+    timeframeOptions = {
+      'All Time' => 'allTime',
+      'Custom' => 'custom',
+      'This week' => 'thisWeek',
+      'Last week' => 'lastWeek',
+      "This Month (#{thisMonthName})" => 'thisMonth',
+      "Last month (#{lastMonthName})" => 'lastMonth'
+    }
   end
 
-  
   # gets all the time_regs for the report with the filters in the report object
   def get_time_regs(report, users, projects, tasks)
-
-    # includes tables to decrease the number of queries 
+    # includes tables to decrease the number of queries
     time_regs = TimeReg.includes(
       :task,
       :user,
       membership: [:user],
-      assigned_task: [:project, :task],
-      project: :client,
+      assigned_task: %i[project task],
+      project: :client
     )
-    
+
     # sets a timeframe unless it is allTime
-    time_regs = time_regs.where(date_worked: report.date_start..report.date_end) unless report.timeframe == "allTime"
+    time_regs = time_regs.where(date_worked: report.date_start..report.date_end) unless report.timeframe == 'allTime'
 
     # filters the time_regs to show the correct ones
-    time_regs = time_regs.where(membership: {user_id: users, project_id: projects})
-                          .where(assigned_task: {task_id: tasks})
-                          .order(date_worked: :desc, created_at: :desc)
+    time_regs = time_regs.where(membership: { user_id: users, project_id: projects })
+                         .where(assigned_task: { task_id: tasks })
+                         .order(date_worked: :desc, created_at: :desc)
 
     # converts a time_reg to hash and maps it
     time_regs.map do |time_reg|
@@ -72,24 +71,23 @@ class ReportsController < ApplicationController
 
   # groupes the time_regs for the different columns
   def group_time_regs(time_regs_hash, group)
-    if group == "task"
+    if group == 'task'
       grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:task] }
-    elsif group == "user"
+    elsif group == 'user'
       grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:user] }
-    elsif group == "date"
+    elsif group == 'date'
       grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:date] }
-    elsif group == "project"
+    elsif group == 'project'
       grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:project] }
-    elsif group == "client"
-      grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:client]}
+    elsif group == 'client'
+      grouped_report = time_regs_hash.group_by { |time_reg| time_reg[:client] }
     end
     grouped_report
   end
-  
 
   # sets the timeframe for the report if it is custom or allTime
   def set_dates(report)
-    if report.timeframe == "allTime"
+    if report.timeframe == 'allTime'
       report.date_start = nil
       report.date_end = nil
     else
@@ -103,16 +101,16 @@ class ReportsController < ApplicationController
     timeframe = report.timeframe
     today = Date.today
 
-    if timeframe == "thisWeek"
+    if timeframe == 'thisWeek'
       new_date_start = today.beginning_of_week
       new_date_end = today
-    elsif timeframe == "lastWeek"
+    elsif timeframe == 'lastWeek'
       new_date_start = today.last_week.beginning_of_week
       new_date_end = today.last_week.end_of_week
-    elsif timeframe == "thisMonth"
+    elsif timeframe == 'thisMonth'
       new_date_start = today.beginning_of_month
       new_date_end = today
-    elsif timeframe == "lastMonth"
+    elsif timeframe == 'lastMonth'
       new_date_start = today.last_month.beginning_of_month
       new_date_end = today.last_month.end_of_month
     end

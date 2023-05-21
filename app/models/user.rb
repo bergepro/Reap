@@ -8,8 +8,7 @@ class User < ApplicationRecord
   has_many :projects, through: :memberships
   has_many :time_regs, through: :memberships
 
-  
-  def name 
+  def name
     "#{first_name} #{last_name}"
   end
 end

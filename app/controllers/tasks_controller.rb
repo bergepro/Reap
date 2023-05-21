@@ -19,7 +19,7 @@ class TasksController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
-  end 
+  end
 
   def edit
     @is_in_update = true
@@ -57,6 +57,7 @@ class TasksController < ApplicationController
   end
 
   private
+
   def task_params
     params.require(:task).permit(:name)
   end

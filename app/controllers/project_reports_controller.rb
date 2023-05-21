@@ -1,6 +1,6 @@
 class ProjectReportsController < ReportsController
-  GROUPES = {"Task" => "task", "Date" => "date", "User" => "user"} # columns to group report by
-  START_GROUP = "date" # standard grouping when creating new project report
+  GROUPES = { 'Task' => 'task', 'Date' => 'date', 'User' => 'user' } # columns to group report by
+  START_GROUP = 'date' # standard grouping when creating new project report
 
   # show report
   def show
@@ -17,7 +17,7 @@ class ProjectReportsController < ReportsController
     project = @projects.find(@report.project_id)
     @members = project.users
     @tasks = project.tasks
-    @show_custom_timeframe = @report.timeframe == "custom" ? true : false
+    @show_custom_timeframe = @report.timeframe == 'custom'
   end
 
   def update
@@ -29,15 +29,15 @@ class ProjectReportsController < ReportsController
 
     # clear arrays if no new data
     @report.member_ids = [] unless project_report_params[:member_ids].present?
-    @report.task_ids = [] unless project_report_params[:task_ids].present? 
+    @report.task_ids = [] unless project_report_params[:task_ids].present?
 
     @report.assign_attributes(project_report_params.except(:project_id))
 
     # only adds project_id if it is a valid project (avoids error if user tries to update with "select a project" value)
     @report.project_id = Project.exists?(project_report_params[:project_id]) ? project_report_params[:project_id] : nil
 
-    # sets new dates 
-    set_dates(@report) unless @report.timeframe == "custom"
+    # sets new dates
+    set_dates(@report) unless @report.timeframe == 'custom'
 
     # tries to update the report with new values
     if @report.save
@@ -46,7 +46,7 @@ class ProjectReportsController < ReportsController
       # sets all data the page needs when re-rendering with errors in the form
       @show_edit_form = true
       @groupes = GROUPES
-      @show_custom_timeframe = @report.timeframe == "custom" ? true : false
+      @show_custom_timeframe = @report.timeframe == 'custom'
       @timeframeOptions = get_timeframe_options
       @clients = Client.all
       @projects = @report.client_id.present? ? @clients.find(@report.client_id).projects : []
@@ -68,16 +68,16 @@ class ProjectReportsController < ReportsController
     @report = ProjectReport.new
     @show_custom_timeframe = false
     @timeframeOptions = get_timeframe_options
-    @clients = Client.all 
+    @clients = Client.all
     @projects = []
     @members = []
     @tasks = []
   end
 
   def create
-    # creates a new report and sets values from form 
+    # creates a new report and sets values from form
     @report = ProjectReport.new(project_report_params)
-    set_dates(@report) unless @report.timeframe == "custom"
+    set_dates(@report) unless @report.timeframe == 'custom'
     @report.group_by = START_GROUP # standard grouping from const
 
     # tries to save the new report
@@ -85,19 +85,19 @@ class ProjectReportsController < ReportsController
       redirect_to @report
     else
       # else: re-renders the new-form with errors
-      @show_custom_timeframe = @report.timeframe == "custom" ? true : false
+      @show_custom_timeframe = @report.timeframe == 'custom'
       @timeframeOptions = get_timeframe_options
       @clients = Client.all
       @projects = @report.client_id.present? ? Project.where(client_id: @report.client_id) : []
       if @report.project_id.present?
         project = Project.find(@report.project_id)
         @members = @report.member_ids.present? ? project.users : []
-        @tasks = @report.task_ids.present? ? project.tasks : []   
-      else 
+        @tasks = @report.task_ids.present? ? project.tasks : []
+      else
         @members = []
         @tasks = []
       end
-      render :new, status: :unprocessable_entity 
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -112,16 +112,16 @@ class ProjectReportsController < ReportsController
       if @report.save
         redirect_to @report
       else
-        flash[:alert] = "Could not change the grouping"
+        flash[:alert] = 'Could not change the grouping'
         redirect_to @report
-      end 
+      end
     else
-      flash[:alert] = "Invalid group"
-      redirect_to @report    
+      flash[:alert] = 'Invalid group'
+      redirect_to @report
     end
   end
 
-  #********************
+  # ********************
   # AJAX form updates *
   # *******************
 
@@ -129,26 +129,28 @@ class ProjectReportsController < ReportsController
   # returns a partial
   def update_projects_selection
     projects = Project.where(client_id: params[:client_id])
-    render partial: 'projects', locals: {projects: projects}
+    render partial: 'projects', locals: { projects: }
   end
 
   # updates the form with members from a specific project
   # returns a partial
   def update_members_checkboxes
     members = Project.find(params[:project_id]).users
-    render partial: 'checkboxes', locals: {report: ProjectReport.new, checkboxes: members, text: 'member',}
+    render partial: 'checkboxes', locals: { report: ProjectReport.new, checkboxes: members, text: 'member' }
   end
 
   # updates the form with tasks from a specific project
   # returns a partial
   def update_tasks_checkboxes
     tasks = Project.find(params[:project_id]).tasks
-    render partial: 'checkboxes', locals: {report: ProjectReport.new, checkboxes: tasks, text: 'task',}
+    render partial: 'checkboxes', locals: { report: ProjectReport.new, checkboxes: tasks, text: 'task' }
   end
 
   # permits only valid attributes
-  private 
+  private
+
   def project_report_params
-    params.require(:project_report).permit(:timeframe, :date_start, :date_end, :client_id, :project_id, member_ids: [], task_ids: [])
+    params.require(:project_report).permit(:timeframe, :date_start, :date_end, :client_id, :project_id, member_ids: [],
+                                                                                                        task_ids: [])
   end
 end

@@ -3,7 +3,6 @@ Rails.application.routes.draw do
 
   root 'time_regs#index'
 
-
   resources :project_reports do
     patch :update_group
     collection do
@@ -37,11 +36,10 @@ Rails.application.routes.draw do
       get 'new_modal', to: 'time_regs#new', as: :new_modal
     end
   end
-  
+
   resources :projects do
     resources :memberships
     resources :assigned_tasks
     get 'export', to: 'projects#export', as: 'export_project_time_reg'
   end
 end
-

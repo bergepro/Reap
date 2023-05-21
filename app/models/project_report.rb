@@ -11,20 +11,20 @@ class ProjectReport < ApplicationRecord
   end
 
   def timeframe_dates_present
-    if date_start.blank? || date_end.blank?
-      errors.add(:custom_timeframe, 'requires both start and end dates to be present')
-    end
+    return unless date_start.blank? || date_end.blank?
+
+    errors.add(:custom_timeframe, 'requires both start and end dates to be present')
   end
 
   def validate_member_ids_presence
-    if member_ids.blank? || member_ids.all?(&:empty?)
-      errors.add(:member_ids, 'Please select atleast one member')
-    end
+    return unless member_ids.blank? || member_ids.all?(&:empty?)
+
+    errors.add(:member_ids, 'Please select atleast one member')
   end
 
   def valdiate_task_ids_presence
-    if task_ids.blank? || task_ids.all?(&:empty?)
-      errors.add(:task_ids, 'Please select atleast one task')
-    end
+    return unless task_ids.blank? || task_ids.all?(&:empty?)
+
+    errors.add(:task_ids, 'Please select atleast one task')
   end
 end
