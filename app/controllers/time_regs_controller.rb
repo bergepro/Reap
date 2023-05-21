@@ -114,29 +114,39 @@ class TimeRegsController < ApplicationController
     @time_reg = TimeReg.find(params[:time_reg_id])
     @project = @time_reg.project
 
-    # if time_reg is active, it toggles off and updates the minutes += the minutes passed since the timer started
-    if @time_reg.active
-      new_timestamp = Time.now
+    if @time_reg.minutes < 1440
+      # if time_reg is active, it toggles off and updates the minutes += the minutes passed since the timer started
+      if @time_reg.active
+        new_timestamp = Time.now
 
-      old_time = @time_reg.updated.to_i
-      new_time = new_timestamp.to_i
+        old_time = @time_reg.updated.to_i
+        new_time = new_timestamp.to_i
 
-      worked_minutes = (new_time - old_time) / 60
+        worked_minutes = (new_time - old_time) / 60
+        
+        if (@time_reg.minutes + worked_minutes) < 1440
+          @time_reg.minutes += worked_minutes
+        else
+          @time_reg.minutes = 1440
+        end
+        
+        @time_reg.active = false
+      # if not active, it starts the timer
+      else
+        @time_reg.updated = Time.now
+        @time_reg.active = true
+      end
 
-      @time_reg.minutes += worked_minutes
-      @time_reg.active = false
-    # if not active, it starts the timer
+      # tries to save the changes
+      if @time_reg.save
+        redirect_to time_regs_path
+      else
+        redirect_to time_regs_path
+      end      
     else
-      @time_reg.updated = Time.now
-      @time_reg.active = true
-    end
-
-    # tries to save the changes
-    if @time_reg.save
       redirect_to time_regs_path
-    else
-      render :index, status: :unprocessable_entity
     end
+
   end
 
   # exports the time_regs in a project to a .CSV
