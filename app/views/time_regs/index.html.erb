@@ -30,13 +30,13 @@
   <div class="flex flex-col grow mx-8">
     <div class="flex w-full justify-between">
       <div class=" flex space-x-4">
-          <%= link_to root_path(date: @chosen_date - 1.day) do %>
-            <div class="p-2 rounded-lg bg-seaGreen text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </div>
-          <% end %>
+        <%= link_to root_path(date: @chosen_date - 1.day) do %>
+          <div class="p-2 rounded-lg bg-seaGreen text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </div>
+        <% end %>
         <%= link_to root_path(date: @chosen_date + 1.day) do %>
           <div class="p-2 rounded-lg bg-seaGreen text-white">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -44,19 +44,19 @@
             </svg>
           </div>
         <% end %>
-      
-      <div class="flex lg:text-3xl text-xl w-3/4  max-[800px]:hidden">
-        <% if @chosen_date == Date.today %>
-          <p class="bold ml-4 mr-4">
-          Today: 
-          </p>
-        <% end %>
 
-        <p class="  ">
-        <%= @chosen_date.strftime("%A, %d %B") %>
-        </p>
+        <div class="flex lg:text-3xl text-xl w-3/4  max-[800px]:hidden">
+          <% if @chosen_date == Date.today %>
+            <p class="bold ml-4 mr-4">
+            Today: 
+            </p>
+          <% end %>
+
+          <p class="  ">
+          <%= @chosen_date.strftime("%A, %d %B") %>
+          </p>
+        </div>
       </div>
-</div>
       <div class="col-span-3">
 
         <%= form_tag(root_path, method: "get", class: "flex space-x-2") do %>
@@ -70,13 +70,6 @@
 
         <% end %>
       </div>
-
-
-
-
-
-
-
     </div>
 
     <!-- MOBILE BUTTON FOR SHOWING THE NEW FORM-->
@@ -107,39 +100,31 @@
             <% diff = current_day_index - @chosen_date.wday %>
           <% end %>
 
-          <% puts("INSIDE LOOP @chosen_date", @chosen_date.wday) %>
-
           <%= link_to day, root_path(date: @chosen_date + diff.days) %><br>
           <% day_minutes = @time_regs_week.select{ |tr| tr.date_worked.wday == (i+1) % 7 }.sum(&:minutes) %>
           <%= format_duration(day_minutes) %>
 
         </div>
       <% end %>
-      <% puts(" AFTER LOOP chosen chosen date: ",@chosen_date) %>
+<div class="grid grow">
+      Week total
+      <br />
+      <%= format_duration(@total_minutes_week) %>
+    </div>
     </div>
 
-      <div class="grid grow">
-        Week total
-        <br />
-        <%= format_duration(@total_minutes_week) %>
-      </div>
-    </div>
- 
-
-    <!-- DIV FOR SHOWING THE NEW FORM-->
-    <div data-modal-target="modal" class="modal <%= "hidden" unless @show_new %> fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="modal-content bg-white rounded-lg overflow-hidden shadow-xl transform transition-all" data-action="click->modal#preventClose">
-        <%= render "time_regs/new", time_reg: @time_reg, projects: @projects %>
-      </div>
-    </div>
-
-    <div class="border-y-2 divide-y-2">
-      <%= render @time_regs %>
-    </div>
     
-    <div class='text-end mt-6 mr-24'>
-      Total: <%= format_duration(@total_minutes_day) %>
-    </div>
+
+
+  <div class="border-y-2 divide-y-2">
+    <%= render @time_regs %>
   </div>
+
+  <div class='text-end mt-6 mr-24'>
+    Total: <%= format_duration(@total_minutes_day) %>
+  </div>
+
+  </div>
+</div>
 </div>
 
