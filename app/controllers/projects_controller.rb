@@ -153,7 +153,7 @@ class ProjectsController < ApplicationController
         # Checks if the time entries are valid and adds them to the array if they are
         # Also adds 1 to the valid_entries variable
         imported_time_reg = @project.time_regs.new(time_reg_params)
-        imported_time_reg.updated = Date.now
+        imported_time_reg.updated = Time.now
         imported_time_reg.active = false
 
         if imported_time_reg.valid?
