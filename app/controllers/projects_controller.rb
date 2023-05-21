@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   before_action :ensure_membership, only: %i[show edit update destroy]
 
   def index
-    @clients = Client.all
+    @clients = current_user.clients
   end
 
   # viser et enkelt prosjekt til bruker .where(assigned_tasks: { project_id: @project.id }

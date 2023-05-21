@@ -20,7 +20,7 @@
             <div class="text-red-600 text-xs italic mt-1"><%= message %></div>
           <% end %>
         </div>
-        
+
         <div class="field my-4">
           <%= form.label :notes, class: 'block text-gray-700 text-sm font-bold mb-2' %>       
           <% @time_reg.errors.full_messages_for(:notes).each do |message| %>
@@ -43,7 +43,7 @@
             <div class="text-red-600 italic text-xs mt-1"><%= message %></div>
           <% end %>     
           <div class="flex justify-between">
-            <%= form.date_field :date_worked %>
+            <%= form.date_field :date_worked, class: 'w-full rounded-md p-2 border border-gray-300 ' %>
           </div>
         </div>
 

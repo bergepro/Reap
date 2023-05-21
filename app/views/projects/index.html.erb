@@ -18,17 +18,9 @@
           <div class="flex justify-between border-b border-gray-300 pb-1">
             <%= link_to client.name, client, class: 'font-semibold text-xl"' %>
           </div>
-          <% if @projects.count < 1%>
-            <div class="border-b border-gray-300 pb-1 pt-1 ">
-              <p class="italic text-stone-700 ml-4 ">You have no projects for this client yet</p>
-            </div>
-          <% end %>
           <% @projects.each do |project| %>
             <div class="border-b border-gray-300 pb-1 pt-1 ">
-              <%= 
-                link_to project.name, project, 
-                class: 'italic text-stone-700 ml-4' 
-              %>
+              <%= link_to project.name, project, class: 'italic text-stone-700 ml-4' %>
             </div>
           <% end %>       
         </div>
