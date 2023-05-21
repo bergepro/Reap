@@ -38,12 +38,14 @@
           <%= form.number_field :minutes, class: 'w-full rounded-md p-2 border border-gray-300'  %>
         </div>
 
-        <div class="field my-4 mb-10">
+        <div class="field my-4 mb-10">  
           <%= form.label :date_worked, class: 'block text-gray-700 text-sm font-bold mb-2' %>
-          <br>
-            <div class="flex justify-between">
-              <%= form.date_select :date_worked, {end_year: Date.today.year}, class: "w-24 rounded-md p-1" %>
-            </div>
+          <% @time_reg.errors.full_messages_for(:date_worked).each do |message| %>
+            <div class="text-red-600 italic text-xs mt-1"><%= message %></div>
+          <% end %>     
+          <div class="flex justify-between">
+            <%= form.date_field :date_worked %>
+          </div>
         </div>
 
         <div class="actions text-center">

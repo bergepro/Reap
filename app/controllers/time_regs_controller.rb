@@ -11,7 +11,7 @@ class TimeRegsController < ApplicationController
     @total_minutes_day = @time_regs.sum(:minutes)
     @minutes_by_day = minutes_by_day_of_week(@chosen_date, current_user)
     @projects = current_user.projects
-    @time_reg = TimeReg.new
+    @time_reg = TimeReg.new(date_worked: Date.today)
 
     # calculate the start and end date of the week of @chosen_date
     start_date = @chosen_date.beginning_of_week
