@@ -80,7 +80,11 @@ class TimeRegsController < ApplicationController
       redirect_to time_regs_path
       flash[:notice] = "Time entry has been updated"
     else
-      flash[:alert] = "cannot update time entry" 
+      @projects = current_user.projects
+      @assigned_tasks = Task.joins(:assigned_tasks)
+      .where(assigned_tasks: { project_id: @time_reg.project.id })
+      .pluck(:name, 'assigned_tasks.id')
+
       render :edit, status: :unprocessable_entity
     end
   end

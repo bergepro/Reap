@@ -16,6 +16,7 @@ module.exports = {
         'cream': '#F0E7DB',
         'seaGreen': '#319895',
         'seaGreenDark': "#285E61",
+        'seaGreenDarker': "#193c3e",
         'dangerRed': "#ff0000",
       },
       fontFamily: {

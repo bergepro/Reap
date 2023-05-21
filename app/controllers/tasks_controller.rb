@@ -33,17 +33,27 @@ class TasksController < ApplicationController
 
     if @task.update(task_params)
       flash[:notice] = 'Task has been updated'
+      redirect_to tasks_path
     else
-      flash[:alert] = 'Cannot update task'
+      render :edit, status: :unprocessable_entity
     end
-    redirect_to tasks_path
   end
 
   def destroy
     @task = Task.find(params[:id])
-    @task.destroy
 
-    redirect_to tasks_path
+    if @task.assigned_tasks.empty?
+      if @task.destroy
+        flash[:notice] = 'Task was successfully deleted.'
+        redirect_to tasks_path
+      else
+        flash[:alert] = 'Task was successfully deleted.'
+        redirect_to edit_task_path(@task)
+      end
+    else
+      flash[:alert] = 'Task is being used in one or more projects.'
+      redirect_to edit_task_path(@task)
+    end
   end
 
   private

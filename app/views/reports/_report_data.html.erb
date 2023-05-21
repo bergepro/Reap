@@ -11,7 +11,7 @@
       <!--iterates over every header column-->
       <% header_columns.each do |group, title| %>
         <% unless @report.group_by == group %> <!--prevents a column with the current group_by -->
-          <th class="border-b-2 border-gray-300"><%= title %></th>
+          <th class="border-b-2 border-gray-300 p-1"><%= title %></th>
         <% end %>
       <% end %>
       <th class="border-b-2 border-gray-300">hours</th>
@@ -23,9 +23,9 @@
 
       <!--creates a row with a group name column fills the rest of the column blank-->
       <tr class="bg-gray-100">
-        <td class="p-1 text-sm font-semibold  border-b-2 border-gray-300"><%= group %><br></td>
+        <td class="p-2 text-sm font-semibold  border-b-2 border-gray-300"><%= group %><br></td>
         <% 4.times do %>
-          <td class="border-b-2 border-gray-300"></td>
+          <td class="border-b-2 border-gray-300 p-1"></td>
         <% end %>
       </tr>
 
@@ -41,7 +41,7 @@
           }%>
           <% content_columns.each do |group, text |%>
             <% unless @report.group_by == group %> <!--prevents a column with the current group_by -->
-              <td class="pb-1"><%= text %></td>
+              <td class="pb-1 p-1"><%= text %></td>
             <% end %>
           <% end %>
           <td class="pb-1"><%= convert_time_int(time_reg[:minutes])%></td>

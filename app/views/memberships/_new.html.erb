@@ -1,9 +1,11 @@
 <%= form_with model: [@project, @project.memberships.build ] do |f| %>
   <div class="flex justify-between">
     <div class="p-1 my-1">
-      <%= f.label :email, class: "mr-2"%>
-      <%= f.email_field :email, class: "mr-2" %> 
-      <%= f.submit "Add Member", class: "rounded bg-blue-200 p-2 hover:bg-blue-300 float-right mr-4" %>  
+      <%= f.label :email, class: 'text-gray-700 font-semibold mb-2 mr-2'%>
+      <%= f.email_field :email, class: "w rounded-md p-2 border border-gray-300 mr-4" %> 
+      <span class="bg-seaGreen w-fit rounded p-2 m-2 hover:bg-seaGreenDark shadow text-white">
+        <%= f.submit "Add Member", class: "" %>  
+      </span>
   </div>
 <% end %>      
 

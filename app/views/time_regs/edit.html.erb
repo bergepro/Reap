@@ -1,45 +1,45 @@
 <div class="flex flex-col items-center pt-4">
   <div class="max-w-md">
     <div class="p-1 my-4">
-    <h1 class="font-bold">Edit time entry:</h1>
+    <h1 class="font-bold text-2xl mb-4">Edit time entry:</h1>
 
     <div class="p-1 my-4" data-controller="time-tasks">
       <%= form_with(model: @time_reg) do |form| %>
         <div class="field my-4 w-80">
-          <%= form.label :project_id %>       
-          <%= form.collection_select :project_id, @projects , :id, :name, { selected: @time_reg.project.id }, { class: 'w-full rounded-md p-1', id: 'timeproject-select' } %>
+          <%= form.label :project_id, class: 'block text-gray-700 text-sm font-bold mb-2'  %>       
+          <%= form.collection_select :project_id, @projects , :id, :name, { selected: @time_reg.project.id }, { class: 'w-full rounded-md p-2 border border-gray-300', id: 'timeproject-select' } %>
           <% @time_reg.errors.full_messages_for(:project_id).each do |message| %>
-            <div class="text-sm italic text-gray-600"><%= message %></div>
+            <div class="text-red-600 text-xs italic mt-1"><%= message %></div>
           <% end %>
         </div>
 
         <div class="field my-4 w-80">
-          <%= form.label :assigned_task_id %>
-          <%= form.collection_select :assigned_task_id, @assigned_tasks, :last, :first, {}, {class: 'w-full rounded-md p-1', id: 'timetask-select'}  %>
+          <%= form.label :assigned_task_id, class: 'block text-gray-700 text-sm font-bold mb-2' %>
+          <%= form.collection_select :assigned_task_id, @assigned_tasks, :last, :first, {}, {class: 'w-full rounded-md p-2 border border-gray-300', id: 'timetask-select'}  %>
           <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
-            <div class="text-sm italic text-gray-600"><%= message %></div>
+            <div class="text-red-600 text-xs italic mt-1"><%= message %></div>
           <% end %>
         </div>
         <div class="field my-4">
-          <%= form.label :notes %>       
+          <%= form.label :notes, class: 'block text-gray-700 text-sm font-bold mb-2' %>       
           <% @time_reg.errors.full_messages_for(:notes).each do |message| %>
-            <div class="text-sm italic text-gray-600"><%= message %></div>
+            <div class="text-red-600 text-xs italic mt-1"><%= message %></div>
           <% end %>
           <br>
-          <%= form.text_area :notes, class: 'w-full rounded-md p-1' %>
+          <%= form.text_area :notes, class: 'w-full rounded-md p-2 border border-gray-300' %>
         </div>
 
         <div class="field my-45">
-          <%= form.label :minutes %>
+          <%= form.label :minutes, class: 'block text-gray-700 text-sm font-bold mb-2' %>
           <% @time_reg.errors.full_messages_for(:minutes).each do |message| %>
-            <div class="text-sm	italic text-gray-600"><%= message %></div>
+            <div class="text-red-600 text-xs italic mt-1"><%= message %></div>
           <% end %>
           <br>  
-          <%= form.number_field :minutes, class: 'w-full rounded-md p-1'  %>
+          <%= form.number_field :minutes, class: 'w-full rounded-md p-2 border border-gray-300'  %>
         </div>
 
-        <div class="field my-4">
-          <%= form.label :date_worked %>
+        <div class="field my-4 mb-10">
+          <%= form.label :date_worked, class: 'block text-gray-700 text-sm font-bold mb-2' %>
           <br>
             <div class="flex justify-between">
               <%= form.date_select :date_worked, {end_year: Date.today.year}, class: "w-24 rounded-md p-1" %>
@@ -47,8 +47,10 @@
         </div>
 
         <div class="actions text-center">
-          <%= form.submit class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow' %>
-          <%= link_to 'Cancel', :back, class: "rounded bg-gray-200 p-2 m-2 hover:bg-gray-300 shadow mt-6" %>
+          <span class="rounded bg-seaGreen p-2 m-2 hover:bg-seaGreenDark shadow text-white">
+           <%= form.submit class: '' %>
+          </span>
+          <%= link_to 'Cancel', :back, class: "rounded bg-tastyWhiteLite p-2 m-2 hover:bg-red-100 shadow mt-6" %>
         </div>   
       <% end %> 
     </div>

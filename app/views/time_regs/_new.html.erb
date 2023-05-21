@@ -8,7 +8,7 @@
           <%= form.label :project_id, class: 'block text-gray-700 text-sm font-bold mb-2' %>       
           <%= form.collection_select :project_id, @projects , :id, :name, { include_blank: "select a project:"}, {class: 'w-full rounded-md p-2 border border-gray-300', id: 'timeproject-select'}  %>
           <% @time_reg.errors.full_messages_for(:membership).any? do |message| %>
-            <div class="text-red-700 text-xs italic mt-1">Please select a project</div>
+            <div class="text-red-600 text-xs italic mt-1">Please select a project</div>
           <% end %>
         </div>
 
@@ -47,8 +47,10 @@
         </div>
 
         <div class="flex justify-center mt-8 px-4">
-          <%= form.submit class: 'rounded bg-blue-200 p-2 m-2 hover:bg-blue-300 shadow' %>
-          <div data-action="click->modal#toggle" class="cursor-pointer rounded bg-red-200 p-2 m-2 hover:bg-red-300 shadow">
+          <span class="rounded bg-seaGreen p-2 m-2 shadow text-white hover:bg-seaGreenDark">
+            <%= form.submit class: '' %>          
+          </span>
+          <div data-action="click->modal#toggle" class="cursor-pointer rounded bg-tastyWhiteLite p-2 m-2 hover:bg-red-100 shadow">
             Cancel
           </div> 
         </div>

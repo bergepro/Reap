@@ -7,7 +7,7 @@
     <div class='flex justify-between mb-8'>
       <h1 class="font-medium italic text-2xl ml-4">Edit <%= @project.name %></h1><br>
       <button data-action="click->collapse-delete#deleteDiv" 
-        class="rounded bg-gray-300 p-2 hover:bg-red-400" 
+        class="rounded bg-tastyWhiteLite border border-gray-400 p-2 hover:bg-red-400" 
         data-task-id="delete-button">Delete project
       </button>
     </div>
@@ -19,7 +19,7 @@
 
     <div class="pt-10">
       <h1 class="font-medium border-b border-gray-300 text-lg italic pb-2">Project tasks</h1>
-        <%= render @assigned_tasks %>
+      <%= render @assigned_tasks %>
     </div>
 
     <div>
@@ -30,7 +30,9 @@
 
     <div class="pt-10">
       <h1 class="font-medium border-b border-gray-300 text-lg italic pb-2">Project members</h1>
-      <%= render @project.memberships %>
+      <div class="bg-tastyWhiteLite">
+        <%= render @project.memberships %>
+      </div>
     </div>
 
     <div class="pt-10">

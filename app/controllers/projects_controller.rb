@@ -56,15 +56,26 @@ class ProjectsController < ApplicationController
 
     if @project.update(project_params)
       flash[:notice] = 'project has been updated'
+      redirect_to @project
     else
+      @tasks = Task.all
+      @clients = Client.all
+      @project = Project.find(delete_params[:id])
+      @assigned_task = @project.assigned_tasks.new
+      @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
+      .joins(:task)
+      .where(project_id: @project.id)
+
       flash[:alert] = 'cannot update project'
+      render :edit, status: :unprocessable_entity
     end
-    redirect_to @project
   end
 
   def destroy
+    @tasks = Task.all
     @clients = Client.all
     @project = Project.find(delete_params[:id])
+    @assigned_task = @project.assigned_tasks.new
 
     # checks the confirmation field before trying to delete
     if delete_params[:confirmation] == "DELETE"
@@ -72,11 +83,18 @@ class ProjectsController < ApplicationController
         flash[:notice] = "Project deleted"
         redirect_to projects_path
       else
-        flash[:notice] = "Could not delete project"
+        @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
+          .joins(:task)
+          .where(project_id: @project.id)
+
+        flash[:alert] = "Could not delete project"
         render :edit, status: :unprocessable_entity
       end
     else
-      flash[:alert] = "Could not confirm"
+      @assigned_tasks = AssignedTask.select('tasks.name, assigned_tasks.id, assigned_tasks.project_id, assigned_tasks.task_id')
+        .joins(:task)
+        .where(project_id: @project.id)
+      flash[:alert] = "Invalid confirmation"
       render :edit, status: :unprocessable_entity
     end
   end

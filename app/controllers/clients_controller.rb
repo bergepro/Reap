@@ -36,20 +36,33 @@ class ClientsController < ApplicationController
       redirect_to @client
       flash[:notice] = "client has been updated"
     else
-      flash[:alert] = "cannot update client" 
-      render :new, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @client = Client.find(params[:id])
-    @client.destroy
-  
-    redirect_to '/clients#index', status: :see_other
+
+    if delete_params[:confirmation] == "DELETE"
+      if @client.destroy
+        flash[:notice] = "Client deleted"
+        redirect_to clients_path
+      else
+        flash[:alert] = "Could not delete client"
+        redirect_to edit_client_path(@client)
+      end        
+    else
+      flash[:alert] = "Invalid confirmation"
+      redirect_to edit_client_path(@client)      
+    end
   end
 
   private
   def client_params
     params.require(:client).permit(:name, :description)
+  end
+
+  def delete_params
+    params.permit(:confirmation, :id)
   end
 end

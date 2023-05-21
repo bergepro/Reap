@@ -1,4 +1,4 @@
-<div class="mt-5 mb-5 bg-neutral-50 border border-gray-400 rounded p-2">
+<div class="mt-5 mb-5 bg-tastyWhiteLite border border-gray-400 rounded p-2">
   <div class="text-center">
     <h4 class="">Provide a CSV file with these columns</h4>
     <br>
@@ -6,7 +6,9 @@
     <br>    
     <div >
       <%= form_with url: projects_import_path do |form| %>
-        <%= submit_tag "Import CSV", class: 'rounded bg-blue-200 hover:bg-blue-300 p-2 mr-2'%>
+        <span class="rounded bg-seaGreen p-2 hover:bg-seaGreenDark shadow text-white mr-2">
+          <%= submit_tag "Import CSV", class: ''%>
+        </span>
         <%= form.file_field :file %>
       <% end %>    
     </div>
