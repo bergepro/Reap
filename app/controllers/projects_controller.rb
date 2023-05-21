@@ -111,64 +111,66 @@ class ProjectsController < ApplicationController
     end
 
     file = params[:file].read
-    CSV.parse(file, headers: true) do |row|
-      time_reg_params = row.to_hash.slice('date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email')
+    begin
+      CSV.parse(file, headers: true) do |row|
+        time_reg_params = row.to_hash.slice('date', 'client', 'project', 'task', 'notes', 'minutes', 'first name', 'last name', 'email')
 
-      # "Renames" date column to date_worked, which is the name used in the database.
-      time_reg_params['date_worked'] = row['date']
-      time_reg_params.delete('date')
+        # "Renames" date column to date_worked, which is the name used in the database.
+        time_reg_params['date_worked'] = row['date']
+        time_reg_params.delete('date')
 
-      # Deletes redundant 'client' column and checks if the client exists
-      client = row['client']
-      check_client client
-      time_reg_params.delete('client')
+        # Deletes redundant 'client' column and checks if the client exists
+        client = row['client']
+        check_client client
+        time_reg_params.delete('client')
 
-      # Deletes redundant 'project' column and checks if the project exists
-      project = row['project']
-      check_project project
-      time_reg_params.delete('project')
+        # Deletes redundant 'project' column and checks if the project exists
+        project = row['project']
+        check_project project
+        time_reg_params.delete('project')
 
-      # Deletes redundant 'task' column and checks if the task exists
-      task = row['task']
-      check_task task 
-      time_reg_params.delete('task')
+        # Deletes redundant 'task' column and checks if the task exists
+        task = row['task']
+        check_task task 
+        time_reg_params.delete('task')
 
-      # Deletes redundant 'assigned_task' column and checks if the task exists
-      check_assigned_task task_id: @task.id
-      time_reg_params['assigned_task_id'] = @assigned_task.id
+        # Deletes redundant 'assigned_task' column and checks if the task exists
+        check_assigned_task task_id: @task.id
+        time_reg_params['assigned_task_id'] = @assigned_task.id
+          
+        # Deletes redunant name columns
+        time_reg_params.delete('first name')
+        time_reg_params.delete('last name')
+
+        # Checks if the e-mail and user is valid, and deletes redundant e-mail column
+        email = row['email']
+        @user = User.find_by(email: email)
+        @membership = Membership.find_by(user_id: @user.id, project_id: @project.id)
+        time_reg_params.delete('email')
+        time_reg_params['membership_id'] = @membership.id
         
-      # Deletes redunant name columns
-      time_reg_params.delete('first name')
-      time_reg_params.delete('last name')
+        # Checks if the time entries are valid and adds them to the array if they are
+        # Also adds 1 to the valid_entries variable
+        imported_time_reg = @project.time_regs.new(time_reg_params)
+        if imported_time_reg.valid?
+          imported_time_regs << imported_time_reg
+          valid_entries = valid_entries + 1
+        else
+          Rails.logger.debug "Invalid time entry: #{imported_time_reg.errors.full_messages}"
+        end
 
-      # Checks if the e-mail and user is valid, and deletes redundant e-mail column
-      email = row['email']
-      @user = User.find_by(email: email)
-      @membership = Membership.find_by(user_id: @user.id, project_id: @project.id)
-      time_reg_params.delete('email')
-      time_reg_params['membership_id'] = @membership.id
-      
-      # Checks if the time entries are valid and adds them to the array if they are
-      # Also adds 1 to the valid_entries variable
-      imported_time_reg = @project.time_regs.new(time_reg_params)
-      if imported_time_reg.valid?
-        imported_time_regs << imported_time_reg
-        valid_entries = valid_entries + 1
-      else
-        Rails.logger.debug "Invalid time entry: #{imported_time_reg.errors.full_messages}"
+        # If any valid time entries have been added, import them
+        if imported_time_regs.present?
+          TimeReg.import(imported_time_regs)
+          flash[:notice] = "#{valid_entries} time entries imported successfully."
+        else
+          flash[:alert] = "No valid time entries found in the file."
+        end
+          redirect_to projects_path
       end
-
-      # If any valid time entries have been added, import them
-      if imported_time_regs.present?
-        TimeReg.import(imported_time_regs)
-        flash[:notice] = "#{valid_entries} time entries imported successfully."
-      else
-        flash[:alert] = "No valid time entries found in the file."
-      end
+    rescue StandardError => e # If the e-mail is invalid, flash and error and redirect
+      flash[:alert] = "Invalid e-mail. Please double check the e-mail column for every row."
       redirect_to projects_path
-      rescue StandardError => e # If the e-mail is invalid, flash and error and redirect
-        flash[:alert] = "Invalid e-mail. Please double check the e-mail column for every row."
-        redirect_to projects_path
     end
   end
 
