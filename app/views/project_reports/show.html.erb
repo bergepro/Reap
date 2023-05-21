@@ -22,7 +22,7 @@
         <!-- form for changing the group_by -->
         <%= form_with url: project_report_update_group_path(@report), method: :patch do |form| %>
           <%= form.label :group_by, 'Group by:', class: 'mr-2' %>
-          <%= form.select :group_by, options_for_select(@groupes, @report.group_by),{}, class: 'rounded-md border border-gray-300 pr-8 p-1 mr-1' %>
+          <%= form.select :group_by, options_for_select(@groupes, @report.group_by),{}, class: 'rounded-md border border-gray-300 pr-8 p-1 mr-1 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white' %>
           <span class="text-sm rounded bg-seaGreen p-1 hover:bg-seaGreenDark h-full text-white">
             <%= form.submit 'Update', class: ''%>
           </span>

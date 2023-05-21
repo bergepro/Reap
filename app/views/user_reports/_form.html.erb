@@ -8,7 +8,7 @@
     </div>
     <div id="timeframe-select" class="flex justify-between">
       <%= form.label :timeframe, class: 'block text-gray-700 font-bold mb-2' %>
-      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'w-80 rounded-md p-2 border border-gray-300 mr-8', id: 'timeframe-selection'} %>
+      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'w-80 mr-8 rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white', id: 'timeframe-selection'} %>
     </div>
     <div id="custom-timeframe-error-container">
       <% @report.errors.full_messages_for(:custom_timeframe).each do |message| %>
@@ -29,7 +29,7 @@
     </div>
     <div class="flex justify-between">
       <%= form.label :user_id, class: 'block text-gray-700 font-bold mb-2' %>
-      <%= form.collection_select :user_id, @users, :id, :name, {include_blank: 'Select a user' }, {class: 'w-80 rounded-md p-2 border border-gray-300 mr-8', id: 'user-selection'} %>   
+      <%= form.collection_select :user_id, @users, :id, :name, {include_blank: 'Select a user' }, {class: 'w-80 mr-8 rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white', id: 'user-selection'} %>   
     </div>
  </div>
 
@@ -41,7 +41,7 @@
     </div>
     <%= form.label :project_ids, 'Projects', class: 'block text-gray-700 font-bold mb-2' %>
     <div class="mr-4 font-semibold p-1 w-fit m-1" data-controller="user-reports-boxes">
-      <%= check_box_tag "check_all_projects", 0, false, {id: "check-all-projects", 'data-action': "click->user-reports-boxes#addCheckAllProjectsListener" } %>
+      <%= check_box_tag "check_all_projects", 0, false, {id: "check-all-projects", 'data-action': "click->user-reports-boxes#addCheckAllProjectsListener", class: 'text-seaGreenDark focus:ring-seaGreenDark focus:ring-offset-2 focus:ring-opacity-50' } %>
       <%= 'Check all'%>
     </div>
     <!-- div for re-rendering project checkboxes on user change -->
@@ -60,9 +60,10 @@
       <%= form.label :task_ids, 'Tasks', class: 'block text-gray-700 font-bold mb-2' %>
     </div>
     <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
-      <%= check_box_tag "check_all_tasks", 0, false, id: "check-all-tasks" %>
-      <%= 'Check all'%>
+      <%= check_box_tag "check_all_tasks", 0, false, id: "check-all-tasks", class: 'text-seaGreenDark focus:ring-seaGreenDark focus:ring-offset-2 focus:ring-opacity-50' %>
+      <%= 'Check all' %>
     </div>
+
     <!-- div for re-rendering tasks checkboxes on project change -->
     <div id="tasks-checkboxes" data-controller="user-reports-boxes">
       <%= render partial: 'tasks', locals: {report: @report, tasks: @tasks} %>

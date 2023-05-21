@@ -7,7 +7,7 @@
     </div>
     <div id="timeframe-select" class="flex justify-between">
       <%= form.label :timeframe, class: 'block text-gray-700 font-bold mb-2' %>
-      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'w-80 rounded-md p-2 border border-gray-300 mr-8', id: 'timeframe-selection'} %>
+      <%= form.select :timeframe, @timeframeOptions, {} , {class: 'w-80 mr-8 rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white', id: 'timeframe-selection'} %>
     </div>
     <div id="custom-timeframe-error-container">
       <% @report.errors.full_messages_for(:custom_timeframe).each do |message| %>
@@ -30,7 +30,7 @@
         <%= form.label :client_id, class: 'block text-gray-700 font-bold mb-2' %>
       </div>
       <div>
-        <%= form.collection_select :client_id, @clients, :id, :name, {include_blank: 'Select a client' }, {class: 'w-80 rounded-md p-2 border border-gray-300 mr-8', id: 'client-selection'} %>   
+        <%= form.collection_select :client_id, @clients, :id, :name, {include_blank: 'Select a client' }, {class: 'w-80 mr-8 rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white', id: 'client-selection'} %>   
       </div>    
     </div>
   </div>
@@ -47,7 +47,7 @@
       </div>
       <div>
         <!--selection gets dynamically re-filled on client change -->
-        <%= form.collection_select :project_id, @projects, :id, :name, {include_blank: 'Select a project' }, {class: 'w-80 rounded-md p-2 border border-gray-300 mr-8', id: 'project-selection'} %>   
+        <%= form.collection_select :project_id, @projects, :id, :name, {include_blank: 'Select a project' }, {class: 'w-80 mr-8 rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white', id: 'project-selection'} %>   
       </div>    
     </div>
   </div>
@@ -62,7 +62,7 @@
       <%= form.label :member_ids, 'Members', class: 'block text-gray-700 font-bold mb-2'%>
     </div>
     <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
-      <%= check_box_tag "check_all_members", 0, false, id: "check-all-members" %>
+      <%= check_box_tag "check_all_members", 0, false, {id: "check-all-members", class: 'text-seaGreenDark focus:ring-seaGreenDark focus:ring-offset-2 focus:ring-opacity-50' }%>
       <%= 'Check all'%>
     </div>
     <!--div gets dynamically re-filled with checkboxes on project change -->
@@ -81,7 +81,7 @@
       <%= form.label :task_ids, 'Tasks', class: 'block text-gray-700 font-bold mb-2'%>
     </div>
     <div class="mr-4 font-semibold p-1 w-fit float-left m-1">
-      <%= check_box_tag "check_all_tasks", 0, false, id: "check-all-tasks" %>
+      <%= check_box_tag "check_all_tasks", 0, false, {id: "check-all-tasks", class: 'text-seaGreenDark focus:ring-seaGreenDark focus:ring-offset-2 focus:ring-opacity-50'} %>
       <%= 'Check all'%>
     </div>
     <!--div gets dynamically re-filled with checkboxes on project change -->

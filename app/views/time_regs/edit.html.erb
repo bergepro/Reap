@@ -7,7 +7,7 @@
       <%= form_with(model: @time_reg) do |form| %>
         <div class="field my-4 w-80">
           <%= form.label :project_id, class: 'block text-gray-700 text-sm font-bold mb-2'  %>       
-          <%= form.collection_select :project_id, @projects , :id, :name, { selected: @time_reg.project.id }, { class: 'w-full rounded-md p-2 border border-gray-300', id: 'timeproject-select' } %>
+          <%= form.collection_select :project_id, @projects , :id, :name, { selected: @time_reg.project.id }, { class: 'w-full rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white', id: 'timeproject-select' } %>
           <% @time_reg.errors.full_messages_for(:project_id).each do |message| %>
             <div class="text-red-600 text-xs italic mt-1"><%= message %></div>
           <% end %>
@@ -15,7 +15,7 @@
 
         <div class="field my-4 w-80">
           <%= form.label :assigned_task_id, class: 'block text-gray-700 text-sm font-bold mb-2' %>
-          <%= form.collection_select :assigned_task_id, @assigned_tasks, :last, :first, {}, {class: 'w-full rounded-md p-2 border border-gray-300', id: 'timetask-select'}  %>
+          <%= form.collection_select :assigned_task_id, @assigned_tasks, :last, :first, {}, {class: 'w-full rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white', id: 'timetask-select'}  %>
           <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
             <div class="text-red-600 text-xs italic mt-1"><%= message %></div>
           <% end %>
@@ -26,7 +26,7 @@
           <% @time_reg.errors.full_messages_for(:notes).each do |message| %>
             <div class="text-red-600 text-xs italic mt-1"><%= message %></div>
           <% end %>
-          <%= form.text_area :notes, class: 'w-full rounded-md p-2 border border-gray-300' %>
+          <%= form.text_area :notes, class: 'w-full rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white' %>
         </div>
 
         <div class="field my-45">
@@ -34,7 +34,7 @@
           <% @time_reg.errors.full_messages_for(:minutes).each do |message| %>
             <div class="text-red-600 text-xs italic mt-1"><%= message %></div>
           <% end %>
-          <%= form.number_field :minutes, class: 'w-full rounded-md p-2 border border-gray-300'  %>
+          <%= form.number_field :minutes, class: 'w-full rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white'  %>
         </div>
 
         <div class="field my-4 mb-10">  
@@ -43,7 +43,7 @@
             <div class="text-red-600 italic text-xs mt-1"><%= message %></div>
           <% end %>     
           <div class="flex justify-between">
-            <%= form.date_field :date_worked, class: 'w-full rounded-md p-2 border border-gray-300 ' %>
+            <%= form.date_field :date_worked, class: 'w-full rounded-md p-2 border border-gray-300 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white' %>
           </div>
         </div>
 

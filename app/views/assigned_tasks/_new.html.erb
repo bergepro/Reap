@@ -2,7 +2,7 @@
   <%= form_with model: [@project, @assigned_task] do |form| %>
     <div class="max-w-md md:min-w-custom35 flex justify-normal h-20">
       <div class="flex justify-between items-center">
-        <%= form.collection_select :task_id, @tasks, :id, :name, { include_blank: false }, { class: 'pr-40 rounded-md p-2 border border-gray-300 mr-2' }  %>
+        <%= form.collection_select :task_id, @tasks, :id, :name, { include_blank: false }, { class: 'pr-40 rounded-md p-2 border border-gray-300 mr-2 focus:ring-1 focus:ring-seaGreenDark focus:border-seaGreenDark ring-offset-1 ring-offset-white' }  %>
         <% @assigned_task.errors.full_messages_for(:name).each do |message|%>
           <div class="text-red-600 italic text-xs mt-1">
             <%= message %>
