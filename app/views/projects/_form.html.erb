@@ -30,19 +30,20 @@
   <% end %>
   </div>
   <br>
+<div class="mb-14">
   <% if form.object.new_record? %>
-    <div>
-      <%= form.label :task_ids, 'Tasks', class: 'block text-gray-700 font-bold mb-1' %>
+    <%= form.label :task_ids, 'Tasks', class: 'block text-gray-700 font-bold mb-1' %>
+    <div class="mt-2 ml-2 grid grid-cols-2 gap-4">
       <%= form.collection_check_boxes :task_ids, Task.all, :id, :name do |task| %>
-        <div class="border mr-8 m-1 p-2 rounded-xl border-gray-300 float-left bg-tastyWhiteLite mb-10">
-          <%= task.label do %>
-            <%= task.check_box %>
-            <%= "&nbsp;".html_safe + task.text %>
-          <% end %>
+        <div class="flex items-center space-x-2">
+          <%= task.check_box(class: 'text-seaGreen focus:ring-seaGreen focus:ring-offset-2 focus:ring-opacity-50') %>
+          <%= task.label(class: 'text-gray-800') %>
         </div>
       <% end %>
-    </div>  
+    </div>
   <% end %>
+</div>
+
 
   <div class="actions text-center p-1 m-1 clear-both">
     <span class="rounded bg-seaGreen p-2 hover:bg-seaGreenDark shadow text-white">
