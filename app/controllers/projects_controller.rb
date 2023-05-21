@@ -146,7 +146,7 @@ class ProjectsController < ApplicationController
         # Checks if the e-mail and user is valid, and deletes redundant e-mail column
         email = row['email']
         @user = User.find_by(email: email)
-        @membership = Membership.find_by(user_id: @user.id, project_id: @project.id)
+        @membership = Membership.find_or_create_by(user_id: @user.id, project_id: @project.id)
         time_reg_params.delete('email')
         time_reg_params['membership_id'] = @membership.id
       
@@ -169,10 +169,10 @@ class ProjectsController < ApplicationController
       else
         flash[:alert] = "No valid time entries found in the file."
       end
-      redirect_to projects_path
     rescue StandardError => e # If the e-mail is invalid, flash and error and redirect
         flash[:alert] = "Invalid e-mail. Please double check the e-mail column for every row."
     end
+    redirect_to projects_path
   end
 
   private
@@ -215,7 +215,6 @@ class ProjectsController < ApplicationController
     if !@client.projects.exists?(name: project)
       project_params = { 'client_id' => @client.id, 'name' => project, 'description' => 'Description.' }
       @project = @client.projects.new(project_params)
-      @project.users << current_user
       @project.save
     else
       @project = @client.projects.find_by(name: project)
