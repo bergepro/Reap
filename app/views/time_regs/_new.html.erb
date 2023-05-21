@@ -6,8 +6,8 @@
         <div class="mb-4">
           <%= form.label :project_id, class: 'block text-gray-700 text-sm font-bold mb-2' %>       
           <%= form.collection_select :project_id, @projects , :id, :name, { include_blank: "select a project:"}, {class: 'w-full rounded-md p-2 border border-gray-300', id: 'timeproject-select'}  %>
-          <% @time_reg.errors.full_messages_for(:project_id).each do |message| %>
-            <div class="text-red-700 text-xs italic mt-1"><%= message %></div>
+          <% @time_reg.errors.full_messages_for(:membership).any? do |message| %>
+            <div class="text-red-700 text-xs italic mt-1">Please select a project</div>
           <% end %>
         </div>
 
@@ -15,7 +15,7 @@
           <%= form.label :assigned_task_id, class: 'block text-gray-700 text-sm font-bold mb-2' %>
           <%= form.collection_select :assigned_task_id, {}, :id, :name, {}, {class: 'w-full rounded-md p-2 border border-gray-300', id: 'timetask-select'}  %>
           <% @time_reg.errors.full_messages_for(:assigned_task_id).each do |message| %>
-            <div class="text-red-600 italic text-xs mt-1"><%= message %></div>
+            <div class="text-red-600 italic text-xs mt-1">Please select a task</div>
           <% end %>
         </div>
 
@@ -31,7 +31,7 @@
         <div class="mb-4">
           <%= form.label :minutes, class: 'block text-gray-700 text-sm font-bold mb-2' %>
           <% @time_reg.errors.full_messages_for(:minutes).each do |message| %>
-            <div class="text-sm	italic text-gray-600"><%= message %></div>
+            <div class="text-red-600 italic text-xs mt-1"><%= message %></div>
           <% end %>
           <br>  
           <%= form.number_field :minutes, value: 0, class: 'w-full rounded-md p-2 border border-gray-300' %>
