@@ -5,7 +5,7 @@ Time tracking application written in Ruby on Rails
 
 ---
 
-You can get check out this project in two ways: setting it up locally or testing our [live version](https://rocky-headland-04914.herokuapp.com/).
+You can get check out this project in two ways: setting it up locally or testing our [live version]([https://rocky-headland-04914.herokuapp.com/](https://reaptime.herokuapp.com)).
 
 ### Setting Up Locally
 
