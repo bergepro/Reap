@@ -1,4 +1,5 @@
 module ReportsHelper
+  # converts time-regs minutes to "0:00" format
   def convert_time_int(minutes)
     return nil if minutes.nil?
 

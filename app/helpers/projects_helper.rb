@@ -1,4 +1,5 @@
 module ProjectsHelper
+  # sums a users minutes on a task in a project
   def grouped_time_regs(assigned_task)
     assigned_task.time_regs
                  .joins(membership: :user)

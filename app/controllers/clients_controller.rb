@@ -42,6 +42,7 @@ class ClientsController < ApplicationController
   def destroy
     @client = Client.find(params[:id])
 
+    # checks the confirmation field before trying to delete
     if delete_params[:confirmation] == 'DELETE'
       if @client.destroy
         flash[:notice] = 'Client deleted'

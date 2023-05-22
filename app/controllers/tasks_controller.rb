@@ -24,7 +24,6 @@ class TasksController < ApplicationController
   def edit
     @is_in_update = true
 
-    puts params.inspect
     @task = Task.find(params[:id])
   end
 
@@ -47,7 +46,7 @@ class TasksController < ApplicationController
         flash[:notice] = 'Task was successfully deleted.'
         redirect_to tasks_path
       else
-        flash[:alert] = 'Task was successfully deleted.'
+        flash[:alert] = 'Could not delete task.'
         redirect_to edit_task_path(@task)
       end
     else
