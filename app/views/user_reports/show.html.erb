@@ -42,5 +42,29 @@
     <div class="bg-slate-50 border-2 border-gray-400">
       <%= render partial: 'reports/report_data', locals: {grouped_report: @grouped_report}   %>
     </div>
+    <div class=BillableRate>
+    <b><p>
+      Project Type:
+    </b></p>
+    <button class="Billable-Button"> <b>Time & Materials</b> <p>Bill by the hour, with billable rates</p></button>
+    <button class="Non-Billable-Button"> <b>Non-Billable</b> <p>Not billed to a client</p></button>
+
+      <div class="BillableText">
+        <b>
+          Billable Rates
+        </b>
+        <p>
+          We need billable rates to track your project's billable amount.
+        </p>
+        <label for="quantity"><b>Project Billable Rate</b> kr</label>
+        <input class="billable-sum" type="text" id="quantity" name="quantity" oninput="restrictInput(event)" maxlength="10">
+        <b><p>
+          Budget
+        </b></p>
+        <p>
+          Set a budget to track project progress.
+        </p>
+      </div>
+    </div>
 </div>
 </div>
