@@ -37,3 +37,8 @@
   border-radius: 5px;
   max-width: 125px;
 }
+
+.active-button {
+  background-color: lightsalmon;
+  border-color: orange;
+}

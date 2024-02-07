@@ -1,5 +1,6 @@
   <%= stylesheet_link_tag('report') %>
-  <%= javascript_include_tag('numbers_only.js') %>
+  <%= javascript_include_tag('numbers_only') %>
+  <%= javascript_include_tag('button_press') %>
 
 <div class="flex flex-col items-center pt-4 mb-20">
   <div class="max-w-md md:min-w-custom60">
@@ -45,29 +46,19 @@
     <div class="bg-slate-50 border-2 border-gray-400">
       <%= render partial: 'reports/report_data', locals: {grouped_report: @grouped_report}   %>
     </div>
-    <div class=BillableRate>
-    <b><p>
-      Project Type:
-    </b></p>
-    <button class="Billable-Button"> <b>Time & Materials</b> <p>Bill by the hour, with billable rates</p></button>
-    <button class="Non-Billable-Button"> <b>Non-Billable</b> <p>Not billed to a client</p></button>
+    <div class="BillableRate">
+      <p><strong>Project Type:</strong></p>
+      <button id="billableButton" class="Billable-Button active-button"><strong>Time & Materials</strong><p>Bill by the hour, with billable rates</p></button>
+      <button id="nonBillableButton" class="Non-Billable-Button"><strong>Non-Billable</strong><p>Not billed to a client</p></button>
 
       <div class="BillableText">
-        <b>
-          Billable Rates
-        </b>
-        <p>
-          We need billable rates to track your project's billable amount.
-        </p>
-        <label><b>Project Billable Rate</b> kr</label>
+        <p><strong>Billable Rates</strong></p>
+        <p>We need billable rates to track your project's billable amount.</p>
+        <label><strong>Project Billable Rate</strong> kr</label>
         <input class="billable-sum" type="text" oninput="restrictInput(event)" maxlength="10">
-        <b><p>
-          Budget
-        </b></p>
-        <p>
-          Set a budget to track project progress.
-        </p>
+        <p><strong>Budget</strong></p>
+        <p>Set a budget to track project progress.</p>
       </div>
     </div>
-</div>
+  </div>
 </div>
