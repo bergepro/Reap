@@ -1,4 +1,5 @@
   <%= stylesheet_link_tag('report') %>
+  <%= javascript_include_tag('numbers_only.js') %>
 
 <div class="flex flex-col items-center pt-4 mb-20">
   <div class="max-w-md md:min-w-custom60">
@@ -58,8 +59,8 @@
         <p>
           We need billable rates to track your project's billable amount.
         </p>
-        <label for="quantity"><b>Project Billable Rate</b> kr</label>
-        <input class="billable-sum" type="text" id="quantity" name="quantity" oninput="restrictInput(event)" maxlength="10">
+        <label><b>Project Billable Rate</b> kr</label>
+        <input class="billable-sum" type="text" oninput="restrictInput(event)" maxlength="10">
         <b><p>
           Budget
         </b></p>
