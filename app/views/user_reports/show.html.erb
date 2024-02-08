@@ -46,16 +46,16 @@
     <div class="bg-slate-50 border-2 border-gray-400">
       <%= render partial: 'reports/report_data', locals: {grouped_report: @grouped_report}   %>
     </div>
-    <div class="BillableRate">
+    <div class="BillableRate bg-tastyWhiteLite mt-5 p-5 rounded-xl border-2-black">
       <p><strong>Project Type:</strong></p>
-      <button id="billableButton" class="Billable-Button active-button"><strong>Time & Materials</strong><p>Bill by the hour, with billable rates</p></button>
-      <button id="nonBillableButton" class="Non-Billable-Button"><strong>Non-Billable</strong><p>Not billed to a client</p></button>
+      <button id="billableButton" class="Billable-Button active-button min-w-custom24 ml-20 p-3.5 rounded border-2-black bg-transparent"><strong>Time & Materials</strong><p>Bill by the hour, with billable rates</p></button>
+      <button id="nonBillableButton" class="Non-Billable-Button min-w-custom24 ml-5 p-3.5 rounded border-2-black bg-transparent"><strong>Non-Billable</strong><p>Not billed to a client</p></button>
 
-      <div class="BillableText">
+      <div class="BillableText bg-stone-300 mt-7 p-3 rounded-xl border-2-black">
         <p><strong>Billable Rates</strong></p>
         <p>We need billable rates to track your project's billable amount.</p>
         <label><strong>Project Billable Rate</strong> kr</label>
-        <input class="billable-sum" type="text" oninput="restrictInput(event)" maxlength="10">
+        <input class="billable-sum rounded w-32" type="text" oninput="restrictInput(event)" maxlength="10">
         <p><strong>Budget</strong></p>
         <p>Set a budget to track project progress.</p>
       </div>
